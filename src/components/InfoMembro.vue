@@ -243,7 +243,7 @@
         </ion-row>
       </form>
     </ion-grid>
-    <p v-else>carregando</p>
+    <p class="loader" v-else>{{textLoader}}</p>
   </ion-content>
 </template>
 
@@ -304,6 +304,7 @@ export default defineComponent({
   },
   data() {
     return {
+      textLoader: "Carregando",
       loader: false,
       msgSistema: "",
       statusInfoSistema: false,
