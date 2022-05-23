@@ -13,6 +13,5 @@ TELA HOME
 
 TELA DE EDITAR MEMBRO:
 
- > AS VEZES NAO SETA O CARGO DO MEMBRO 
  > criar a mutation para atualizar os dados do membro
  >alterar a query do botao salvar para poder atualizar

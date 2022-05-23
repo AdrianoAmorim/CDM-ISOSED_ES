@@ -39,14 +39,15 @@
 
   <ion-content>
     <ion-grid v-if="loader">
-      <ion-row v-model="statusInfoSistema" v-show="statusInfoSistema">
-        <ion-col>
-          <p>{{ msgSistema }}</p>
+      <ion-row v-model="statusInfoSistema" v-if="statusInfoSistema" 
+      class="ion-justify-content-center">
+        <ion-col size="8" class="infoSistema">
+          <p class="ion-text-center">{{msgSistema}}</p>
         </ion-col>
       </ion-row>
 
       <ion-row class="ion-justify-content-between ion-align-items-center">
-        <ion-col size="9" class="">
+        <ion-col size="9">
           <ion-header class="headerPg" mode="ios">
             <ion-title class="titlePg">{{ titlePage }}</ion-title>
           </ion-header>
@@ -595,5 +596,12 @@ ion-radio {
 }
 ion-select-option {
   color: #427aa1;
+}
+ion-col.infoSistema{
+  background-color: #21c05e;
+  color: white;
+  font-style:italic;
+  font-variant:small-caps; /* usado p deixar as letras Maiusculas*/
+  font-weight:bold;
 }
 </style>
