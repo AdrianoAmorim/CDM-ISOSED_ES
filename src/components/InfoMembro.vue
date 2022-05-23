@@ -39,10 +39,16 @@
 
   <ion-content>
     <ion-grid v-if="loader">
-      <ion-row v-model="statusInfoSistema" v-if="statusInfoSistema" 
-      class="ion-justify-content-center">
-        <ion-col size="8" class="infoSistema">
-          <p class="ion-text-center">{{msgSistema}}</p>
+      <ion-row
+        v-model="statusInfoSistema"
+        v-if="statusInfoSistema"
+        class="ion-justify-content-start"
+      >
+        <ion-col size="12" class="infoSistema">
+          <ion-row class="ion-justify-content-between ion-align-items-center">
+            <span>{{ msgSistema }}</span>
+            <ion-icon :icon="checkmarkCircle" />
+          </ion-row>
         </ion-col>
       </ion-row>
 
@@ -244,7 +250,12 @@
 <script>
 import axios from "axios";
 import { defineComponent } from "@vue/runtime-core";
-import { save, closeCircle, arrowBackCircle } from "ionicons/icons";
+import {
+  save,
+  closeCircle,
+  arrowBackCircle,
+  checkmarkCircle,
+} from "ionicons/icons";
 import {
   alertController,
   IonIcon,
@@ -318,6 +329,7 @@ export default defineComponent({
       save,
       closeCircle,
       arrowBackCircle,
+      checkmarkCircle,
     };
   },
   props: {
@@ -326,19 +338,19 @@ export default defineComponent({
     titlePage: String,
   },
   methods: {
-    limparCampos(){
+    limparCampos() {
       this.membro.nome = "";
-        this.membro.telefone = 0;
-        this.membro.dtBatismo = ""; 
-        this.membro.dtNascimento = "" ;
-        this.membro.pai = "";
-       this.membro.mae = ""; 
-        this.membro.estCivil = "" ;
-        this.membro.id_cargo = 0 ;
-        this.logradouro.endereco = "" ;
-        this.logradouro.numero = 0 ;
-        this.logradouro.bairro ="" ;
-        this.logradouro.cidade = "";
+      this.membro.telefone = 0;
+      this.membro.dtBatismo = "";
+      this.membro.dtNascimento = "";
+      this.membro.pai = "";
+      this.membro.mae = "";
+      this.membro.estCivil = "";
+      this.membro.id_cargo = 0;
+      this.logradouro.endereco = "";
+      this.logradouro.numero = 0;
+      this.logradouro.bairro = "";
+      this.logradouro.cidade = "";
     },
     async confirmDelete() {
       const alert = await alertController.create({
@@ -568,7 +580,7 @@ export default defineComponent({
         }
       } else if (this.page == "editar") {
         this.getMembro(this.idMembro);
-        if (this.cargos!= null) {
+        if (this.cargos != null) {
           this.loader = true;
         }
       }
@@ -577,7 +589,6 @@ export default defineComponent({
   beforeMount() {
     this.getCargos();
   },
-
 });
 </script>
 
@@ -597,11 +608,18 @@ ion-radio {
 ion-select-option {
   color: #427aa1;
 }
-ion-col.infoSistema{
+ion-col.infoSistema {
+  opacity: 0.8;
+  border-radius: 15px;
+  padding: 15px;
   background-color: #21c05e;
   color: white;
-  font-style:italic;
-  font-variant:small-caps; /* usado p deixar as letras Maiusculas*/
-  font-weight:bold;
+  font-style: italic;
+  font-size: 16px;
+  font-weight: bold;
+}
+ion-col.infoSistema icon {
+  font-size: 26px;
+  object-fit: fill;
 }
 </style>
