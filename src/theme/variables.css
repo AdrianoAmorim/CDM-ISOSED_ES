@@ -1,0 +1,65 @@
+/* Ionic Variables and Theming. For more info, please see:
+http://ionicframework.com/docs/theming/ */
+
+/** Ionic CSS Variables **/
+:root {
+  --ion-color-primary: #064789;
+	--ion-color-primary-rgb: 6,71,137;
+	--ion-color-primary-contrast: #ffffff;
+	--ion-color-primary-contrast-rgb: 255,255,255;
+	--ion-color-primary-shade: #053e79;
+	--ion-color-primary-tint: #1f5995;
+
+	--ion-color-secondary: #427AA1;
+	--ion-color-secondary-rgb: 66,122,161;
+	--ion-color-secondary-contrast: #ffffff;
+	--ion-color-secondary-contrast-rgb: 255,255,255;
+	--ion-color-secondary-shade: #3a6b8e;
+	--ion-color-secondary-tint: #5587aa;
+
+	--ion-color-tertiary: #5260ff;
+	--ion-color-tertiary-rgb: 82,96,255;
+	--ion-color-tertiary-contrast: #ffffff;
+	--ion-color-tertiary-contrast-rgb: 255,255,255;
+	--ion-color-tertiary-shade: #4854e0;
+	--ion-color-tertiary-tint: #6370ff;
+
+	--ion-color-success: #21c05e;
+	--ion-color-success-rgb: 33,192,94;
+	--ion-color-success-contrast: #000000;
+	--ion-color-success-contrast-rgb: 0,0,0;
+	--ion-color-success-shade: #1da953;
+	--ion-color-success-tint: #37c66e;
+
+	--ion-color-warning: #eeff00f6;
+	--ion-color-warning-rgb: 227,255,15;
+	--ion-color-warning-contrast: #000000;
+	--ion-color-warning-contrast-rgb: 0,0,0;
+	--ion-color-warning-shade: #c8e00d;
+	--ion-color-warning-tint: #e6ff27;
+
+	--ion-color-danger: #eb445a;
+	--ion-color-danger-rgb: 235,68,90;
+	--ion-color-danger-contrast: #ffffff;
+	--ion-color-danger-contrast-rgb: 255,255,255;
+	--ion-color-danger-shade: #cf3c4f;
+	--ion-color-danger-tint: #ed576b;
+
+	--ion-color-medium: #c7ced6;
+	--ion-color-medium-rgb: 199,206,214;
+	--ion-color-medium-contrast: #000000;
+	--ion-color-medium-contrast-rgb: 0,0,0;
+	--ion-color-medium-shade: #afb5bc;
+	--ion-color-medium-tint: #cdd3da;
+
+	--ion-color-light: #EBF2FA;
+	--ion-color-light-rgb: 235,242,250;
+	--ion-color-light-contrast: #000000;
+	--ion-color-light-contrast-rgb: 0,0,0;
+	--ion-color-light-shade: #cfd5dc;
+	--ion-color-light-tint: #edf3fb;
+}
+
+@media (prefers-color-scheme: light) {
+ 
+}

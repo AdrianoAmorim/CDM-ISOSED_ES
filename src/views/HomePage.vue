@@ -1,0 +1,222 @@
+<!-- Pagina Responsavel por iniciar a aplicação contem:
+a barra de Ferramentas e a lista de membros cadastrados -->
+<template>
+  <ion-page>
+    <ion-header mode="ios">
+      <ion-toolbar mode="ios">
+        <ion-grid>
+          <ion-row class="ion-align-items-center">
+            <ion-col size="7">
+              <ion-row class="ion-justify-content-center">
+                <ion-searchbar
+                  color="light"
+                  show-cancel-button="never"
+                  placeholder="Buscar Membro"
+                  style="margin: 0; padding: 0"
+                />
+              </ion-row>
+            </ion-col>
+
+            <ion-col size="5">
+              <ion-row class="ion-justify-content-end">
+                <ion-button
+                  fill="clear"
+                  size="small"
+                  color="primary"
+                 
+                  class="ion-align-self-start"
+                >
+                  <ion-icon
+                    slot="icon-only"
+                    class="iconToolbar"
+                    :icon="searchCircle"
+                /></ion-button>
+
+                <ion-button
+                  fill="clear"
+                  color="success"
+                  size="small"
+                 router-link="/cadastrar"
+                  class="ion-align-self-end"
+                  ><ion-icon
+                    slot="icon-only"
+                    class="iconToolbar"
+                    :icon="personAdd"
+                /></ion-button>
+              </ion-row>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+      <ion-grid>
+        <ion-row class="ion-justify-content-between ion-align-items-center">
+          
+          <ion-col size="2">
+            <ion-row class="ion-justify-content-start">
+              <ion-thumbnail>
+                <ion-img
+                  class="imgAvatar"
+                  :src="avatarLsMembro"
+                  alt="Imagem Ilustrativa"
+                />
+              </ion-thumbnail>
+            </ion-row>
+          </ion-col>
+
+          <ion-col size="10">
+            <ion-header class="headerPg" mode="ios">
+              <ion-title class="titlePg">MEMBROS CADASTRADOS</ion-title>
+            </ion-header>
+          </ion-col>
+
+        </ion-row>
+
+        <ion-row class="ion-justify-content-center">
+          <ion-col size="12">
+            <ion-list>
+              <ion-row
+                class="ion-justify-content-evenly"
+                v-for="Membro in listaMembros"
+                :key="Membro.id"
+              >
+                <ion-col size="12">
+                  <ion-item>
+                    <ion-col size="9">
+                      <ion-row
+                        class="
+                          ion-justify-content-between ion-align-items-center
+                        "
+                      >
+                        <ion-col size="4">
+                          <ion-avatar>
+                            <ion-img :src="imgAvatar" alt="Avatar do Membro" />
+                          </ion-avatar>
+                        </ion-col>
+
+                        <ion-col size="8">
+                          <ion-label style="overflow: visible">
+                            {{ Membro.nome }}
+                          </ion-label>
+                          <ion-label color="danger"
+                            ><b>{{ Membro.cargo_membro.nome }}</b></ion-label
+                          >
+                        </ion-col>
+                      </ion-row>
+                    </ion-col>
+
+                    <ion-col size="3">
+                      <ion-row class="ion-justify-content-end">
+                        <ion-button
+                          :router-link="'/editar/' + Membro.id"
+                          color="secondary"
+                          fill="clear"
+                          size="large"
+                        >
+                          <ion-icon
+                            slot="icon-only"
+                            class="iconButton"
+                            :icon="create"
+                          />
+                        </ion-button>
+                      </ion-row>
+                    </ion-col>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-content>
+  </ion-page>
+</template>
+
+<script>
+import { defineComponent } from "vue";
+import axios from "axios";
+import { searchCircle, personAdd, create } from "ionicons/icons";
+import {
+  IonImg,
+  IonHeader,
+  IonThumbnail,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonList,
+  IonItem,
+  IonLabel,
+  IonButton,
+  IonAvatar,
+  IonTitle,
+  IonIcon,
+  IonPage,
+  IonToolbar,
+  IonContent,
+  IonSearchbar,
+} from "@ionic/vue";
+
+export default defineComponent({
+  name: "HomePage",
+  components: {
+    IonIcon,
+    IonPage,
+    IonToolbar,
+    IonHeader,
+    IonContent,
+    IonSearchbar,
+    IonButton,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonImg,
+    IonThumbnail,
+    IonList,
+    IonItem,
+    IonLabel,
+    IonAvatar,
+    IonTitle,
+  },
+  data() {
+    return {
+      searchCircle,
+      personAdd,
+      create,
+      avatarLsMembro: "/img/avatarListarMembros2.png",
+      imgAvatar: "/img/avatar.png",
+      listaMembros: null,
+     
+    };
+  },
+  methods: {
+
+    async getMembros() {
+      const response = await axios.post(
+        "https://cdm-isosed.hasura.app/v1/graphql",
+        {
+          query: "query getMembros{membros (order_by: {nome: asc})  {id,nome cargo_membro {nome}}}",
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-hasura-admin-secret":
+              "HqDOmCJCXSI1ITFKPRVp4bwtis0FKbh0aJQxkrR6ZSCKala8GLITbR79brjAA3LM",
+          },
+        }
+      );
+      this.listaMembros = response.data.data.membros;
+    },
+  },
+ 
+ionViewWillEnter() {
+      this.getMembros();
+  },
+
+
+});
+</script>
+
+<style scoped>
+</style>

@@ -1,0 +1,7 @@
+{
+  "name": "cadastro-membro",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
