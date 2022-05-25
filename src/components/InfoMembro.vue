@@ -35,6 +35,7 @@
       >
         <ion-icon slot="icon-only" class="iconToolbar" :icon="save"
       /></ion-button>
+
       <ion-button
         v-else
         fill="clear"
@@ -60,19 +61,20 @@
         </ion-col>
       </ion-row>
 
-      <ion-row class="ion-justify-content-between ion-align-items-center">
-        <ion-col size="9">
+      <ion-row class="ion-align-items-center">
+        <ion-col
+          size="2"
+          class="ion-justify-content-start ion-align-items-center"
+        >
+          <ion-avatar>
+            <ion-img :src="membro.url_foto" alt="Avatar do Membro" />
+          </ion-avatar>
+        </ion-col>
+
+        <ion-col size="10">
           <ion-header class="headerPg" mode="ios">
             <ion-title class="titlePg">{{ titlePage }}</ion-title>
           </ion-header>
-        </ion-col>
-
-        <ion-col size="3">
-          <ion-row class="ion-justify-content-end">
-            <ion-thumbnail>
-              <ion-img :src="avatarCadastro" alt="Imagem Ilustrativa" />
-            </ion-thumbnail>
-          </ion-row>
         </ion-col>
       </ion-row>
 
@@ -135,9 +137,8 @@
             <ion-item mode="md">
               <ion-label position="floating">Telefone: </ion-label>
               <ion-input
-                
                 v-model="membro.telefone"
-                type="number"
+                type="tel"
                 inputmode="numeric"
                 color="secondary"
               ></ion-input>
@@ -252,7 +253,7 @@
         </ion-row>
       </form>
     </ion-grid>
-   <ion-progress-bar v-else type="indeterminate"></ion-progress-bar>
+    <ion-progress-bar v-else type="indeterminate"></ion-progress-bar>
   </ion-content>
 </template>
 
@@ -260,6 +261,7 @@
 import axios from "axios";
 import { defineComponent } from "@vue/runtime-core";
 import {
+  camera,
   save,
   closeCircle,
   arrowBackCircle,
@@ -272,9 +274,7 @@ import {
   IonButton,
   IonContent,
   IonHeader,
-  IonThumbnail,
   IonList,
-  IonImg,
   IonRadio,
   IonToolbar,
   IonRadioGroup,
@@ -297,9 +297,7 @@ export default defineComponent({
     IonIcon,
     IonButton,
     IonContent,
-    IonThumbnail,
     IonGrid,
-    IonImg,
     IonRow,
     IonCol,
     IonToolbar,
@@ -320,6 +318,7 @@ export default defineComponent({
       statusInfoSistema: false,
       membroEdit: null,
       cargos: null,
+      mask: null,
       membro: {
         dtBatismo: "",
         dtNascimento: "",
@@ -329,6 +328,7 @@ export default defineComponent({
         estCivil: "",
         telefone: 0,
         id_cargo: 0,
+        url_foto:"/img/avatar.png"
       },
       logradouro: {
         endereco: "",
@@ -336,8 +336,8 @@ export default defineComponent({
         bairro: "",
         cidade: "",
       },
-      avatarCadastro: "/img/avatarCadMembro.png",
       save,
+      camera,
       closeCircle,
       arrowBackCircle,
       checkmarkCircle,
@@ -368,11 +368,12 @@ export default defineComponent({
         cssClass: "my-custom-class",
         header: "DELETAR MEMBRO",
         message: "Deseja Deletar este Membro?",
+        translucent: true,
         buttons: [
           {
             text: "Cancelar",
             role: "cancel",
-            cssClass: "secondary",
+            cssClass: "danger",
             id: "cancel-button",
             handler: () => {},
           },
@@ -381,6 +382,7 @@ export default defineComponent({
             id: "confirm-button",
             handler: () => {
               this.deleteMembro(this.idMembro);
+              this.loader = false;
             },
           },
         ],
@@ -417,10 +419,12 @@ export default defineComponent({
       this.membro.dtBatismo = membroEdit[0].dtBatismo;
       this.membro.estCivil = membroEdit[0].estCivil;
       this.membro.id_cargo = membroEdit[0].cargo_membro.id;
+      this.membro.url_foto = membroEdit[0].url_foto;
       this.logradouro.endereco = membroEdit[0].logradouro_membro.endereco;
       this.logradouro.bairro = membroEdit[0].logradouro_membro.bairro;
       this.logradouro.cidade = membroEdit[0].logradouro_membro.cidade;
       this.logradouro.numero = membroEdit[0].logradouro_membro.numero;
+      
     },
 
     async getCargos() {
@@ -456,6 +460,7 @@ export default defineComponent({
                 dtNascimento: "${membro.dtNascimento}",
                 dtBatismo: "${membro.dtBatismo}",
                 estCivil: "${membro.estCivil}",
+                url_foto: "${membro.url_foto}",
                 logradouro_membro:{
                   data:{
                     endereco: "${logradouro.endereco}",
@@ -499,6 +504,7 @@ export default defineComponent({
             query: `mutation updateMembro {
                       update_membros(where: {id: {_eq:${this.idMembro}}}, _set: 
                         {  nome: "${membro.nome}",
+                            url_foto: "${membro.url_foto}",
                             telefone: ${membro.telefone},
                             id_cargo: ${membro.id_cargo},
                             pai: "${membro.pai}",
@@ -550,6 +556,7 @@ export default defineComponent({
                   dtNascimento
                   estCivil
                   id_logradouro
+                  url_foto
                   mae
                   nome
                   pai
@@ -649,13 +656,14 @@ export default defineComponent({
   beforeMount() {
     this.getCargos();
   },
-  beforeUnmount(){
-    this.loader = false;
-  }
 });
 </script>
 
 <style scoped>
+.iconCamera {
+  padding-left: 10px;
+  font-size: 46px;
+}
 .diferencaRadioBtn {
   --padding-start: 2px;
   --inner-padding-end: 2px;

@@ -52,7 +52,7 @@ a barra de Ferramentas e a lista de membros cadastrados -->
 
     <ion-content >
       <ion-grid  v-if="loader">
-        <ion-row class="ion-justify-content-between ion-align-items-center">
+        <ion-row class="ion-align-items-center">
           
           <ion-col size="2">
             <ion-row class="ion-justify-content-start">
@@ -86,13 +86,10 @@ a barra de Ferramentas e a lista de membros cadastrados -->
                   <ion-item>
                     <ion-col size="9">
                       <ion-row
-                        class="
-                          ion-justify-content-between ion-align-items-center
-                        "
-                      >
+                        class="ion-justify-content-between ion-align-items-center">
                         <ion-col size="4">
                           <ion-avatar>
-                            <ion-img :src="imgAvatar" alt="Avatar do Membro" />
+                            <ion-img :src="`${Membro.url_foto}`" alt="Avatar do Membro" />
                           </ion-avatar>
                         </ion-col>
 
@@ -201,7 +198,7 @@ export default defineComponent({
       const response = await axios.post(
         "https://cdm-isosed.hasura.app/v1/graphql",
         {
-          query: "query getMembros{membros (order_by: {nome: asc})  {id,nome cargo_membro {nome}}}",
+          query: "query getMembros{membros (order_by: {nome: asc})  {id,nome,url_foto cargo_membro {nome}}}",
         },
         {
           headers: {
