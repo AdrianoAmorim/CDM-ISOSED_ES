@@ -12,5 +12,5 @@ TELA HOME
 
 TELA DE EDITAR MEMBRO:
 > EStilizar alert de Delete
- > criar a mutation para atualizar os dados do membro
- >alterar a query do botao salvar para poder atualizar
+ > Criado o Update (falta revisar query)
+

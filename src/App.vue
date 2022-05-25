@@ -15,6 +15,7 @@ import { IonApp, IonHeader, IonContent, IonRouterOutlet } from "@ionic/vue";
 import { defineComponent } from "vue";
 import NavBar from "@/components/NavBar.vue";
 
+
 export default defineComponent({
   name: "App",
   components: {
@@ -49,12 +50,6 @@ object-fit: fill;
  text-align: left;
   padding: 5px; 
 }
-.loader{
-  margin-left:15px;
-  font-size:18px;
-  font-weight: bold;
-  font-style: italic;
- color: #053e79;
-}
+
 
 </style>

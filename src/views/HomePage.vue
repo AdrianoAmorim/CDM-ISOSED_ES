@@ -50,8 +50,8 @@ a barra de Ferramentas e a lista de membros cadastrados -->
       </ion-toolbar>
     </ion-header>
 
-    <ion-content>
-      <ion-grid>
+    <ion-content >
+      <ion-grid  v-if="loader">
         <ion-row class="ion-justify-content-between ion-align-items-center">
           
           <ion-col size="2">
@@ -74,7 +74,7 @@ a barra de Ferramentas e a lista de membros cadastrados -->
 
         </ion-row>
 
-        <ion-row class="ion-justify-content-center">
+        <ion-row class="ion-justify-content-center" >
           <ion-col size="12">
             <ion-list>
               <ion-row
@@ -129,7 +129,9 @@ a barra de Ferramentas e a lista de membros cadastrados -->
             </ion-list>
           </ion-col>
         </ion-row>
+        
       </ion-grid>
+    <ion-progress-bar v-else type="indeterminate"></ion-progress-bar>
     </ion-content>
   </ion-page>
 </template>
@@ -156,11 +158,13 @@ import {
   IonToolbar,
   IonContent,
   IonSearchbar,
+  IonProgressBar
 } from "@ionic/vue";
 
 export default defineComponent({
   name: "HomePage",
   components: {
+    IonProgressBar,
     IonIcon,
     IonPage,
     IonToolbar,
@@ -181,6 +185,7 @@ export default defineComponent({
   },
   data() {
     return {
+      loader: false,
       searchCircle,
       personAdd,
       create,
@@ -208,13 +213,22 @@ export default defineComponent({
       );
       this.listaMembros = response.data.data.membros;
     },
+    
+  },
+  watch:{
+    listaMembros(){
+      if(this.listaMembros != null){
+        this.loader = true;
+      }
+    }
   },
  
-ionViewWillEnter() {
+ionViewDidEnter() {
       this.getMembros();
   },
-
-
+ionViewWillLeave(){
+    this.loader = false;
+  }
 });
 </script>
 

@@ -25,6 +25,18 @@
       /></ion-button>
 
       <ion-button
+        v-if="page == 'editar'"
+        fill="clear"
+        router-direction="back"
+        slot="end"
+        size="small"
+        color="success"
+        @click="updateMembro(this.membro, this.logradouro)"
+      >
+        <ion-icon slot="icon-only" class="iconToolbar" :icon="save"
+      /></ion-button>
+      <ion-button
+        v-else
         fill="clear"
         router-direction="back"
         slot="end"
@@ -39,15 +51,11 @@
 
   <ion-content>
     <ion-grid v-if="loader">
-      <ion-row
-        v-model="statusInfoSistema"
-        v-if="statusInfoSistema"
-        class="ion-justify-content-start"
-      >
+      <ion-row v-if="statusInfoSistema" class="ion-justify-content-start">
         <ion-col size="12" class="infoSistema">
           <ion-row class="ion-justify-content-between ion-align-items-center">
             <span>{{ msgSistema }}</span>
-            <ion-icon :icon="checkmarkCircle" />
+            <ion-icon color="warning" :icon="checkmarkCircle" />
           </ion-row>
         </ion-col>
       </ion-row>
@@ -127,6 +135,7 @@
             <ion-item mode="md">
               <ion-label position="floating">Telefone: </ion-label>
               <ion-input
+                
                 v-model="membro.telefone"
                 type="number"
                 inputmode="numeric"
@@ -243,7 +252,7 @@
         </ion-row>
       </form>
     </ion-grid>
-    <p class="loader" v-else>{{textLoader}}</p>
+   <ion-progress-bar v-else type="indeterminate"></ion-progress-bar>
   </ion-content>
 </template>
 
@@ -257,6 +266,7 @@ import {
   checkmarkCircle,
 } from "ionicons/icons";
 import {
+  IonProgressBar,
   alertController,
   IonIcon,
   IonButton,
@@ -282,6 +292,7 @@ import {
 export default defineComponent({
   name: "InfoMembro",
   components: {
+    IonProgressBar,
     IonHeader,
     IonIcon,
     IonButton,
@@ -304,7 +315,6 @@ export default defineComponent({
   },
   data() {
     return {
-      textLoader: "Carregando",
       loader: false,
       msgSistema: "",
       statusInfoSistema: false,
@@ -465,7 +475,7 @@ export default defineComponent({
           }
         );
         if (response.data.data.insert_membros_one.id > 0) {
-          this.msgSistema = "Pedido Realizado com Sucesso!!";
+          this.msgSistema = "Membro Cadastrado com Sucesso!!";
           this.statusInfoSistema = true;
           this.limparCampos();
           setTimeout(() => {
@@ -473,14 +483,62 @@ export default defineComponent({
             this.$router.push("/home");
           }, 3000);
         } else {
-          this.msgSistema = "Erro ao Cadastrar novo Usuário";
+          this.msgSistema = "Erro ao Cadastrar novo Membro";
           this.statusInfoSistema = true;
         }
       } else {
         alert("Favor Preencher todas as Informações do Membro!");
       }
     },
-
+    async updateMembro(membro, logradouro) {
+      const validar = this.validarCampos();
+      if (validar) {
+        const response = await axios.post(
+          "https://cdm-isosed.hasura.app/v1/graphql",
+          {
+            query: `mutation updateMembro {
+                      update_membros(where: {id: {_eq:${this.idMembro}}}, _set: 
+                        {  nome: "${membro.nome}",
+                            telefone: ${membro.telefone},
+                            id_cargo: ${membro.id_cargo},
+                            pai: "${membro.pai}",
+                            mae: "${membro.mae}",
+                            dtNascimento: "${membro.dtNascimento}",
+                            dtBatismo: "${membro.dtBatismo}",
+                            estCivil: "${membro.estCivil}"}) {
+                              affected_rows
+                            }
+                      update_logradouro(where: {id: {_eq:${this.idMembro} }}, _set: 
+                        {endereco: "${logradouro.endereco}",
+                          numero: ${logradouro.numero},
+                          bairro: "${logradouro.bairro}",
+                          cidade: "${logradouro.cidade}"}) {
+                              affected_rows}}`,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "x-hasura-admin-secret":
+                "HqDOmCJCXSI1ITFKPRVp4bwtis0FKbh0aJQxkrR6ZSCKala8GLITbR79brjAA3LM",
+            },
+          }
+        );
+        if (response.data.data.update_membros.affected_rows > 0) {
+          this.msgSistema = "Membro Atualizado com Sucesso!!";
+          this.statusInfoSistema = true;
+          this.limparCampos();
+          setTimeout(() => {
+            this.statusInfoSistema = false;
+            this.$router.push("/home");
+          }, 3000);
+        } else {
+          this.msgSistema = "Erro ao Atualizar o Membro";
+          this.statusInfoSistema = true;
+        }
+      } else {
+        alert("Favor Preencher todas as Informações");
+      }
+    },
     async getMembro(idMembro) {
       const response = await axios.post(
         "https://cdm-isosed.hasura.app/v1/graphql",
@@ -581,6 +639,7 @@ export default defineComponent({
         }
       } else if (this.page == "editar") {
         this.getMembro(this.idMembro);
+        this.loader = false;
         if (this.cargos != null) {
           this.loader = true;
         }
@@ -590,6 +649,9 @@ export default defineComponent({
   beforeMount() {
     this.getCargos();
   },
+  beforeUnmount(){
+    this.loader = false;
+  }
 });
 </script>
 
@@ -612,15 +674,14 @@ ion-select-option {
 ion-col.infoSistema {
   opacity: 0.8;
   border-radius: 15px;
-  padding: 15px;
+  padding: 12px;
   background-color: #21c05e;
   color: white;
   font-style: italic;
-  font-size: 16px;
   font-weight: bold;
 }
-ion-col.infoSistema icon {
-  font-size: 26px;
+ion-col.infoSistema ion-icon {
+  font-size: 24px;
   object-fit: fill;
 }
 </style>
