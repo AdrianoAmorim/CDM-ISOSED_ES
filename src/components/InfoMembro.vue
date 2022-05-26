@@ -4,7 +4,7 @@
       <ion-button
         v-if="page == 'editar'"
         fill="clear"
-        router-direction="top"
+        router-direction="back"
         slot="end"
         size="small"
         color="danger"
@@ -137,10 +137,9 @@
             <ion-item mode="md">
               <ion-label position="floating">Telefone: </ion-label>
               <ion-input
-                v-model="membro.telefone"
-                type="tel"
-                inputmode="numeric"
                 color="secondary"
+                v-model="membro.telefone"
+                type="number"
               ></ion-input>
             </ion-item>
           </ion-col>
@@ -268,6 +267,7 @@ import {
   checkmarkCircle,
 } from "ionicons/icons";
 import {
+  IonAvatar,
   IonProgressBar,
   alertController,
   IonIcon,
@@ -283,6 +283,7 @@ import {
   IonGrid,
   IonRow,
   IonCol,
+  IonImg,
   IonItem,
   IonInput,
   IonTitle,
@@ -295,6 +296,8 @@ export default defineComponent({
     IonProgressBar,
     IonHeader,
     IonIcon,
+    IonAvatar,
+    IonImg,
     IonButton,
     IonContent,
     IonGrid,
@@ -326,13 +329,13 @@ export default defineComponent({
         pai: "",
         mae: "",
         estCivil: "",
-        telefone: 0,
-        id_cargo: 0,
-        url_foto:"/img/avatar.png"
+        telefone: null,
+        id_cargo: null,
+        url_foto: "/img/avatar.png",
       },
       logradouro: {
         endereco: "",
-        numero: 0,
+        numero: null,
         bairro: "",
         cidade: "",
       },
@@ -351,15 +354,16 @@ export default defineComponent({
   methods: {
     limparCampos() {
       this.membro.nome = "";
-      this.membro.telefone = 0;
+      this.membro.telefone = null;
       this.membro.dtBatismo = "";
       this.membro.dtNascimento = "";
       this.membro.pai = "";
       this.membro.mae = "";
       this.membro.estCivil = "";
-      this.membro.id_cargo = 0;
+      this.membro.url_foto = "";
+      this.membro.id_cargo = null;
       this.logradouro.endereco = "";
-      this.logradouro.numero = 0;
+      this.logradouro.numero = null;
       this.logradouro.bairro = "";
       this.logradouro.cidade = "";
     },
@@ -392,15 +396,15 @@ export default defineComponent({
     validarCampos() {
       if (
         (this.membro.nome == "") |
-        (this.membro.telefone == 0) |
+        (this.membro.telefone == null) |
         (this.membro.dtBatismo == "") |
         (this.membro.dtNascimento == "") |
         (this.membro.pai == "") |
         (this.membro.mae == "") |
         (this.membro.estCivil == "") |
-        (this.membro.id_cargo == 0) |
+        (this.membro.id_cargo == null) |
         (this.logradouro.endereco == "") |
-        (this.logradouro.numero == 0) |
+        (this.logradouro.numero == null) |
         (this.logradouro.bairro == "") |
         (this.logradouro.cidade == "")
       ) {
@@ -424,7 +428,6 @@ export default defineComponent({
       this.logradouro.bairro = membroEdit[0].logradouro_membro.bairro;
       this.logradouro.cidade = membroEdit[0].logradouro_membro.cidade;
       this.logradouro.numero = membroEdit[0].logradouro_membro.numero;
-      
     },
 
     async getCargos() {
@@ -482,8 +485,8 @@ export default defineComponent({
         if (response.data.data.insert_membros_one.id > 0) {
           this.msgSistema = "Membro Cadastrado com Sucesso!!";
           this.statusInfoSistema = true;
-          this.limparCampos();
           setTimeout(() => {
+            this.limparCampos();
             this.statusInfoSistema = false;
             this.$router.push("/home");
           }, 3000);
@@ -532,7 +535,7 @@ export default defineComponent({
         if (response.data.data.update_membros.affected_rows > 0) {
           this.msgSistema = "Membro Atualizado com Sucesso!!";
           this.statusInfoSistema = true;
-          this.limparCampos();
+
           setTimeout(() => {
             this.statusInfoSistema = false;
             this.$router.push("/home");
@@ -582,7 +585,11 @@ export default defineComponent({
         }
       );
       this.membroEdit = response.data.data.membros;
-      this.setDadosInp(this.membroEdit);
+
+      if (this.cargos != null && this.membroEdit != null) {
+        this.loader = true;
+        this.setDadosInp(this.membroEdit);
+      }
     },
 
     async deleteMembro(id) {
@@ -646,15 +653,12 @@ export default defineComponent({
         }
       } else if (this.page == "editar") {
         this.getMembro(this.idMembro);
-        this.loader = false;
-        if (this.cargos != null) {
-          this.loader = true;
-        }
       }
     },
   },
-  beforeMount() {
+  mounted() {
     this.getCargos();
+    console.log("inicioMount " + this.membroEdi + " " + this.idMembro);
   },
 });
 </script>

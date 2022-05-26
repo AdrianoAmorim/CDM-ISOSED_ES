@@ -20,10 +20,10 @@ a barra de Ferramentas e a lista de membros cadastrados -->
             <ion-col size="5">
               <ion-row class="ion-justify-content-end">
                 <ion-button
+                disabled
                   fill="clear"
                   size="small"
                   color="primary"
-                 
                   class="ion-align-self-start"
                 >
                   <ion-icon
@@ -107,7 +107,7 @@ a barra de Ferramentas e a lista de membros cadastrados -->
                     <ion-col size="3">
                       <ion-row class="ion-justify-content-end">
                         <ion-button
-                          :router-link="'/editar/' + Membro.id"
+                          :router-link = '"/editar/" + Membro.id'
                           color="secondary"
                           fill="clear"
                           size="large"
@@ -220,10 +220,10 @@ export default defineComponent({
     }
   },
  
-ionViewDidEnter() {
+ionViewWillEnter() {
       this.getMembros();
   },
-ionViewWillLeave(){
+ionViewDidLeave(){
     this.loader = false;
   }
 });
