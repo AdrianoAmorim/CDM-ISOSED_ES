@@ -486,9 +486,8 @@ export default defineComponent({
           this.msgSistema = "Membro Cadastrado com Sucesso!!";
           this.statusInfoSistema = true;
           setTimeout(() => {
-            this.limparCampos();
             this.statusInfoSistema = false;
-            this.$router.push("/home");
+            this.limparCampos();
           }, 3000);
         } else {
           this.msgSistema = "Erro ao Cadastrar novo Membro";
@@ -538,7 +537,7 @@ export default defineComponent({
 
           setTimeout(() => {
             this.statusInfoSistema = false;
-            this.$router.push("/home");
+            this.limparCampos();
           }, 3000);
         } else {
           this.msgSistema = "Erro ao Atualizar o Membro";
