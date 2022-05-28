@@ -1,7 +1,7 @@
 <template>
   <ion-header mode="ios">
     <ion-toolbar mode="ios">
-      <ion-button
+      <ion-button 
         v-if="page == 'editar'"
         fill="clear"
         router-direction="back"
@@ -486,8 +486,9 @@ export default defineComponent({
           this.msgSistema = "Membro Cadastrado com Sucesso!!";
           this.statusInfoSistema = true;
           setTimeout(() => {
-            this.statusInfoSistema = false;
-            this.limparCampos();
+            this.statusInfoSistema = false
+            this.$router.push("/home")
+                        this.limparCampos();
           }, 3000);
         } else {
           this.msgSistema = "Erro ao Cadastrar novo Membro";
@@ -537,6 +538,7 @@ export default defineComponent({
 
           setTimeout(() => {
             this.statusInfoSistema = false;
+            this.$router.push("/home");
             this.limparCampos();
           }, 3000);
         } else {
@@ -586,8 +588,8 @@ export default defineComponent({
       this.membroEdit = response.data.data.membros;
 
       if (this.cargos != null && this.membroEdit != null) {
-        this.loader = true;
         this.setDadosInp(this.membroEdit);
+        this.loader = true;
       }
     },
 
@@ -657,7 +659,7 @@ export default defineComponent({
   },
   mounted() {
     this.getCargos();
-    console.log("inicioMount " + this.membroEdi + " " + this.idMembro);
+    console.log("inicioMount " + this.membroEdit + " " + this.idMembro);
   },
 });
 </script>
@@ -682,7 +684,7 @@ ion-radio {
 ion-select-option {
   color: #427aa1;
 }
-ion-col.infoSistema {
+.infoSistema {
   opacity: 0.8;
   border-radius: 15px;
   padding: 12px;
@@ -691,7 +693,7 @@ ion-col.infoSistema {
   font-style: italic;
   font-weight: bold;
 }
-ion-col.infoSistema ion-icon {
+.infoSistema ion-icon {
   font-size: 24px;
   object-fit: fill;
 }
