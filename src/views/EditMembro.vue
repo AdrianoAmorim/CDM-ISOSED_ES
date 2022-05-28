@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-      <InfoMembro titlePage="EDITAR MEMBRO" :page="nomePg" :idMembro="this.id" />
+      <InfoMembro :page="nomePg" :idMembro="this.id" />
   </ion-page>
 </template>
 

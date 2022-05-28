@@ -2,7 +2,7 @@
   <ion-page>
     
  
-      <InfoMembro titlePage="CADASTRAR MEMBRO" :page="nomePg" />
+      <InfoMembro  :page="nomePg" />
     
   </ion-page>
 </template>

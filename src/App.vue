@@ -44,12 +44,7 @@ object-fit: fill;
 .headerPg{
   padding:20px;
 }
-.titlePg{
-  overflow:visible;
-  color: slategray;
- text-align: center;
-  padding: 5px; 
-}
+
 
 
 </style>

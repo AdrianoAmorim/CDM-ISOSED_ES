@@ -1,4 +1,5 @@
 <template>
+<ion-page>
   <ion-header mode="ios">
     <ion-toolbar mode="ios">
       <ion-button 
@@ -61,20 +62,11 @@
         </ion-col>
       </ion-row>
 
-      <ion-row class="ion-align-items-center">
-        <ion-col
-          size="2"
-          class="ion-justify-content-start ion-align-items-center"
-        >
-          <ion-avatar>
+      <ion-row class="ion-align-items-center ion-justify-content-center">
+        <ion-col  size="4">
+          <ion-avatar class="avatarFoto">
             <ion-img :src="membro.url_foto" alt="Avatar do Membro" />
           </ion-avatar>
-        </ion-col>
-
-        <ion-col size="10">
-          <ion-header class="headerPg" mode="ios">
-            <ion-title class="titlePg">{{ titlePage }}</ion-title>
-          </ion-header>
         </ion-col>
       </ion-row>
 
@@ -169,7 +161,7 @@
           <ion-col>
             <ion-item mode="md">
               <ion-label position="floating">Pai: </ion-label>
-              <ion-input v-model="membro.pai" color="secondary"></ion-input>
+              <ion-input v-model="membro.pai" type="text" color="secondary"></ion-input>
             </ion-item>
           </ion-col>
         </ion-row>
@@ -254,11 +246,12 @@
     </ion-grid>
     <ion-progress-bar v-else type="indeterminate"></ion-progress-bar>
   </ion-content>
+  </ion-page>
 </template>
 
 <script>
 import axios from "axios";
-import { defineComponent } from "@vue/runtime-core";
+import { defineComponent } from "vue";
 import {
   camera,
   save,
@@ -267,6 +260,7 @@ import {
   checkmarkCircle,
 } from "ionicons/icons";
 import {
+  IonPage,
   IonAvatar,
   IonProgressBar,
   alertController,
@@ -286,13 +280,13 @@ import {
   IonImg,
   IonItem,
   IonInput,
-  IonTitle,
   IonLabel,
 } from "@ionic/vue";
 
 export default defineComponent({
   name: "InfoMembro",
   components: {
+    IonPage,
     IonProgressBar,
     IonHeader,
     IonIcon,
@@ -305,7 +299,6 @@ export default defineComponent({
     IonCol,
     IonToolbar,
     IonItem,
-    IonTitle,
     IonInput,
     IonLabel,
     IonSelect,
@@ -349,7 +342,6 @@ export default defineComponent({
   props: {
     idMembro: String,
     page: String,
-    titlePage: String,
   },
   methods: {
     limparCampos() {
@@ -657,7 +649,7 @@ export default defineComponent({
       }
     },
   },
-  mounted() {
+  beforeMount() {
     this.getCargos();
     console.log("inicioMount " + this.membroEdit + " " + this.idMembro);
   },
@@ -665,10 +657,14 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.iconCamera {
-  padding-left: 10px;
-  font-size: 46px;
+.avatarFoto {
+  background-color: #427aa1;
+  width:100px;
+  height: 100px;
+  object-fit: cover;
 }
+
+
 .diferencaRadioBtn {
   --padding-start: 2px;
   --inner-padding-end: 2px;

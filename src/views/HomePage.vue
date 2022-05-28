@@ -36,7 +36,7 @@ a barra de Ferramentas e a lista de membros cadastrados -->
                   fill="clear"
                   color="success"
                   size="small"
-                 router-link="/cadastrar"
+                router-link="/cadastrar"
                   class="ion-align-self-end"
                   ><ion-icon
                     slot="icon-only"
@@ -52,27 +52,6 @@ a barra de Ferramentas e a lista de membros cadastrados -->
 
     <ion-content >
       <ion-grid  v-if="loader">
-        <ion-row class="ion-align-items-center">
-          
-          <ion-col size="2">
-            <ion-row class="ion-justify-content-start">
-              <ion-thumbnail>
-                <ion-img
-                  class="imgAvatar"
-                  :src="avatarLsMembro"
-                  alt="Imagem Ilustrativa"
-                />
-              </ion-thumbnail>
-            </ion-row>
-          </ion-col>
-
-          <ion-col size="10">
-            <ion-header class="headerPg" mode="ios">
-              <ion-title class="titlePg">MEMBROS CADASTRADOS</ion-title>
-            </ion-header>
-          </ion-col>
-
-        </ion-row>
 
         <ion-row class="ion-justify-content-center" >
           <ion-col size="12">
@@ -140,7 +119,6 @@ import { searchCircle, personAdd, create } from "ionicons/icons";
 import {
   IonImg,
   IonHeader,
-  IonThumbnail,
   IonGrid,
   IonRow,
   IonCol,
@@ -149,7 +127,6 @@ import {
   IonLabel,
   IonButton,
   IonAvatar,
-  IonTitle,
   IonIcon,
   IonPage,
   IonToolbar,
@@ -173,12 +150,10 @@ export default defineComponent({
     IonRow,
     IonCol,
     IonImg,
-    IonThumbnail,
     IonList,
     IonItem,
     IonLabel,
-    IonAvatar,
-    IonTitle,
+    IonAvatar
   },
   data() {
     return {
@@ -186,7 +161,6 @@ export default defineComponent({
       searchCircle,
       personAdd,
       create,
-      avatarLsMembro: "/img/avatarListarMembros2.png",
       imgAvatar: "/img/avatar.png",
       listaMembros: null,
      
