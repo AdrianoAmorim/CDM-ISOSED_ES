@@ -63,10 +63,11 @@
       </ion-row>
 
       <ion-row class="ion-align-items-center ion-justify-content-center">
-        <ion-col  size="4">
-          <ion-avatar class="avatarFoto">
-            <ion-img :src="membro.url_foto" alt="Avatar do Membro" />
-          </ion-avatar>
+        <ion-col size="5">
+            <ion-avatar class="avatarFoto">
+              <ion-icon v-if="membro.url_foto == null" color="secondary" :icon="camera" />
+              <ion-img v-else :src="membro.url_foto" alt="Avatar do Membro" />
+            </ion-avatar>
         </ion-col>
       </ion-row>
 
@@ -324,7 +325,7 @@ export default defineComponent({
         estCivil: "",
         telefone: null,
         id_cargo: null,
-        url_foto: "/img/avatar.png",
+        url_foto: null,
       },
       logradouro: {
         endereco: "",
@@ -658,10 +659,15 @@ export default defineComponent({
 
 <style scoped>
 .avatarFoto {
-  background-color: #427aa1;
-  width:100px;
-  height: 100px;
+  margin: 8px;
+  text-align: center;
+  border: 3px solid #427aa1;
+  width:110px;
+  height: 110px;
   object-fit: cover;
+}
+.avatarFoto ion-icon{
+ font-size: 68px;
 }
 
 
