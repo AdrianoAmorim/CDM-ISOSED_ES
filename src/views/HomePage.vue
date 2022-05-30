@@ -86,7 +86,7 @@ a barra de Ferramentas e a lista de membros cadastrados -->
                     <ion-col size="3">
                       <ion-row class="ion-justify-content-end">
                         <ion-button
-                          @click="this.$router.replace('/editar/'+`${Membro.id}`)"
+                          @click="this.$router.push('/editar/'+`${Membro.id}`)"
                           color="secondary"
                           fill="clear"
                           size="large"

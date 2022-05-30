@@ -1,252 +1,265 @@
 <template>
-<ion-page>
-  <ion-header mode="ios">
-    <ion-toolbar mode="ios">
-      <ion-button 
-        v-if="page == 'editar'"
-        fill="clear"
-        router-direction="back"
-        slot="end"
-        size="small"
-        color="danger"
-        @click="confirmDelete()"
-      >
-        <ion-icon slot="icon-only" class="iconToolbar" :icon="closeCircle"
-      /></ion-button>
+  <ion-page>
+    <ion-header mode="ios">
+      <ion-toolbar mode="ios">
+        <ion-button
+          v-if="page == 'editar'"
+          fill="clear"
+          router-direction="back"
+          slot="end"
+          size="small"
+          color="danger"
+          @click="confirmDelete()"
+        >
+          <ion-icon slot="icon-only" class="iconToolbar" :icon="closeCircle"
+        /></ion-button>
 
-      <ion-button
-        fill="clear"
-        router-direction="back"
-        slot="end"
-        size="small"
-        color="primary"
-        router-link="/"
-      >
-        <ion-icon slot="icon-only" class="iconToolbar" :icon="arrowBackCircle"
-      /></ion-button>
+        <ion-button
+          fill="clear"
+          router-direction="back"
+          slot="end"
+          size="small"
+          color="primary"
+          router-link="/"
+        >
+          <ion-icon
+            slot="icon-only"
+            class="iconToolbar"
+            :icon="arrowBackCircle"
+        /></ion-button>
 
-      <ion-button
-        v-if="page == 'editar'"
-        fill="clear"
-        router-direction="back"
-        slot="end"
-        size="small"
-        color="success"
-        @click="updateMembro(this.membro, this.logradouro)"
-      >
-        <ion-icon slot="icon-only" class="iconToolbar" :icon="save"
-      /></ion-button>
+        <ion-button
+          v-if="page == 'editar'"
+          fill="clear"
+          router-direction="back"
+          slot="end"
+          size="small"
+          color="success"
+          @click="updateMembro(this.membro, this.logradouro)"
+        >
+          <ion-icon slot="icon-only" class="iconToolbar" :icon="save"
+        /></ion-button>
 
-      <ion-button
-        v-else
-        fill="clear"
-        router-direction="back"
-        slot="end"
-        size="small"
-        color="success"
-        @click="setMembro(this.membro, this.logradouro)"
-      >
-        <ion-icon slot="icon-only" class="iconToolbar" :icon="save"
-      /></ion-button>
-    </ion-toolbar>
-  </ion-header>
+        <ion-button
+          v-else
+          fill="clear"
+          router-direction="back"
+          slot="end"
+          size="small"
+          color="success"
+          @click="setMembro(this.membro, this.logradouro)"
+        >
+          <ion-icon slot="icon-only" class="iconToolbar" :icon="save"
+        /></ion-button>
+      </ion-toolbar>
+    </ion-header>
 
-  <ion-content>
-    <ion-grid v-if="loader">
-      <ion-row v-if="statusInfoSistema" class="ion-justify-content-start">
-        <ion-col size="12" class="infoSistema">
-          <ion-row class="ion-justify-content-between ion-align-items-center">
-            <span>{{ msgSistema }}</span>
-            <ion-icon color="warning" :icon="checkmarkCircle" />
+    <ion-content>
+      <ion-grid v-if="loader">
+        <ion-row v-if="statusInfoSistema" class="ion-justify-content-start">
+          <ion-col size="12" class="infoSistema">
+            <ion-row class="ion-justify-content-between ion-align-items-center">
+              <span>{{ msgSistema }}</span>
+              <ion-icon color="warning" :icon="checkmarkCircle" />
+            </ion-row>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="ion-justify-content-center ion-align-items-center">
+          <ion-col size="5">
+            <ion-row class="ion-justify-content-center">
+              <ion-avatar class="avatarFoto">
+                <ion-icon
+                  v-if="membro.url_foto == null"
+                  color="secondary"
+                  :icon="camera"
+                />
+                <ion-img v-else :src="membro.url_foto" alt="Avatar do Membro" />
+              </ion-avatar>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+
+        <form>
+          <ion-row>
+            <ion-col>
+              <ion-item mode="md">
+                <ion-label position="floating">Nome: </ion-label>
+                <ion-input v-model="membro.nome" color="secondary"></ion-input>
+              </ion-item>
+            </ion-col>
           </ion-row>
-        </ion-col>
-      </ion-row>
 
-      <ion-row class="ion-justify-content-center ion-align-items-end">
-        <ion-col size="3" class="ion-text-center">
-            <ion-avatar class="avatarFoto">
-              <ion-icon v-if="membro.url_foto == null" color="secondary" :icon="camera" />
-              <ion-img v-else :src="membro.url_foto" alt="Avatar do Membro" />
-            </ion-avatar>
-        </ion-col>
-      </ion-row>
+          <ion-row>
+            <ion-col size="8">
+              <ion-item mode="md">
+                <ion-label position="floating">Endereço: </ion-label>
+                <ion-input
+                  v-model="logradouro.endereco"
+                  color="secondary"
+                ></ion-input>
+              </ion-item>
+            </ion-col>
+            <ion-col size="4">
+              <ion-item mode="md">
+                <ion-label position="floating">Nº: </ion-label>
+                <ion-input
+                  v-model="logradouro.numero"
+                  type="number"
+                  inputmode="numeric"
+                  color="secondary"
+                ></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
 
-      <form>
-        <ion-row>
-          <ion-col>
-            <ion-item mode="md">
-              <ion-label position="floating">Nome: </ion-label>
-              <ion-input v-model="membro.nome" color="secondary"></ion-input>
-            </ion-item>
-          </ion-col>
-        </ion-row>
+          <ion-row>
+            <ion-col size="6">
+              <ion-item mode="md">
+                <ion-label position="floating">Bairro: </ion-label>
+                <ion-input
+                  v-model="logradouro.bairro"
+                  color="secondary"
+                ></ion-input>
+              </ion-item>
+            </ion-col>
+            <ion-col size="6">
+              <ion-item mode="md">
+                <ion-label position="floating">Cidade: </ion-label>
+                <ion-input
+                  v-model="logradouro.cidade"
+                  color="secondary"
+                ></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
 
-        <ion-row>
-          <ion-col size="8">
-            <ion-item mode="md">
-              <ion-label position="floating">Endereço: </ion-label>
-              <ion-input
-                v-model="logradouro.endereco"
-                color="secondary"
-              ></ion-input>
-            </ion-item>
-          </ion-col>
-          <ion-col size="4">
-            <ion-item mode="md">
-              <ion-label position="floating">Nº: </ion-label>
-              <ion-input
-                v-model="logradouro.numero"
-                type="number"
-                inputmode="numeric"
-                color="secondary"
-              ></ion-input>
-            </ion-item>
-          </ion-col>
-        </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-item mode="md">
+                <ion-label position="floating">Telefone: </ion-label>
+                <ion-input
+                  color="secondary"
+                  v-model="membro.telefone"
+                  type="number"
+                ></ion-input>
+              </ion-item>
+            </ion-col>
 
-        <ion-row>
-          <ion-col size="6">
-            <ion-item mode="md">
-              <ion-label position="floating">Bairro: </ion-label>
-              <ion-input
-                v-model="logradouro.bairro"
-                color="secondary"
-              ></ion-input>
-            </ion-item>
-          </ion-col>
-          <ion-col size="6">
-            <ion-item mode="md">
-              <ion-label position="floating">Cidade: </ion-label>
-              <ion-input
-                v-model="logradouro.cidade"
-                color="secondary"
-              ></ion-input>
-            </ion-item>
-          </ion-col>
-        </ion-row>
-
-        <ion-row>
-          <ion-col>
-            <ion-item mode="md">
-              <ion-label position="floating">Telefone: </ion-label>
-              <ion-input
-                color="secondary"
-                v-model="membro.telefone"
-                type="number"
-              ></ion-input>
-            </ion-item>
-          </ion-col>
-
-          <ion-col>
-            <ion-item mode="md">
-              <ion-label position="stacked">Cargo: </ion-label>
-              <ion-select
-                v-model="membro.id_cargo"
-                color="secondary"
-                placeholder="Selecione o Cargo"
-                cancel-text="CANCELAR"
-                ok-text="OK"
-              >
-                <ion-select-option
-                  v-for="Cargo in cargos"
-                  :key="Cargo.id"
-                  :value="Cargo.id"
-                  >{{ Cargo.nome }}</ion-select-option
+            <ion-col>
+              <ion-item mode="md">
+                <ion-label position="stacked">Cargo: </ion-label>
+                <ion-select
+                  v-model="membro.id_cargo"
+                  color="secondary"
+                  placeholder="Selecione o Cargo"
+                  cancel-text="CANCELAR"
+                  ok-text="OK"
                 >
-              </ion-select>
-            </ion-item>
-          </ion-col>
-        </ion-row>
-
-        <ion-row>
-          <ion-col>
-            <ion-item mode="md">
-              <ion-label position="floating">Pai: </ion-label>
-              <ion-input v-model="membro.pai" type="text" color="secondary"></ion-input>
-            </ion-item>
-          </ion-col>
-        </ion-row>
-
-        <ion-row>
-          <ion-col>
-            <ion-item mode="md">
-              <ion-label position="floating">Mãe: </ion-label>
-              <ion-input v-model="membro.mae" color="secondary"></ion-input>
-            </ion-item>
-          </ion-col>
-        </ion-row>
-
-        <ion-row>
-          <ion-col size="6">
-            <ion-item mode="md">
-              <ion-label style="overflow: visible" position="stacked"
-                >Data de Nascimento:
-              </ion-label>
-              <ion-input
-                v-model="membro.dtNascimento"
-                type="date"
-                color="secondary"
-              ></ion-input>
-            </ion-item>
-          </ion-col>
-          <ion-col size="6">
-            <ion-item mode="md">
-              <ion-label position="stacked">Data de Batismo: </ion-label>
-              <ion-input
-                v-model="membro.dtBatismo"
-                type="date"
-                color="secondary"
-              ></ion-input>
-            </ion-item>
-          </ion-col>
-        </ion-row>
-
-        <ion-row>
-          <ion-col>
-            <ion-list>
-              <ion-radio-group v-model="membro.estCivil" mode="md">
-                <ion-row class="ion-justify-content-start">
-                  <ion-label
-                    style="margin-right: 3px"
-                    class="ion-align-self-center"
-                    >Est. Civil:</ion-label
+                  <ion-select-option
+                    v-for="Cargo in cargos"
+                    :key="Cargo.id"
+                    :value="Cargo.id"
+                    >{{ Cargo.nome }}</ion-select-option
                   >
+                </ion-select>
+              </ion-item>
+            </ion-col>
+          </ion-row>
 
-                  <ion-item class="diferencaRadioBtn">
-                    <ion-label>Casado</ion-label>
-                    <ion-radio
-                      color="secondary"
-                      slot="start"
-                      value="Casado"
-                    ></ion-radio>
-                  </ion-item>
+          <ion-row>
+            <ion-col>
+              <ion-item mode="md">
+                <ion-label position="floating">Pai: </ion-label>
+                <ion-input
+                  v-model="membro.pai"
+                  type="text"
+                  color="secondary"
+                ></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
 
-                  <ion-item class="diferencaRadioBtn">
-                    <ion-label>Solteiro</ion-label>
-                    <ion-radio
-                      color="secondary"
-                      slot="start"
-                      value="Solteiro"
-                    ></ion-radio>
-                  </ion-item>
+          <ion-row>
+            <ion-col>
+              <ion-item mode="md">
+                <ion-label position="floating">Mãe: </ion-label>
+                <ion-input v-model="membro.mae" color="secondary"></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
 
-                  <ion-item class="diferencaRadioBtn">
-                    <ion-label>Viúvo(a)</ion-label>
-                    <ion-radio
-                      color="secondary"
-                      slot="start"
-                      value="Viúvo(a)"
-                    ></ion-radio>
-                  </ion-item>
-                </ion-row>
-              </ion-radio-group>
-            </ion-list>
-          </ion-col>
-        </ion-row>
-      </form>
-    </ion-grid>
-    <ion-progress-bar v-else type="indeterminate"></ion-progress-bar>
-  </ion-content>
+          <ion-row>
+            <ion-col size="6">
+              <ion-item mode="md">
+                <ion-label style="overflow: visible" position="stacked"
+                  >Data de Nascimento:
+                </ion-label>
+                <ion-input
+                  v-model="membro.dtNascimento"
+                  type="date"
+                  color="secondary"
+                ></ion-input>
+              </ion-item>
+            </ion-col>
+            <ion-col size="6">
+              <ion-item mode="md">
+                <ion-label position="stacked">Data de Batismo: </ion-label>
+                <ion-input
+                  v-model="membro.dtBatismo"
+                  type="date"
+                  color="secondary"
+                ></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col>
+              <ion-list>
+                <ion-radio-group v-model="membro.estCivil" mode="md">
+                  <ion-row class="ion-justify-content-start">
+                    <ion-label
+                      style="margin-right: 3px"
+                      class="ion-align-self-center"
+                      >Est. Civil:</ion-label
+                    >
+
+                    <ion-item class="diferencaRadioBtn">
+                      <ion-label>Casado</ion-label>
+                      <ion-radio
+                        color="secondary"
+                        slot="start"
+                        value="Casado"
+                      ></ion-radio>
+                    </ion-item>
+
+                    <ion-item class="diferencaRadioBtn">
+                      <ion-label>Solteiro</ion-label>
+                      <ion-radio
+                        color="secondary"
+                        slot="start"
+                        value="Solteiro"
+                      ></ion-radio>
+                    </ion-item>
+
+                    <ion-item class="diferencaRadioBtn">
+                      <ion-label>Viúvo(a)</ion-label>
+                      <ion-radio
+                        color="secondary"
+                        slot="start"
+                        value="Viúvo(a)"
+                      ></ion-radio>
+                    </ion-item>
+                  </ion-row>
+                </ion-radio-group>
+              </ion-list>
+            </ion-col>
+          </ion-row>
+        </form>
+      </ion-grid>
+      <ion-progress-bar v-else type="indeterminate"></ion-progress-bar>
+    </ion-content>
   </ion-page>
 </template>
 
@@ -315,7 +328,6 @@ export default defineComponent({
       statusInfoSistema: false,
       membroEdit: null,
       cargos: null,
-      mask: null,
       membro: {
         dtBatismo: "",
         dtNascimento: "",
@@ -341,7 +353,8 @@ export default defineComponent({
     };
   },
   props: {
-    idMembro: String,
+    cargosLs: null,
+    membroEd: null,
     page: String,
   },
   methods: {
@@ -408,6 +421,7 @@ export default defineComponent({
     },
 
     setDadosInp(membroEdit) {
+      console.log("entrando dentro do setDados:");
       this.membro.nome = membroEdit[0].nome;
       this.membro.pai = membroEdit[0].pai;
       this.membro.mae = membroEdit[0].mae;
@@ -421,6 +435,8 @@ export default defineComponent({
       this.logradouro.bairro = membroEdit[0].logradouro_membro.bairro;
       this.logradouro.cidade = membroEdit[0].logradouro_membro.cidade;
       this.logradouro.numero = membroEdit[0].logradouro_membro.numero;
+      this.loader = true;
+      
     },
 
     async getCargos() {
@@ -479,8 +495,8 @@ export default defineComponent({
           this.msgSistema = "Membro Cadastrado com Sucesso!!";
           this.statusInfoSistema = true;
           setTimeout(() => {
-            this.statusInfoSistema = false
-            this.$router.push("/home")
+            this.statusInfoSistema = false;
+            this.$router.push("/home");
             this.limparCampos();
           }, 3000);
         } else {
@@ -640,35 +656,34 @@ export default defineComponent({
     },
   },
   watch: {
-    cargos() {
-      if (this.page == "cadastro") {
-        if (this.cargos != null) {
+    cargosLs() {
+      this.cargos = this.cargosLs;
+      if(this.page=="cadastro"){
           this.loader = true;
-        }
-      } else if (this.page == "editar") {
-        this.getMembro(this.idMembro);
       }
+    },
+    membroEd() {
+      this.setDadosInp(this.membroEd);
     },
   },
   beforeMount() {
-    this.getCargos();
-    console.log("inicioMount " + this.membroEdit + " " + this.idMembro);
+    console.log(
+      "entrando no mount infomembro "
+    );
   },
 });
 </script>
 
 <style scoped>
 .avatarFoto {
- 
   border: 3px solid #427aa1;
-  width:110px;
+  width: 110px;
   height: 110px;
   object-fit: cover;
 }
-.avatarFoto ion-icon{
- font-size: 68px;
+.avatarFoto ion-icon {
+  font-size: 68px;
 }
-
 
 .diferencaRadioBtn {
   --padding-start: 2px;
