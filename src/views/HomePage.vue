@@ -36,7 +36,7 @@ a barra de Ferramentas e a lista de membros cadastrados -->
                   fill="clear"
                   color="success"
                   size="small"
-                router-link="/cadastrar"
+                @click="this.$router.replace('/cadastrar')"
                   class="ion-align-self-end"
                   ><ion-icon
                     slot="icon-only"
@@ -86,7 +86,7 @@ a barra de Ferramentas e a lista de membros cadastrados -->
                     <ion-col size="3">
                       <ion-row class="ion-justify-content-end">
                         <ion-button
-                          :router-link = '"/editar/" + Membro.id'
+                          @click="this.$router.replace('/editar/'+`${Membro.id}`)"
                           color="secondary"
                           fill="clear"
                           size="large"

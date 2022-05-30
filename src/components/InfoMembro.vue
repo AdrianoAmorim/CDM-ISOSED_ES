@@ -481,7 +481,7 @@ export default defineComponent({
           setTimeout(() => {
             this.statusInfoSistema = false
             this.$router.push("/home")
-                        this.limparCampos();
+            this.limparCampos();
           }, 3000);
         } else {
           this.msgSistema = "Erro ao Cadastrar novo Membro";
@@ -531,7 +531,7 @@ export default defineComponent({
 
           setTimeout(() => {
             this.statusInfoSistema = false;
-            this.$router.push("/home");
+            this.$router.replace("/home");
             this.limparCampos();
           }, 3000);
         } else {
