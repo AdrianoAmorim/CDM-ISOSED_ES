@@ -73,7 +73,7 @@ a barra de Ferramentas e a lista de membros cadastrados -->
                         </ion-col>
 
                         <ion-col size="8">
-                          <ion-label style="overflow: visible">
+                          <ion-label class="ion-text-wrap" style="overflow: visible">
                             {{ Membro.nome }}
                           </ion-label>
                           <ion-label color="danger"

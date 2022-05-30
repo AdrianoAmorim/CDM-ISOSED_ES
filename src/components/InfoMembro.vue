@@ -62,8 +62,8 @@
         </ion-col>
       </ion-row>
 
-      <ion-row class="ion-align-items-center ion-justify-content-center">
-        <ion-col size="5">
+      <ion-row class="ion-justify-content-center ion-align-items-end">
+        <ion-col size="3" class="ion-text-center">
             <ion-avatar class="avatarFoto">
               <ion-icon v-if="membro.url_foto == null" color="secondary" :icon="camera" />
               <ion-img v-else :src="membro.url_foto" alt="Avatar do Membro" />
@@ -659,8 +659,7 @@ export default defineComponent({
 
 <style scoped>
 .avatarFoto {
-  margin: 8px;
-  text-align: center;
+ 
   border: 3px solid #427aa1;
   width:110px;
   height: 110px;
