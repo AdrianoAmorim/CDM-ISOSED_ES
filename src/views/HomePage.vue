@@ -161,7 +161,6 @@ export default defineComponent({
       searchCircle,
       personAdd,
       create,
-      imgAvatar: "/img/avatar.png",
       listaMembros: null,
      
     };
@@ -189,12 +188,14 @@ export default defineComponent({
   watch:{
     listaMembros(){
       if(this.listaMembros != null){
+        
         this.loader = true;
       }
     }
   },
  
 ionViewWillEnter() {
+  console.log(process.env.VUE_APP_SENHA);
       this.getMembros();
   },
 ionViewDidLeave(){

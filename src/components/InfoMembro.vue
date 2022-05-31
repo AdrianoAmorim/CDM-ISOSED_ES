@@ -69,12 +69,8 @@
           <ion-col size="5">
             <ion-row class="ion-justify-content-center">
               <ion-avatar class="avatarFoto">
-                <ion-icon
-                  v-if="membro.url_foto == null"
-                  color="secondary"
-                  :icon="camera"
-                />
-                <ion-img v-else :src="membro.url_foto" alt="Avatar do Membro" />
+                <img class="fotoMembro" v-if="membro.url_foto" :src="membro.url_foto" alt="Avatar do Membro" />
+                <img  v-else src="/img/camera.png"  alt="Avatar do Membro" />
               </ion-avatar>
             </ion-row>
           </ion-col>
@@ -291,7 +287,6 @@ import {
   IonGrid,
   IonRow,
   IonCol,
-  IonImg,
   IonItem,
   IonInput,
   IonLabel,
@@ -305,7 +300,6 @@ export default defineComponent({
     IonHeader,
     IonIcon,
     IonAvatar,
-    IonImg,
     IonButton,
     IonContent,
     IonGrid,
@@ -508,7 +502,7 @@ export default defineComponent({
     async updateMembro(membro, logradouro) {
       const validar = this.validarCampos();
       if (validar) {
-        console.log(this.idMembro)
+        console.log(this.idMembro);
         const response = await axios.post(
           "https://cdm-isosed.hasura.app/v1/graphql",
           {
@@ -540,7 +534,7 @@ export default defineComponent({
             },
           }
         );
-        console.log(response)
+        console.log(response);
         if (response.data.data.update_membros.affected_rows > 0) {
           this.msgSistema = "Membro Atualizado com Sucesso!!";
           this.statusInfoSistema = true;
@@ -663,7 +657,7 @@ export default defineComponent({
           this.loader = true;
         }
       }
-      if (this.page == "editar") {     
+      if (this.page == "editar") {
         if (this.membro != null && this.cargos != null) {
           this.loader = true;
           console.log("dentro do IF q libera o loader");
@@ -685,12 +679,20 @@ export default defineComponent({
 <style scoped>
 .avatarFoto {
   border: 3px solid #427aa1;
-  width: 110px;
-  height: 110px;
-  object-fit: cover;
+  width: 105px;
+  height: 105px;
 }
-.avatarFoto ion-icon {
-  font-size: 68px;
+.avatarFoto img {
+ height: 70%; 
+ width: 70%; 
+ margin: 10% auto; 
+ display:block
+}
+.fotoMembro{
+   height: 100% !important;
+ width: 100% !important; 
+ margin: 0 auto !important; 
+ display:block
 }
 
 .diferencaRadioBtn {
