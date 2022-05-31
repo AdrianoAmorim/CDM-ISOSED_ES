@@ -324,26 +324,25 @@ export default defineComponent({
   data() {
     return {
       loader: false,
-      msgSistema: "",
+      msgSistema: null,
       statusInfoSistema: false,
-      membroEdit: null,
       cargos: null,
       membro: {
-        dtBatismo: "",
-        dtNascimento: "",
-        nome: "",
-        pai: "",
-        mae: "",
-        estCivil: "",
+        dtBatismo: null,
+        dtNascimento: null,
+        nome: null,
+        pai: null,
+        mae: null,
+        estCivil: null,
         telefone: null,
         id_cargo: null,
         url_foto: null,
       },
       logradouro: {
-        endereco: "",
+        endereco: null,
         numero: null,
-        bairro: "",
-        cidade: "",
+        bairro: null,
+        cidade: null,
       },
       save,
       camera,
@@ -353,25 +352,26 @@ export default defineComponent({
     };
   },
   props: {
+    idMembro: null,
     cargosLs: null,
     membroEd: null,
     page: String,
   },
   methods: {
     limparCampos() {
-      this.membro.nome = "";
+      this.membro.nome = null;
       this.membro.telefone = null;
-      this.membro.dtBatismo = "";
-      this.membro.dtNascimento = "";
-      this.membro.pai = "";
-      this.membro.mae = "";
-      this.membro.estCivil = "";
-      this.membro.url_foto = "";
+      this.membro.dtBatismo = null;
+      this.membro.dtNascimento = null;
+      this.membro.pai = null;
+      this.membro.mae = null;
+      this.membro.estCivil = null;
+      this.membro.url_foto = null;
       this.membro.id_cargo = null;
-      this.logradouro.endereco = "";
+      this.logradouro.endereco = null;
       this.logradouro.numero = null;
-      this.logradouro.bairro = "";
-      this.logradouro.cidade = "";
+      this.logradouro.bairro = null;
+      this.logradouro.cidade = null;
     },
     async confirmDelete() {
       const alert = await alertController.create({
@@ -401,18 +401,18 @@ export default defineComponent({
     },
     validarCampos() {
       if (
-        (this.membro.nome == "") |
+        (this.membro.nome == null) |
         (this.membro.telefone == null) |
-        (this.membro.dtBatismo == "") |
-        (this.membro.dtNascimento == "") |
-        (this.membro.pai == "") |
-        (this.membro.mae == "") |
-        (this.membro.estCivil == "") |
+        (this.membro.dtBatismo == null) |
+        (this.membro.dtNascimento == null) |
+        (this.membro.pai == null) |
+        (this.membro.mae == null) |
+        (this.membro.estCivil == null) |
         (this.membro.id_cargo == null) |
-        (this.logradouro.endereco == "") |
+        (this.logradouro.endereco == null) |
         (this.logradouro.numero == null) |
-        (this.logradouro.bairro == "") |
-        (this.logradouro.cidade == "")
+        (this.logradouro.bairro == null) |
+        (this.logradouro.cidade == null)
       ) {
         return false;
       } else {
@@ -422,21 +422,19 @@ export default defineComponent({
 
     setDadosInp(membroEdit) {
       console.log("entrando dentro do setDados:");
-      this.membro.nome = membroEdit[0].nome;
-      this.membro.pai = membroEdit[0].pai;
-      this.membro.mae = membroEdit[0].mae;
-      this.membro.telefone = membroEdit[0].telefone;
-      this.membro.dtNascimento = membroEdit[0].dtNascimento;
-      this.membro.dtBatismo = membroEdit[0].dtBatismo;
-      this.membro.estCivil = membroEdit[0].estCivil;
-      this.membro.id_cargo = membroEdit[0].cargo_membro.id;
-      this.membro.url_foto = membroEdit[0].url_foto;
-      this.logradouro.endereco = membroEdit[0].logradouro_membro.endereco;
-      this.logradouro.bairro = membroEdit[0].logradouro_membro.bairro;
-      this.logradouro.cidade = membroEdit[0].logradouro_membro.cidade;
-      this.logradouro.numero = membroEdit[0].logradouro_membro.numero;
-      this.loader = true;
-      
+      this.membro.nome = membroEdit.nome;
+      this.membro.pai = membroEdit.pai;
+      this.membro.mae = membroEdit.mae;
+      this.membro.telefone = membroEdit.telefone;
+      this.membro.dtNascimento = membroEdit.dtNascimento;
+      this.membro.dtBatismo = membroEdit.dtBatismo;
+      this.membro.estCivil = membroEdit.estCivil;
+      this.membro.id_cargo = membroEdit.cargo_membro.id;
+      this.membro.url_foto = membroEdit.url_foto;
+      this.logradouro.endereco = membroEdit.logradouro_membro.endereco;
+      this.logradouro.bairro = membroEdit.logradouro_membro.bairro;
+      this.logradouro.cidade = membroEdit.logradouro_membro.cidade;
+      this.logradouro.numero = membroEdit.logradouro_membro.numero;
     },
 
     async getCargos() {
@@ -510,6 +508,7 @@ export default defineComponent({
     async updateMembro(membro, logradouro) {
       const validar = this.validarCampos();
       if (validar) {
+        console.log(this.idMembro)
         const response = await axios.post(
           "https://cdm-isosed.hasura.app/v1/graphql",
           {
@@ -541,6 +540,7 @@ export default defineComponent({
             },
           }
         );
+        console.log(response)
         if (response.data.data.update_membros.affected_rows > 0) {
           this.msgSistema = "Membro Atualizado com Sucesso!!";
           this.statusInfoSistema = true;
@@ -658,18 +658,26 @@ export default defineComponent({
   watch: {
     cargosLs() {
       this.cargos = this.cargosLs;
-      if(this.page=="cadastro"){
+      if (this.page == "cadastro") {
+        if (this.cargos != null) {
           this.loader = true;
+        }
       }
+      if (this.page == "editar") {     
+        if (this.membro != null && this.cargos != null) {
+          this.loader = true;
+          console.log("dentro do IF q libera o loader");
+        }
+      }
+
+      console.log("variavel cargos:");
+      console.log(this.cargos);
+      console.log("variavel membroED");
+      console.log(this.membroEd);
     },
     membroEd() {
       this.setDadosInp(this.membroEd);
     },
-  },
-  beforeMount() {
-    console.log(
-      "entrando no mount infomembro "
-    );
   },
 });
 </script>

@@ -1,4 +1,4 @@
-import { createRouter, createMemoryHistory } from '@ionic/vue-router';
+import { createRouter, createWebHistory } from '@ionic/vue-router';
 import HomePage from '../views/HomePage.vue'
 import CadMembro from '../views/CadMembro.vue'
 import EditMembro from '../views/EditMembro.vue'
@@ -26,7 +26,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createMemoryHistory(process.env.BASE_URL),
+  history: createWebHistory(process.env.BASE_URL),
   routes
 })
 

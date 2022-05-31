@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <InfoMembro :page="nomePg" :cargosLs="this.cargos" :membroEd="this.membro" />
+    <InfoMembro :idMembro="id" :page="nomePg" :cargosLs="this.cargos" :membroEd="this.membro" />
   </ion-page>
 </template>
 
@@ -63,8 +63,7 @@ export default defineComponent({
           },
         }
       );
-      this.membro = response.data.data.membros;
-      console.log("Valor da Variavel dentro do getMembro "+ this.membro);
+      this.membro = response.data.data.membros[0];
     },
         async getCargos() {
       const response = await axios.post(
