@@ -69,7 +69,7 @@
           <ion-col size="5">
             <ion-row class="ion-justify-content-center">
               <ion-avatar class="avatarFoto">
-                <img  class="fotoMembro" src="/img/camera.png" alt="Avatar do Membro" />
+                <img  class="fotoMembro" :src="membro.url_foto?membro.url_foto:'/img/camera.png'" alt="Avatar do Membro" />
               </ion-avatar>
             </ion-row>
           </ion-col>
@@ -329,7 +329,7 @@ export default defineComponent({
         estCivil: null,
         telefone: null,
         id_cargo: null,
-        url_foto: null,
+        url_foto: "",
       },
       logradouro: {
         endereco: null,
@@ -359,12 +359,13 @@ export default defineComponent({
       this.membro.pai = null;
       this.membro.mae = null;
       this.membro.estCivil = null;
-      this.membro.url_foto = null;
+      this.membro.url_foto = "";
       this.membro.id_cargo = null;
       this.logradouro.endereco = null;
       this.logradouro.numero = null;
       this.logradouro.bairro = null;
       this.logradouro.cidade = null;
+
     },
     async confirmDelete() {
       const alert = await alertController.create({
@@ -414,8 +415,6 @@ export default defineComponent({
     },
 
     setDadosInp(membroEdit) {
-      console.log("entrando dentro do setDados:");
-    
       this.membro.nome = membroEdit.nome;
       this.membro.pai = membroEdit.pai;
       this.membro.mae = membroEdit.mae;
@@ -473,7 +472,7 @@ export default defineComponent({
           this.statusInfoSistema = true;
           setTimeout(() => {
             this.statusInfoSistema = false;
-            this.$router.push("/home");
+            this.$router.push("/");
             this.limparCampos();
           }, 3000);
         } else {
@@ -487,7 +486,7 @@ export default defineComponent({
     async updateMembro(membro, logradouro) {
       const validar = this.validarCampos();
       if (validar) {
-        console.log(this.idMembro);
+        console.log(membro.url_foto)
         const response = await axios.post(
           "https://cdm-isosed.hasura.app/v1/graphql",
           {
@@ -526,7 +525,7 @@ export default defineComponent({
 
           setTimeout(() => {
             this.statusInfoSistema = false;
-            this.$router.replace("/home");
+            this.$router.push("/");
             this.limparCampos();
           }, 3000);
         } else {
@@ -601,22 +600,17 @@ export default defineComponent({
       }
       if (this.page == "editar") {
         if (this.membro != null && this.cargos != null) {
-          console.log("dentro do if do watch cargos")
           this.loader= true;
         }
       }
 
-      console.log("variavel cargos:");
-      console.log(this.cargos);
-      console.log("variavel membroED");
-      console.log(this.membroEd);
     },
     membroEd() {
       this.setDadosInp(this.membroEd);
     },
   },
   mounted(){
-    console.log(this.idMembro);
+    console.log("dentro do mounted")
   }
 });
 </script>

@@ -67,10 +67,9 @@ a barra de Ferramentas e a lista de membros cadastrados -->
                       <ion-row
                         class="ion-justify-content-between ion-align-items-center">
                         <ion-col size="4">
-                          <span>{{Membro.url_foto}}</span>
                           <ion-avatar>
-                            <ion-img v-if="Membro.url_foto == null" :src="Membro.url_foto" alt="Avatar do Membro" />
-                            <ion-img v-else :src="pathAvatarDefault" alt="Avatarr do Membro" />
+                            <ion-img :src="Membro.url_foto? Membro.url_foto:'/img/camera.png'" alt="Avatar do Membro" />
+                            
                           </ion-avatar>
                         </ion-col>
 
@@ -159,7 +158,6 @@ export default defineComponent({
   },
   data() {
     return {
-      pathAvatarDefault:'/img/camera.png',
       loader: false,
       searchCircle,
       personAdd,
@@ -192,7 +190,6 @@ export default defineComponent({
     listaMembros(){
       if(this.listaMembros != null){
         this.loader = true;
-        console.log(this.listaMembros[10].url_foto)
       }
     }
   },

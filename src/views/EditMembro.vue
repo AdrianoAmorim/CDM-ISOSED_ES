@@ -83,7 +83,6 @@ export default defineComponent({
     },
   },
   beforeMount(){
-    console.log("dentro do beforeMounted do EditMembro");
     this.getMembro(this.id);
     this.getCargos();
   }
