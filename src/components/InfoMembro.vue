@@ -352,6 +352,7 @@ export default defineComponent({
   },
   methods: {
     limparCampos() {
+      this.loader = false;
       this.membro.nome = null;
       this.membro.telefone = null;
       this.membro.dtBatismo = null;
@@ -365,6 +366,7 @@ export default defineComponent({
       this.logradouro.numero = null;
       this.logradouro.bairro = null;
       this.logradouro.cidade = null;
+
 
     },
     async confirmDelete() {
@@ -472,8 +474,7 @@ export default defineComponent({
           this.statusInfoSistema = true;
           setTimeout(() => {
             this.statusInfoSistema = false;
-            this.$router.push("/");
-            this.limparCampos();
+            this.$router.replace("/");
           }, 3000);
         } else {
           this.msgSistema = "Erro ao Cadastrar novo Membro";
@@ -486,7 +487,6 @@ export default defineComponent({
     async updateMembro(membro, logradouro) {
       const validar = this.validarCampos();
       if (validar) {
-        console.log(membro.url_foto)
         const response = await axios.post(
           "https://cdm-isosed.hasura.app/v1/graphql",
           {
@@ -518,15 +518,13 @@ export default defineComponent({
             },
           }
         );
-        console.log(response);
         if (response.data.data.update_membros.affected_rows > 0) {
           this.msgSistema = "Membro Atualizado com Sucesso!!";
           this.statusInfoSistema = true;
 
           setTimeout(() => {
             this.statusInfoSistema = false;
-            this.$router.push("/");
-            this.limparCampos();
+            this.$router.replace("/");
           }, 3000);
         } else {
           this.msgSistema = "Erro ao Atualizar o Membro";
@@ -609,8 +607,9 @@ export default defineComponent({
       this.setDadosInp(this.membroEd);
     },
   },
-  mounted(){
-    console.log("dentro do mounted")
+  beforeUnmount(){
+    console.log("dentro do unmounted")
+            this.limparCampos();
   }
 });
 </script>
