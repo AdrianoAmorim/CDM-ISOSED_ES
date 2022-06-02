@@ -3,12 +3,9 @@ import HomePage from '../views/HomePage.vue'
 import CadMembro from '../views/CadMembro.vue'
 import EditMembro from '../views/EditMembro.vue'
 const routes = [
+
   {
     path: '/',
-    redirect: '/home'
-  },
-  {
-    path: '/home',
     name: 'Home',
     component: HomePage
   },

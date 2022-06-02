@@ -59,25 +59,27 @@ a barra de Ferramentas e a lista de membros cadastrados -->
               <ion-row
                 class="ion-justify-content-evenly"
                 v-for="Membro in listaMembros"
-                :key="Membro.id"
-              >
+                :key="Membro.id">
+             
                 <ion-col size="12">
                   <ion-item>
                     <ion-col size="9">
                       <ion-row
                         class="ion-justify-content-between ion-align-items-center">
                         <ion-col size="4">
+                          <span>{{Membro.url_foto}}</span>
                           <ion-avatar>
-                            <ion-img :src="`${Membro.url_foto}`" alt="Avatar do Membro" />
+                            <ion-img v-if="Membro.url_foto == null" :src="Membro.url_foto" alt="Avatar do Membro" />
+                            <ion-img v-else :src="pathAvatarDefault" alt="Avatarr do Membro" />
                           </ion-avatar>
                         </ion-col>
 
                         <ion-col size="8">
                           <ion-label class="ion-text-wrap" style="overflow: visible">
-                            {{ Membro.nome }}
+                            {{ Membro.nome }} 
                           </ion-label>
                           <ion-label color="danger"
-                            ><b>{{ Membro.cargo_membro.nome }}</b></ion-label
+                            ><b>{{Membro.cargo_membro.nome}}</b></ion-label
                           >
                         </ion-col>
                       </ion-row>
@@ -157,6 +159,7 @@ export default defineComponent({
   },
   data() {
     return {
+      pathAvatarDefault:'/img/camera.png',
       loader: false,
       searchCircle,
       personAdd,
@@ -188,14 +191,13 @@ export default defineComponent({
   watch:{
     listaMembros(){
       if(this.listaMembros != null){
-        
         this.loader = true;
+        console.log(this.listaMembros[10].url_foto)
       }
     }
   },
  
 ionViewWillEnter() {
-  console.log(process.env.VUE_APP_SENHA);
       this.getMembros();
   },
 ionViewDidLeave(){

@@ -69,8 +69,7 @@
           <ion-col size="5">
             <ion-row class="ion-justify-content-center">
               <ion-avatar class="avatarFoto">
-                <img class="fotoMembro" v-if="membro.url_foto" :src="membro.url_foto" alt="Avatar do Membro" />
-                <img  v-else src="/img/camera.png"  alt="Avatar do Membro" />
+                <img  class="fotoMembro" src="/img/camera.png" alt="Avatar do Membro" />
               </ion-avatar>
             </ion-row>
           </ion-col>
@@ -416,6 +415,7 @@ export default defineComponent({
 
     setDadosInp(membroEdit) {
       console.log("entrando dentro do setDados:");
+    
       this.membro.nome = membroEdit.nome;
       this.membro.pai = membroEdit.pai;
       this.membro.mae = membroEdit.mae;
@@ -423,30 +423,15 @@ export default defineComponent({
       this.membro.dtNascimento = membroEdit.dtNascimento;
       this.membro.dtBatismo = membroEdit.dtBatismo;
       this.membro.estCivil = membroEdit.estCivil;
-      this.membro.id_cargo = membroEdit.cargo_membro.id;
       this.membro.url_foto = membroEdit.url_foto;
+      this.membro.id_cargo = membroEdit.cargo_membro.id;
       this.logradouro.endereco = membroEdit.logradouro_membro.endereco;
       this.logradouro.bairro = membroEdit.logradouro_membro.bairro;
       this.logradouro.cidade = membroEdit.logradouro_membro.cidade;
       this.logradouro.numero = membroEdit.logradouro_membro.numero;
+    
     },
 
-    async getCargos() {
-      const response = await axios.post(
-        "https://cdm-isosed.hasura.app/v1/graphql",
-        {
-          query: "query getCargos {cargo {id,nome}}",
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "x-hasura-admin-secret":
-              "HqDOmCJCXSI1ITFKPRVp4bwtis0FKbh0aJQxkrR6ZSCKala8GLITbR79brjAA3LM",
-          },
-        }
-      );
-      this.cargos = response.data.data.cargo;
-    },
 
     async setMembro(membro, logradouro) {
       const validar = this.validarCampos();
@@ -552,49 +537,6 @@ export default defineComponent({
         alert("Favor Preencher todas as Informações");
       }
     },
-    async getMembro(idMembro) {
-      const response = await axios.post(
-        "https://cdm-isosed.hasura.app/v1/graphql",
-        {
-          query: `query getMembro {
-            membros(where: {id: {_eq: ${idMembro}}}) {
-                   id
-                   dtBatismo
-                  dtNascimento
-                  estCivil
-                  id_logradouro
-                  url_foto
-                  mae
-                  nome
-                  pai
-                  telefone
-                  logradouro_membro {
-                      bairro
-                      cidade
-                      endereco
-                      numero
-                    }
-                    cargo_membro {
-                      id
-                    }
-                  }
-                }`,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "x-hasura-admin-secret":
-              "HqDOmCJCXSI1ITFKPRVp4bwtis0FKbh0aJQxkrR6ZSCKala8GLITbR79brjAA3LM",
-          },
-        }
-      );
-      this.membroEdit = response.data.data.membros;
-
-      if (this.cargos != null && this.membroEdit != null) {
-        this.setDadosInp(this.membroEdit);
-        this.loader = true;
-      }
-    },
 
     async deleteMembro(id) {
       const response = await axios.post(
@@ -659,8 +601,8 @@ export default defineComponent({
       }
       if (this.page == "editar") {
         if (this.membro != null && this.cargos != null) {
-          this.loader = true;
-          console.log("dentro do IF q libera o loader");
+          console.log("dentro do if do watch cargos")
+          this.loader= true;
         }
       }
 
@@ -673,6 +615,9 @@ export default defineComponent({
       this.setDadosInp(this.membroEd);
     },
   },
+  mounted(){
+    console.log(this.idMembro);
+  }
 });
 </script>
 
