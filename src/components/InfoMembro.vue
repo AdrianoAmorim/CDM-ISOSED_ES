@@ -69,7 +69,7 @@
           <ion-col size="5">
             <ion-row class="ion-justify-content-center">
               <ion-avatar class="avatarFoto">
-                <img  class="fotoMembro" :src="membro.url_foto?membro.url_foto:'/img/camera.png'" alt="Avatar do Membro" />
+                <img  :class="membro.url_foto?'':'fotoMembro'" :src="membro.url_foto?membro.url_foto:'/img/camera.png'" alt="Avatar do Membro" />
               </ion-avatar>
             </ion-row>
           </ion-col>
@@ -269,6 +269,7 @@ import {
   checkmarkCircle,
 } from "ionicons/icons";
 import {
+  
   IonPage,
   IonAvatar,
   IonProgressBar,
@@ -616,21 +617,9 @@ export default defineComponent({
 
 <style scoped>
 .avatarFoto {
-  border: 3px solid #427aa1;
-  width: 105px;
-  height: 105px;
-}
-.avatarFoto img {
- height: 70%; 
- width: 70%; 
- margin: 10% auto; 
- display:block
-}
-.fotoMembro{
-   height: 100% !important;
- width: 100% !important; 
- margin: 0 auto !important; 
- display:block
+  border: 2px solid #427aa1;
+  width: 100px;
+  height: 100px;
 }
 
 .diferencaRadioBtn {

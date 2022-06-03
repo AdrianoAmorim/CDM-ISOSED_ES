@@ -68,7 +68,7 @@ a barra de Ferramentas e a lista de membros cadastrados -->
                         class="ion-justify-content-between ion-align-items-center">
                         <ion-col size="4">
                           <ion-avatar>
-                            <ion-img :src="Membro.url_foto? Membro.url_foto:'/img/camera.png'" alt="Avatar do Membro" />
+                            <ion-img :class="Membro.url_foto?'':'fotoMembro'" :src="Membro.url_foto? Membro.url_foto:'/img/camera.png'" alt="Avatar do Membro" />
                             
                           </ion-avatar>
                         </ion-col>

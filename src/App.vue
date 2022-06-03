@@ -29,10 +29,15 @@ export default defineComponent({
 </script>
 
 <style>
-.imgAvatar{
-  max-width: 100%;
-object-fit: contain ;
+.fotoMembro{
+  border-radius: 0px;
+  display: block;
+  margin:12px auto;
+  object-fit: contain;
+height: 65% ;
+ width: 65% ;
 }
+
 .iconToolbar{
 font-size:30px;
 object-fit: fill;
