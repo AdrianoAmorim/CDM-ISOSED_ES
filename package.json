@@ -20,7 +20,8 @@
     "axios": "^0.27.2",
     "core-js": "^3.6.5",
     "vue": "^3.2.21",
-    "vue-router": "^4.0.12"
+    "vue-router": "^4.0.12",
+    "vue-the-mask": "^0.11.1"
   },
   "devDependencies": {
     "@capacitor/cli": "3.5.0",

@@ -68,7 +68,7 @@
         <ion-row class="ion-justify-content-center ion-align-items-center">
           <ion-col size="5">
             <ion-row class="ion-justify-content-center">
-              <ion-avatar class="avatarFoto">
+              <ion-avatar @click="this.membro.telefone = 2835184378" class="avatarFoto">
                 <img  :class="membro.url_foto?'':'fotoMembro'" :src="membro.url_foto?membro.url_foto:'/img/camera.png'" alt="Avatar do Membro" />
               </ion-avatar>
             </ion-row>
@@ -136,8 +136,11 @@
                 <ion-input
                   color="secondary"
                   v-model="membro.telefone"
-                  type="number"
+                  type="text"
+                  inputmode="numeric"
+                  placeholder="(xx) xxxxx-xxxx"
                 ></ion-input>
+                <input  v-mask="['(##) #####-####', '(##) ####-####']" v-model="membro.telefone" style="display: none">
               </ion-item>
             </ion-col>
 
@@ -260,6 +263,7 @@
 
 <script>
 import axios from "axios";
+import {mask} from 'vue-the-mask';
 import { defineComponent } from "vue";
 import {
   camera,
@@ -294,6 +298,7 @@ import {
 
 export default defineComponent({
   name: "InfoMembro",
+  directives: {mask},
   components: {
     IonPage,
     IonProgressBar,
@@ -352,6 +357,15 @@ export default defineComponent({
     page: String,
   },
   methods: {
+    retirarMascara(input){
+      var val = input;
+          val = val.replace("(","");
+          val = val.replace(")","");
+          val = val.replace(" ","");
+          val = val.replace("-","");
+          val = parseInt(val)
+          return val
+    },
     limparCampos() {
       this.loader = false;
       this.membro.nome = null;
@@ -431,20 +445,20 @@ export default defineComponent({
       this.logradouro.bairro = membroEdit.logradouro_membro.bairro;
       this.logradouro.cidade = membroEdit.logradouro_membro.cidade;
       this.logradouro.numero = membroEdit.logradouro_membro.numero;
-    
     },
 
 
     async setMembro(membro, logradouro) {
       const validar = this.validarCampos();
       if (validar) {
+        const telSemMask = this.retirarMascara(membro.telefone);
         const response = await axios.post(
           "https://cdm-isosed.hasura.app/v1/graphql",
           {
             query: `mutation setMembro{
               insert_membros_one(object:{
                 nome: "${membro.nome}",
-                telefone: ${membro.telefone},
+                telefone: ${telSemMask},
                 id_cargo: ${membro.id_cargo},
                 pai: "${membro.pai}",
                 mae: "${membro.mae}",
@@ -488,6 +502,7 @@ export default defineComponent({
     async updateMembro(membro, logradouro) {
       const validar = this.validarCampos();
       if (validar) {
+        const telSemMask = this.retirarMascara(membro.telefone);
         const response = await axios.post(
           "https://cdm-isosed.hasura.app/v1/graphql",
           {
@@ -495,7 +510,7 @@ export default defineComponent({
                       update_membros(where: {id: {_eq:${this.idMembro}}}, _set: 
                         {  nome: "${membro.nome}",
                             url_foto: "${membro.url_foto}",
-                            telefone: ${membro.telefone},
+                            telefone: ${telSemMask},
                             id_cargo: ${membro.id_cargo},
                             pai: "${membro.pai}",
                             mae: "${membro.mae}",
@@ -609,8 +624,7 @@ export default defineComponent({
     },
   },
   beforeUnmount(){
-    console.log("dentro do unmounted")
-            this.limparCampos();
+    this.limparCampos();
   }
 });
 </script>

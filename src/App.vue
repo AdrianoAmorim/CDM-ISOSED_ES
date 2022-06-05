@@ -34,8 +34,8 @@ export default defineComponent({
   display: block;
   margin:12px auto;
   object-fit: contain;
-height: 65% ;
- width: 65% ;
+  height: 65% ;
+  width: 65% ;
 }
 
 .iconToolbar{
