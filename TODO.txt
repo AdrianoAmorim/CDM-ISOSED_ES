@@ -14,9 +14,4 @@ TELA DE EDITAR MEMBRO:
 > EStilizar alert de Delete
  > Criado o Update (falta revisar query), ta com algum erro nao cadastra o endereco kkk
 
-BUGSSS:
 
-entra num membro pra editar.. 
-Edita ELe e salva a atualizacao..(dai ele redireciona p home):
-dai vc em seguida entra nesse mesmo membro q foi editado (dai nao renderiza os dados desse membro)
-* nao entra no hooks Mounted... (no caso nem no beforeMount tmb)...*

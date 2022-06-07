@@ -1,6 +1,6 @@
 <template>
   <ion-toolbar color="primary">
-    <ion-thumbnail slot="start" class="">
+    <ion-thumbnail slot="start">
       <ion-img class="imgAvatar" :src="imgLogo" alt="logomarca" />
     </ion-thumbnail>
 

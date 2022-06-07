@@ -29,6 +29,12 @@ export default defineComponent({
 </script>
 
 <style>
+.alert-delete .btn-delete{
+  color: #eb445a !important;
+}
+.alert-delete .btn-confirm{
+  color: #21c05e !important;
+}
 .fotoMembro{
   border-radius: 0px;
   display: block;
@@ -46,9 +52,7 @@ object-fit: fill;
 font-size:36px;
 object-fit: fill;
 }
-.headerPg{
-  padding:20px;
-}
+
 
 
 

@@ -35,6 +35,7 @@
           slot="end"
           size="small"
           color="success"
+          :disabled="ativarBtnSalvar"
           @click="updateMembro(this.membro, this.logradouro)"
         >
           <ion-icon slot="icon-only" class="iconToolbar" :icon="save"
@@ -47,6 +48,7 @@
           slot="end"
           size="small"
           color="success"
+          :disabled="ativarBtnSalvar"
           @click="setMembro(this.membro, this.logradouro)"
         >
           <ion-icon slot="icon-only" class="iconToolbar" :icon="save"
@@ -68,7 +70,7 @@
         <ion-row class="ion-justify-content-center ion-align-items-center">
           <ion-col size="5">
             <ion-row class="ion-justify-content-center">
-              <ion-avatar @click="this.membro.telefone = 2835184378" class="avatarFoto">
+              <ion-avatar class="avatarFoto">
                 <img  :class="membro.url_foto?'':'fotoMembro'" :src="membro.url_foto?membro.url_foto:'/img/camera.png'" alt="Avatar do Membro" />
               </ion-avatar>
             </ion-row>
@@ -80,7 +82,7 @@
             <ion-col>
               <ion-item mode="md">
                 <ion-label position="floating">Nome: </ion-label>
-                <ion-input v-model="membro.nome" color="secondary"></ion-input>
+                <ion-input v-model="membro.nome" color="secondary" @ionBlur="validarCampos()"></ion-input>
               </ion-item>
             </ion-col>
           </ion-row>
@@ -90,6 +92,7 @@
               <ion-item mode="md">
                 <ion-label position="floating">Endereço: </ion-label>
                 <ion-input
+                @ionBlur="validarCampos()"
                   v-model="logradouro.endereco"
                   color="secondary"
                 ></ion-input>
@@ -99,6 +102,7 @@
               <ion-item mode="md">
                 <ion-label position="floating">Nº: </ion-label>
                 <ion-input
+                @ionBlur="validarCampos()"
                   v-model="logradouro.numero"
                   type="number"
                   inputmode="numeric"
@@ -113,6 +117,7 @@
               <ion-item mode="md">
                 <ion-label position="floating">Bairro: </ion-label>
                 <ion-input
+                @ionBlur="validarCampos()"
                   v-model="logradouro.bairro"
                   color="secondary"
                 ></ion-input>
@@ -122,6 +127,7 @@
               <ion-item mode="md">
                 <ion-label position="floating">Cidade: </ion-label>
                 <ion-input
+                @ionBlur="validarCampos()"
                   v-model="logradouro.cidade"
                   color="secondary"
                 ></ion-input>
@@ -134,6 +140,7 @@
               <ion-item mode="md">
                 <ion-label position="floating">Telefone: </ion-label>
                 <ion-input
+                @ionBlur="validarCampos()"
                   color="secondary"
                   v-model="membro.telefone"
                   type="text"
@@ -148,6 +155,7 @@
               <ion-item mode="md">
                 <ion-label position="stacked">Cargo: </ion-label>
                 <ion-select
+                @ionBlur="validarCampos()"
                   v-model="membro.id_cargo"
                   color="secondary"
                   placeholder="Selecione o Cargo"
@@ -170,6 +178,7 @@
               <ion-item mode="md">
                 <ion-label position="floating">Pai: </ion-label>
                 <ion-input
+                @ionBlur="validarCampos()"
                   v-model="membro.pai"
                   type="text"
                   color="secondary"
@@ -182,7 +191,7 @@
             <ion-col>
               <ion-item mode="md">
                 <ion-label position="floating">Mãe: </ion-label>
-                <ion-input v-model="membro.mae" color="secondary"></ion-input>
+                <ion-input v-model="membro.mae" color="secondary" @ionBlur="validarCampos()"></ion-input>
               </ion-item>
             </ion-col>
           </ion-row>
@@ -194,6 +203,7 @@
                   >Data de Nascimento:
                 </ion-label>
                 <ion-input
+                @ionBlur="validarCampos()"
                   v-model="membro.dtNascimento"
                   type="date"
                   color="secondary"
@@ -204,6 +214,7 @@
               <ion-item mode="md">
                 <ion-label position="stacked">Data de Batismo: </ion-label>
                 <ion-input
+                @ionBlur="validarCampos()"
                   v-model="membro.dtBatismo"
                   type="date"
                   color="secondary"
@@ -215,7 +226,7 @@
           <ion-row>
             <ion-col>
               <ion-list>
-                <ion-radio-group v-model="membro.estCivil" mode="md">
+                <ion-radio-group @ionBlur="validarCampos()" v-model="membro.estCivil" mode="md">
                   <ion-row class="ion-justify-content-start">
                     <ion-label
                       style="margin-right: 3px"
@@ -322,6 +333,7 @@ export default defineComponent({
   },
   data() {
     return {
+      ativarBtnSalvar: true,
       loader: false,
       msgSistema: null,
       statusInfoSistema: false,
@@ -386,21 +398,22 @@ export default defineComponent({
     },
     async confirmDelete() {
       const alert = await alertController.create({
-        cssClass: "my-custom-class",
-        header: "DELETAR MEMBRO",
+        cssClass: "alert-delete",
+        header: "DELETAR",
         message: "Deseja Deletar este Membro?",
         translucent: true,
         buttons: [
           {
             text: "Cancelar",
             role: "cancel",
-            cssClass: "danger",
+            cssClass: "btn-delete",
             id: "cancel-button",
             handler: () => {},
           },
           {
             text: "OK",
             id: "confirm-button",
+            cssClass:"btn-confirm",
             handler: () => {
               this.deleteMembro(this.idMembro);
               this.loader = false;
@@ -425,8 +438,11 @@ export default defineComponent({
         (this.logradouro.bairro == null) |
         (this.logradouro.cidade == null)
       ) {
-        return false;
+        this.ativarBtnSalvar = true;
+      return false;
+      
       } else {
+          this.ativarBtnSalvar = false;
         return true;
       }
     },
@@ -605,6 +621,9 @@ export default defineComponent({
     },
   },
   watch: {
+    membroNome(){
+console.log("mudo valor " + this.membro.nome);
+    },
     cargosLs() {
       this.cargos = this.cargosLs;
       if (this.page == "cadastro") {
@@ -630,6 +649,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
+
 .avatarFoto {
   border: 2px solid #427aa1;
   width: 100px;
