@@ -82,7 +82,7 @@
             <ion-col>
               <ion-item mode="md">
                 <ion-label position="floating">Nome: </ion-label>
-                <ion-input v-model="membro.nome" color="secondary" @ionBlur="validarCampos()"></ion-input>
+                <ion-input v-model="membro.nome" color="secondary" @ionChange="validarCampos()"></ion-input>
               </ion-item>
             </ion-col>
           </ion-row>
@@ -92,7 +92,7 @@
               <ion-item mode="md">
                 <ion-label position="floating">Endereço: </ion-label>
                 <ion-input
-                @ionBlur="validarCampos()"
+                @ionChange="validarCampos()"
                   v-model="logradouro.endereco"
                   color="secondary"
                 ></ion-input>
@@ -102,7 +102,7 @@
               <ion-item mode="md">
                 <ion-label position="floating">Nº: </ion-label>
                 <ion-input
-                @ionBlur="validarCampos()"
+                @ionChange="validarCampos()"
                   v-model="logradouro.numero"
                   type="number"
                   inputmode="numeric"
@@ -117,7 +117,7 @@
               <ion-item mode="md">
                 <ion-label position="floating">Bairro: </ion-label>
                 <ion-input
-                @ionBlur="validarCampos()"
+                @ionChange="validarCampos()"
                   v-model="logradouro.bairro"
                   color="secondary"
                 ></ion-input>
@@ -127,7 +127,7 @@
               <ion-item mode="md">
                 <ion-label position="floating">Cidade: </ion-label>
                 <ion-input
-                @ionBlur="validarCampos()"
+                @ionChange="validarCampos()"
                   v-model="logradouro.cidade"
                   color="secondary"
                 ></ion-input>
@@ -140,7 +140,7 @@
               <ion-item mode="md">
                 <ion-label position="floating">Telefone: </ion-label>
                 <ion-input
-                @ionBlur="validarCampos()"
+                @ionChange="validarCampos()"
                   color="secondary"
                   v-model="membro.telefone"
                   type="text"
@@ -155,7 +155,7 @@
               <ion-item mode="md">
                 <ion-label position="stacked">Cargo: </ion-label>
                 <ion-select
-                @ionBlur="validarCampos()"
+                @ionChange="validarCampos()"
                   v-model="membro.id_cargo"
                   color="secondary"
                   placeholder="Selecione o Cargo"
@@ -178,7 +178,7 @@
               <ion-item mode="md">
                 <ion-label position="floating">Pai: </ion-label>
                 <ion-input
-                @ionBlur="validarCampos()"
+                @ionChange="validarCampos()"
                   v-model="membro.pai"
                   type="text"
                   color="secondary"
@@ -191,7 +191,7 @@
             <ion-col>
               <ion-item mode="md">
                 <ion-label position="floating">Mãe: </ion-label>
-                <ion-input v-model="membro.mae" color="secondary" @ionBlur="validarCampos()"></ion-input>
+                <ion-input v-model="membro.mae" color="secondary" @ionChange="validarCampos()"></ion-input>
               </ion-item>
             </ion-col>
           </ion-row>
@@ -203,7 +203,7 @@
                   >Data de Nascimento:
                 </ion-label>
                 <ion-input
-                @ionBlur="validarCampos()"
+                @ionChange="validarCampos()"
                   v-model="membro.dtNascimento"
                   type="date"
                   color="secondary"
@@ -214,7 +214,7 @@
               <ion-item mode="md">
                 <ion-label position="stacked">Data de Batismo: </ion-label>
                 <ion-input
-                @ionBlur="validarCampos()"
+                @ionChange="validarCampos()"
                   v-model="membro.dtBatismo"
                   type="date"
                   color="secondary"
@@ -226,7 +226,7 @@
           <ion-row>
             <ion-col>
               <ion-list>
-                <ion-radio-group @ionBlur="validarCampos()" v-model="membro.estCivil" mode="md">
+                <ion-radio-group @ionChange="validarCampos()" v-model="membro.estCivil" mode="md">
                   <ion-row class="ion-justify-content-start">
                     <ion-label
                       style="margin-right: 3px"
@@ -425,23 +425,25 @@ export default defineComponent({
     },
     validarCampos() {
       if (
-        (this.membro.nome == null) |
-        (this.membro.telefone == null) |
-        (this.membro.dtBatismo == null) |
-        (this.membro.dtNascimento == null) |
-        (this.membro.pai == null) |
-        (this.membro.mae == null) |
-        (this.membro.estCivil == null) |
-        (this.membro.id_cargo == null) |
-        (this.logradouro.endereco == null) |
-        (this.logradouro.numero == null) |
-        (this.logradouro.bairro == null) |
-        (this.logradouro.cidade == null)
+        (this.membro.nome == null) | (this.membro.nome == "") |
+        (this.membro.telefone == null) | (this.membro.telefone == "") |
+        (this.membro.dtBatismo == null) |  (this.membro.dtBatismo == "") |
+        (this.membro.dtNascimento == null) | (this.membro.dtNascimento == "") |
+        (this.membro.pai == null) | (this.membro.pai == "") |
+        (this.membro.mae == null) | (this.membro.mae == "") |
+        (this.membro.estCivil == null) | (this.membro.estCivil == "") |
+        (this.membro.id_cargo == null) |  (this.membro.id_cargo == "") |
+        (this.logradouro.endereco == null) | (this.logradouro.endereco == "") |
+        (this.logradouro.numero == null) |  (this.logradouro.numero == "") |
+        (this.logradouro.bairro == null) |  (this.logradouro.bairro == "") |
+        (this.logradouro.cidade == null)| (this.logradouro.cidade == "")
       ) {
-        this.ativarBtnSalvar = true;
+        
+        console.log("dentro do vazio")
+          this.ativarBtnSalvar = true;
       return false;
-      
       } else {
+        console.log("dentro do cheio")
           this.ativarBtnSalvar = false;
         return true;
       }

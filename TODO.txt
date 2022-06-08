@@ -2,7 +2,7 @@ Coisas para fazer:
 
 TELA CADASTRO
 >DESABILITAR BOTAO CADASTRO CASO OS CAMPOS NAO ESTEJAO TODOS PREENCHIDOS
->formatar os campos que precisao de mascara
+
 >CRIAR ALERT DE AVISO DE CAMPOS VAZIOS
 
 
@@ -11,7 +11,6 @@ TELA HOME
 
 
 TELA DE EDITAR MEMBRO:
-> EStilizar alert de Delete
- > Criado o Update (falta revisar query), ta com algum erro nao cadastra o endereco kkk
+ > Criado o Update (falta revisar query)
 
 
