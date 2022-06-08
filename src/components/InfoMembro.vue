@@ -57,21 +57,18 @@
     </ion-header>
 
     <ion-content>
+      
       <ion-grid v-if="loader">
-        <ion-row v-if="statusInfoSistema" class="ion-justify-content-start">
-          <ion-col size="12" class="infoSistema">
-            <ion-row class="ion-justify-content-between ion-align-items-center">
-              <span>{{ msgSistema }}</span>
-              <ion-icon color="warning" :icon="checkmarkCircle" />
-            </ion-row>
-          </ion-col>
-        </ion-row>
 
         <ion-row class="ion-justify-content-center ion-align-items-center">
           <ion-col size="5">
             <ion-row class="ion-justify-content-center">
               <ion-avatar class="avatarFoto">
-                <img  :class="membro.url_foto?'':'fotoMembro'" :src="membro.url_foto?membro.url_foto:'/img/camera.png'" alt="Avatar do Membro" />
+                <img
+                  :class="membro.url_foto ? '' : 'fotoMembro'"
+                  :src="membro.url_foto ? membro.url_foto : '/img/camera.png'"
+                  alt="Avatar do Membro"
+                />
               </ion-avatar>
             </ion-row>
           </ion-col>
@@ -82,7 +79,11 @@
             <ion-col>
               <ion-item mode="md">
                 <ion-label position="floating">Nome: </ion-label>
-                <ion-input v-model="membro.nome" color="secondary" @ionChange="validarCampos()"></ion-input>
+                <ion-input
+                  v-model="membro.nome"
+                  color="secondary"
+                  @ionChange="validarCampos()"
+                ></ion-input>
               </ion-item>
             </ion-col>
           </ion-row>
@@ -92,7 +93,7 @@
               <ion-item mode="md">
                 <ion-label position="floating">Endereço: </ion-label>
                 <ion-input
-                @ionChange="validarCampos()"
+                  @ionChange="validarCampos()"
                   v-model="logradouro.endereco"
                   color="secondary"
                 ></ion-input>
@@ -102,7 +103,7 @@
               <ion-item mode="md">
                 <ion-label position="floating">Nº: </ion-label>
                 <ion-input
-                @ionChange="validarCampos()"
+                  @ionChange="validarCampos()"
                   v-model="logradouro.numero"
                   type="number"
                   inputmode="numeric"
@@ -117,7 +118,7 @@
               <ion-item mode="md">
                 <ion-label position="floating">Bairro: </ion-label>
                 <ion-input
-                @ionChange="validarCampos()"
+                  @ionChange="validarCampos()"
                   v-model="logradouro.bairro"
                   color="secondary"
                 ></ion-input>
@@ -127,7 +128,7 @@
               <ion-item mode="md">
                 <ion-label position="floating">Cidade: </ion-label>
                 <ion-input
-                @ionChange="validarCampos()"
+                  @ionChange="validarCampos()"
                   v-model="logradouro.cidade"
                   color="secondary"
                 ></ion-input>
@@ -140,14 +141,18 @@
               <ion-item mode="md">
                 <ion-label position="floating">Telefone: </ion-label>
                 <ion-input
-                @ionChange="validarCampos()"
+                  @ionChange="validarCampos()"
                   color="secondary"
                   v-model="membro.telefone"
                   type="text"
                   inputmode="numeric"
                   placeholder="(xx) xxxxx-xxxx"
                 ></ion-input>
-                <input  v-mask="['(##) #####-####', '(##) ####-####']" v-model="membro.telefone" style="display: none">
+                <input
+                  v-mask="['(##) #####-####', '(##) ####-####']"
+                  v-model="membro.telefone"
+                  style="display: none"
+                />
               </ion-item>
             </ion-col>
 
@@ -155,7 +160,7 @@
               <ion-item mode="md">
                 <ion-label position="stacked">Cargo: </ion-label>
                 <ion-select
-                @ionChange="validarCampos()"
+                  @ionChange="validarCampos()"
                   v-model="membro.id_cargo"
                   color="secondary"
                   placeholder="Selecione o Cargo"
@@ -178,7 +183,7 @@
               <ion-item mode="md">
                 <ion-label position="floating">Pai: </ion-label>
                 <ion-input
-                @ionChange="validarCampos()"
+                  @ionChange="validarCampos()"
                   v-model="membro.pai"
                   type="text"
                   color="secondary"
@@ -191,7 +196,11 @@
             <ion-col>
               <ion-item mode="md">
                 <ion-label position="floating">Mãe: </ion-label>
-                <ion-input v-model="membro.mae" color="secondary" @ionChange="validarCampos()"></ion-input>
+                <ion-input
+                  v-model="membro.mae"
+                  color="secondary"
+                  @ionChange="validarCampos()"
+                ></ion-input>
               </ion-item>
             </ion-col>
           </ion-row>
@@ -203,7 +212,7 @@
                   >Data de Nascimento:
                 </ion-label>
                 <ion-input
-                @ionChange="validarCampos()"
+                  @ionChange="validarCampos()"
                   v-model="membro.dtNascimento"
                   type="date"
                   color="secondary"
@@ -214,7 +223,7 @@
               <ion-item mode="md">
                 <ion-label position="stacked">Data de Batismo: </ion-label>
                 <ion-input
-                @ionChange="validarCampos()"
+                  @ionChange="validarCampos()"
                   v-model="membro.dtBatismo"
                   type="date"
                   color="secondary"
@@ -226,7 +235,11 @@
           <ion-row>
             <ion-col>
               <ion-list>
-                <ion-radio-group @ionChange="validarCampos()" v-model="membro.estCivil" mode="md">
+                <ion-radio-group
+                  @ionChange="validarCampos()"
+                  v-model="membro.estCivil"
+                  mode="md"
+                >
                   <ion-row class="ion-justify-content-start">
                     <ion-label
                       style="margin-right: 3px"
@@ -268,13 +281,23 @@
         </form>
       </ion-grid>
       <ion-progress-bar v-else type="indeterminate"></ion-progress-bar>
+      <ion-grid>
+         <ion-row v-if="statusInfoSistema" class="ion-justify-content-start">
+          <ion-col size="12" class="infoSistema">
+            <ion-row class="ion-justify-content-between ion-align-items-center">
+              <span>{{ msgSistema }}</span>
+              <ion-icon color="warning" :icon="checkmarkCircle" />
+            </ion-row>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </ion-content>
   </ion-page>
 </template>
 
 <script>
 import axios from "axios";
-import {mask} from 'vue-the-mask';
+import { mask } from "vue-the-mask";
 import { defineComponent } from "vue";
 import {
   camera,
@@ -284,7 +307,6 @@ import {
   checkmarkCircle,
 } from "ionicons/icons";
 import {
-  
   IonPage,
   IonAvatar,
   IonProgressBar,
@@ -309,7 +331,7 @@ import {
 
 export default defineComponent({
   name: "InfoMembro",
-  directives: {mask},
+  directives: { mask },
   components: {
     IonPage,
     IonProgressBar,
@@ -369,14 +391,14 @@ export default defineComponent({
     page: String,
   },
   methods: {
-    retirarMascara(input){
+    retirarMascara(input) {
       var val = input;
-          val = val.replace("(","");
-          val = val.replace(")","");
-          val = val.replace(" ","");
-          val = val.replace("-","");
-          val = parseInt(val)
-          return val
+      val = val.replace("(", "");
+      val = val.replace(")", "");
+      val = val.replace(" ", "");
+      val = val.replace("-", "");
+      val = parseInt(val);
+      return val;
     },
     limparCampos() {
       this.loader = false;
@@ -393,8 +415,6 @@ export default defineComponent({
       this.logradouro.numero = null;
       this.logradouro.bairro = null;
       this.logradouro.cidade = null;
-
-
     },
     async confirmDelete() {
       const alert = await alertController.create({
@@ -413,7 +433,7 @@ export default defineComponent({
           {
             text: "OK",
             id: "confirm-button",
-            cssClass:"btn-confirm",
+            cssClass: "btn-confirm",
             handler: () => {
               this.deleteMembro(this.idMembro);
               this.loader = false;
@@ -425,26 +445,37 @@ export default defineComponent({
     },
     validarCampos() {
       if (
-        (this.membro.nome == null) | (this.membro.nome == "") |
-        (this.membro.telefone == null) | (this.membro.telefone == "") |
-        (this.membro.dtBatismo == null) |  (this.membro.dtBatismo == "") |
-        (this.membro.dtNascimento == null) | (this.membro.dtNascimento == "") |
-        (this.membro.pai == null) | (this.membro.pai == "") |
-        (this.membro.mae == null) | (this.membro.mae == "") |
-        (this.membro.estCivil == null) | (this.membro.estCivil == "") |
-        (this.membro.id_cargo == null) |  (this.membro.id_cargo == "") |
-        (this.logradouro.endereco == null) | (this.logradouro.endereco == "") |
-        (this.logradouro.numero == null) |  (this.logradouro.numero == "") |
-        (this.logradouro.bairro == null) |  (this.logradouro.bairro == "") |
-        (this.logradouro.cidade == null)| (this.logradouro.cidade == "")
+        (this.membro.nome == null) |
+        (this.membro.nome == "") |
+        (this.membro.telefone == null) |
+        (this.membro.telefone == "") |
+        (this.membro.dtBatismo == null) |
+        (this.membro.dtBatismo == "") |
+        (this.membro.dtNascimento == null) |
+        (this.membro.dtNascimento == "") |
+        (this.membro.pai == null) |
+        (this.membro.pai == "") |
+        (this.membro.mae == null) |
+        (this.membro.mae == "") |
+        (this.membro.estCivil == null) |
+        (this.membro.estCivil == "") |
+        (this.membro.id_cargo == null) |
+        (this.membro.id_cargo == "") |
+        (this.logradouro.endereco == null) |
+        (this.logradouro.endereco == "") |
+        (this.logradouro.numero == null) |
+        (this.logradouro.numero == "") |
+        (this.logradouro.bairro == null) |
+        (this.logradouro.bairro == "") |
+        (this.logradouro.cidade == null) |
+        (this.logradouro.cidade == "")
       ) {
-        
-        console.log("dentro do vazio")
-          this.ativarBtnSalvar = true;
-      return false;
+        console.log("dentro do vazio");
+        this.ativarBtnSalvar = true;
+        return false;
       } else {
-        console.log("dentro do cheio")
-          this.ativarBtnSalvar = false;
+        console.log("dentro do cheio");
+        this.ativarBtnSalvar = false;
         return true;
       }
     },
@@ -464,7 +495,6 @@ export default defineComponent({
       this.logradouro.cidade = membroEdit.logradouro_membro.cidade;
       this.logradouro.numero = membroEdit.logradouro_membro.numero;
     },
-
 
     async setMembro(membro, logradouro) {
       const validar = this.validarCampos();
@@ -503,6 +533,7 @@ export default defineComponent({
           }
         );
         if (response.data.data.insert_membros_one.id > 0) {
+          this.limparCampos();
           this.msgSistema = "Membro Cadastrado com Sucesso!!";
           this.statusInfoSistema = true;
           setTimeout(() => {
@@ -623,8 +654,8 @@ export default defineComponent({
     },
   },
   watch: {
-    membroNome(){
-console.log("mudo valor " + this.membro.nome);
+    membroNome() {
+      console.log("mudo valor " + this.membro.nome);
     },
     cargosLs() {
       this.cargos = this.cargosLs;
@@ -635,23 +666,21 @@ console.log("mudo valor " + this.membro.nome);
       }
       if (this.page == "editar") {
         if (this.membro != null && this.cargos != null) {
-          this.loader= true;
+          this.loader = true;
         }
       }
-
     },
     membroEd() {
       this.setDadosInp(this.membroEd);
     },
   },
-  beforeUnmount(){
+  beforeUnmount() {
     this.limparCampos();
-  }
+  },
 });
 </script>
 
 <style scoped>
-
 .avatarFoto {
   border: 2px solid #427aa1;
   width: 100px;
