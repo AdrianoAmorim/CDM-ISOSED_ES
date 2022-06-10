@@ -57,13 +57,13 @@
     </ion-header>
 
     <ion-content>
-      
       <ion-grid v-if="loader">
-
+        
+      <img :src="foto">
         <ion-row class="ion-justify-content-center ion-align-items-center">
           <ion-col size="5">
             <ion-row class="ion-justify-content-center">
-              <ion-avatar class="avatarFoto">
+              <ion-avatar class="avatarFoto" @click="tirarFoto()">
                 <img
                   :class="membro.url_foto ? '' : 'fotoMembro'"
                   :src="membro.url_foto ? membro.url_foto : '/img/camera.png'"
@@ -281,8 +281,9 @@
         </form>
       </ion-grid>
       <ion-progress-bar v-else type="indeterminate"></ion-progress-bar>
+
       <ion-grid>
-         <ion-row v-if="statusInfoSistema" class="ion-justify-content-start">
+        <ion-row v-if="statusInfoSistema" class="ion-justify-content-start">
           <ion-col size="12" class="infoSistema">
             <ion-row class="ion-justify-content-between ion-align-items-center">
               <span>{{ msgSistema }}</span>
@@ -297,6 +298,7 @@
 
 <script>
 import axios from "axios";
+import { Camera, CameraResultType,CameraSource } from "@capacitor/camera";
 import { mask } from "vue-the-mask";
 import { defineComponent } from "vue";
 import {
@@ -355,6 +357,7 @@ export default defineComponent({
   },
   data() {
     return {
+      foto:null,
       ativarBtnSalvar: true,
       loader: false,
       msgSistema: null,
@@ -391,6 +394,23 @@ export default defineComponent({
     page: String,
   },
   methods: {
+    tirarFoto() {
+        const image = Camera.getPhoto({
+          quality: 100,
+          source: CameraSource.PROMPT,
+          allowEditing: true,
+          resultType: CameraResultType.Uri,
+        });
+
+        // image.webPath will contain a path that can be set as an image src.
+        // You can access the original file using image.path, which can be
+        // passed to the Filesystem API to read the raw data of the image,
+        // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
+        var imageUrl = image.webPath;
+
+        // Can be set to the src of an image now
+        this.foto = imageUrl;
+    },
     retirarMascara(input) {
       var val = input;
       val = val.replace("(", "");
@@ -584,9 +604,9 @@ export default defineComponent({
           }
         );
         if (response.data.data.update_membros.affected_rows > 0) {
+          this.limparCampos();
           this.msgSistema = "Membro Atualizado com Sucesso!!";
           this.statusInfoSistema = true;
-
           setTimeout(() => {
             this.statusInfoSistema = false;
             this.$router.replace("/");
@@ -654,9 +674,6 @@ export default defineComponent({
     },
   },
   watch: {
-    membroNome() {
-      console.log("mudo valor " + this.membro.nome);
-    },
     cargosLs() {
       this.cargos = this.cargosLs;
       if (this.page == "cadastro") {
@@ -673,9 +690,6 @@ export default defineComponent({
     membroEd() {
       this.setDadosInp(this.membroEd);
     },
-  },
-  beforeUnmount() {
-    this.limparCampos();
   },
 });
 </script>

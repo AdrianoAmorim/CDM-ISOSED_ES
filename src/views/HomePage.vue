@@ -50,8 +50,8 @@ a barra de Ferramentas e a lista de membros cadastrados -->
         </ion-toolbar>
       </ion-header>
 
-      <ion-content v-if="loader">
-        <ion-grid>
+      <ion-content >
+        <ion-grid v-if="loader">
           <ion-row class="ion-justify-content-center">
             <ion-col size="12">
               <ion-list>
@@ -121,8 +121,9 @@ a barra de Ferramentas e a lista de membros cadastrados -->
             </ion-col>
           </ion-row>
         </ion-grid>
+        <ion-progress-bar v-else type="indeterminate"></ion-progress-bar>
       </ion-content>
-    <ion-progress-bar v-else type="indeterminate"></ion-progress-bar>
+    
     
   </ion-page>
 </template>

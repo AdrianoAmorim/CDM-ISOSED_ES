@@ -1,6 +1,7 @@
 Coisas para fazer:
 
 TELA CADASTRO
+>criar funcao para abrir camera e salvar fotos
 >CRIAR ALERT DE AVISO DE CAMPOS VAZIOS
 
 
