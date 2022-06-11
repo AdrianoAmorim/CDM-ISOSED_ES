@@ -397,7 +397,7 @@ export default defineComponent({
     tirarFoto() {
         const image = Camera.getPhoto({
           quality: 100,
-          source: CameraSource.PROMPT,
+          source: CameraSource.CAMERA,
           allowEditing: true,
           resultType: CameraResultType.Uri,
         });
