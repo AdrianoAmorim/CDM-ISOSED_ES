@@ -58,8 +58,10 @@
 
     <ion-content>
       <ion-grid v-if="loader">
-        
-      <img :src="foto">
+<ion-row>
+  <img :src="foto.pathWeb"/>
+</ion-row>
+
         <ion-row class="ion-justify-content-center ion-align-items-center">
           <ion-col size="5">
             <ion-row class="ion-justify-content-center">
@@ -357,7 +359,10 @@ export default defineComponent({
   },
   data() {
     return {
-      foto:null,
+      foto:{
+        pathFile: String,
+        pathWeb: String
+      },
       ativarBtnSalvar: true,
       loader: false,
       msgSistema: null,
@@ -394,22 +399,20 @@ export default defineComponent({
     page: String,
   },
   methods: {
-    tirarFoto() {
-        const image = Camera.getPhoto({
+ 
+    async tirarFoto() {
+        const image = await Camera.getPhoto({
           quality: 100,
           source: CameraSource.CAMERA,
           allowEditing: true,
           resultType: CameraResultType.Uri,
         });
-
-        // image.webPath will contain a path that can be set as an image src.
-        // You can access the original file using image.path, which can be
-        // passed to the Filesystem API to read the raw data of the image,
-        // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
-        var imageUrl = image.webPath;
-
-        // Can be set to the src of an image now
-        this.foto = imageUrl;
+        const fileName = new Date().getTime() + '.jpeg';
+      
+        this.foto.pathFile =  fileName;
+        this.foto.pathWeb = image.webPath;
+        console.log("pathFile: "+this.foto.pathFile );
+        console.log("pathWeb: "+this.foto.pathWeb );
     },
     retirarMascara(input) {
       var val = input;
@@ -674,6 +677,7 @@ export default defineComponent({
     },
   },
   watch: {
+  
     cargosLs() {
       this.cargos = this.cargosLs;
       if (this.page == "cadastro") {
