@@ -58,15 +58,11 @@
 
     <ion-content>
       <ion-grid v-if="loader">
-<ion-row>
-  <img :src="foto.pathWeb"/>
-</ion-row>
-
         <ion-row class="ion-justify-content-center ion-align-items-center">
           <ion-col size="5">
             <ion-row class="ion-justify-content-center">
               <ion-avatar class="avatarFoto" @click="tirarFoto()">
-                <img
+                <ion-img
                   :class="membro.url_foto ? '' : 'fotoMembro'"
                   :src="membro.url_foto ? membro.url_foto : '/img/camera.png'"
                   alt="Avatar do Membro"
@@ -300,7 +296,7 @@
 
 <script>
 import axios from "axios";
-import { Camera, CameraResultType,CameraSource } from "@capacitor/camera";
+import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { mask } from "vue-the-mask";
 import { defineComponent } from "vue";
 import {
@@ -316,6 +312,7 @@ import {
   IonProgressBar,
   alertController,
   IonIcon,
+  IonImg,
   IonButton,
   IonContent,
   IonHeader,
@@ -343,6 +340,7 @@ export default defineComponent({
     IonIcon,
     IonAvatar,
     IonButton,
+    IonImg,
     IonContent,
     IonGrid,
     IonRow,
@@ -359,10 +357,7 @@ export default defineComponent({
   },
   data() {
     return {
-      foto:{
-        pathFile: String,
-        pathWeb: String
-      },
+      fotoBase: null,
       ativarBtnSalvar: true,
       loader: false,
       msgSistema: null,
@@ -399,20 +394,28 @@ export default defineComponent({
     page: String,
   },
   methods: {
- 
-    async tirarFoto() {
-        const image = await Camera.getPhoto({
-          quality: 100,
-          source: CameraSource.CAMERA,
-          allowEditing: true,
-          resultType: CameraResultType.Uri,
+    convertToBase64(blob) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onerror = reject;
+          reader.onload = () => {
+            resolve(reader.result);
+          };
+          reader.readAsDataURL(blob);
         });
-        const fileName = new Date().getTime() + '.jpeg';
-      
-        this.foto.pathFile =  fileName;
-        this.foto.pathWeb = image.webPath;
-        console.log("pathFile: "+this.foto.pathFile );
-        console.log("pathWeb: "+this.foto.pathWeb );
+    },
+    async tirarFoto() {
+      const image = await Camera.getPhoto({
+        quality: 100,
+        source: CameraSource.CAMERA,
+        allowEditing: true,
+        resultType: CameraResultType.Uri,
+      });
+      const fileName = new Date().getTime() + ".jpeg";
+
+      this.foto.pathFile = fileName;
+      this.membro.url_foto = image.webPath;
+      console.log(image.webPath);
     },
     retirarMascara(input) {
       var val = input;
@@ -521,6 +524,7 @@ export default defineComponent({
 
     async setMembro(membro, logradouro) {
       const validar = this.validarCampos();
+     const urlFotoBase = await this.convertToBase64(membro.url_foto);
       if (validar) {
         const telSemMask = this.retirarMascara(membro.telefone);
         const response = await axios.post(
@@ -536,7 +540,7 @@ export default defineComponent({
                 dtNascimento: "${membro.dtNascimento}",
                 dtBatismo: "${membro.dtBatismo}",
                 estCivil: "${membro.estCivil}",
-                url_foto: "${membro.url_foto}",
+                url_foto: "${urlFotoBase}",
                 logradouro_membro:{
                   data:{
                     endereco: "${logradouro.endereco}",
@@ -677,7 +681,6 @@ export default defineComponent({
     },
   },
   watch: {
-  
     cargosLs() {
       this.cargos = this.cargosLs;
       if (this.page == "cadastro") {
