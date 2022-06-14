@@ -357,7 +357,6 @@ export default defineComponent({
   },
   data() {
     return {
-      fotoBase: null,
       ativarBtnSalvar: true,
       loader: false,
       msgSistema: null,
@@ -394,17 +393,6 @@ export default defineComponent({
     page: String,
   },
   methods: {
-    convertBlobToBase64(blob) {
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onerror = reject;
-          reader.onload = () => {
-            resolve(reader.result);
-            console.log("vl do reader :"+reader.result)
-          };
-          reader.readAsDataURL(blob);
-        });
-    },
     async tirarFoto() {
       const image = await Camera.getPhoto({
         quality: 100,
@@ -425,8 +413,6 @@ export default defineComponent({
       return val;
     },
     limparCampos() {
-      this.loader = false;
-      this.ativarBtnSalvar = true;
       this.membro.nome = null;
       this.membro.telefone = null;
       this.membro.dtBatismo = null;
@@ -523,9 +509,10 @@ export default defineComponent({
 
     async setMembro(membro, logradouro) {
       const validar = this.validarCampos();
-   
       if (validar) {
         const telSemMask = this.retirarMascara(membro.telefone);
+        this.ativarBtnSalvar = true;
+        this.loader = false;
         const response = await axios.post(
           "https://cdm-isosed.hasura.app/v1/graphql",
           {
@@ -578,6 +565,8 @@ export default defineComponent({
       const validar = this.validarCampos();
       if (validar) {
         const telSemMask = this.retirarMascara(membro.telefone);
+        this.ativarBtnSalvar = true;
+        this.loader = false;
         const response = await axios.post(
           "https://cdm-isosed.hasura.app/v1/graphql",
           {
