@@ -426,6 +426,7 @@ export default defineComponent({
     },
     limparCampos() {
       this.loader = false;
+      this.ativarBtnSalvar = true;
       this.membro.nome = null;
       this.membro.telefone = null;
       this.membro.dtBatismo = null;
