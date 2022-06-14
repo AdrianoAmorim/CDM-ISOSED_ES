@@ -394,12 +394,13 @@ export default defineComponent({
     page: String,
   },
   methods: {
-    convertToBase64(blob) {
+    convertBlobToBase64(blob) {
         return new Promise((resolve, reject) => {
           const reader = new FileReader();
           reader.onerror = reject;
           reader.onload = () => {
             resolve(reader.result);
+            console.log("vl do reader :"+reader.result)
           };
           reader.readAsDataURL(blob);
         });
@@ -409,13 +410,10 @@ export default defineComponent({
         quality: 100,
         source: CameraSource.CAMERA,
         allowEditing: true,
-        resultType: CameraResultType.Uri,
+        resultType: CameraResultType.DataUrl,
       });
-      const fileName = new Date().getTime() + ".jpeg";
-
-      this.foto.pathFile = fileName;
-      this.membro.url_foto = image.webPath;
-      console.log(image.webPath);
+      //const fileName = new Date().getTime() + ".jpeg";
+      this.membro.url_foto = image.dataUrl;
     },
     retirarMascara(input) {
       var val = input;
@@ -524,7 +522,7 @@ export default defineComponent({
 
     async setMembro(membro, logradouro) {
       const validar = this.validarCampos();
-     const urlFotoBase = await this.convertToBase64(membro.url_foto);
+   
       if (validar) {
         const telSemMask = this.retirarMascara(membro.telefone);
         const response = await axios.post(
@@ -540,7 +538,7 @@ export default defineComponent({
                 dtNascimento: "${membro.dtNascimento}",
                 dtBatismo: "${membro.dtBatismo}",
                 estCivil: "${membro.estCivil}",
-                url_foto: "${urlFotoBase}",
+                url_foto: "${membro.url_foto}",
                 logradouro_membro:{
                   data:{
                     endereco: "${logradouro.endereco}",
