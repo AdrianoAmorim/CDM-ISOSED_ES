@@ -310,7 +310,6 @@
 <script>
 import axios from "axios";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
-//import { Filesystem, Directory } from "@capacitor/filesystem";
 import { mask } from "vue-the-mask";
 import { defineComponent } from "vue";
 import {
@@ -504,11 +503,9 @@ export default defineComponent({
         (this.logradouro.cidade == null) |
         (this.logradouro.cidade == "")
       ) {
-        console.log("dentro do vazio");
         this.ativarBtnSalvar = true;
         return false;
       } else {
-        console.log("dentro do cheio");
         this.ativarBtnSalvar = false;
         return true;
       }
@@ -642,6 +639,9 @@ export default defineComponent({
     },
 
     async deleteMembro(id) {
+      this.ativarBtnSalvar = true;
+        this.ativarBtnDelete = true;
+        this.ativarBtnVoltar = true;
       const response = await axios.post(
         "https://cdm-isosed.hasura.app/v1/graphql",
         {
@@ -705,7 +705,6 @@ export default defineComponent({
       if (this.page == "editar") {
         if (this.membro != null && this.cargos != null) {
           this.loader = true;
-          console.log(this.membro);
         }
       }
     },
