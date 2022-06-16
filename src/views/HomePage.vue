@@ -13,6 +13,7 @@ a barra de Ferramentas e a lista de membros cadastrados -->
                     show-cancel-button="never"
                     placeholder="Buscar Membro"
                     style="margin: 0; padding: 0"
+                    v-model="resultBusca"
                   />
                 </ion-row>
               </ion-col>
@@ -20,7 +21,7 @@ a barra de Ferramentas e a lista de membros cadastrados -->
               <ion-col size="5">
                 <ion-row class="ion-justify-content-end">
                   <ion-button
-                    disabled
+                  @click="buscarMembros(resultBusca)"
                     fill="clear"
                     size="small"
                     color="primary"
@@ -178,6 +179,7 @@ export default defineComponent({
       personAdd,
       create,
       listaMembros: null,
+      resultBusca:""
     };
   },
   methods: {
@@ -187,6 +189,24 @@ export default defineComponent({
         {
           query:
             "query getMembros{membros (order_by: {nome: asc})  {id,nome,url_foto cargo_membro {nome}}}",
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-hasura-admin-secret":
+              "HqDOmCJCXSI1ITFKPRVp4bwtis0FKbh0aJQxkrR6ZSCKala8GLITbR79brjAA3LM",
+          },
+        }
+      );
+      this.listaMembros = response.data.data.membros;
+    },
+       async buscarMembros(resultBusca) {
+        this.loader = false
+      const response = await axios.post(
+        "https://cdm-isosed.hasura.app/v1/graphql",
+        {
+          query:
+            `query buscarMembros{membros (where: {nome: {_ilike: "${resultBusca}%"}},order_by: {nome: asc})  {id,nome,url_foto cargo_membro {nome}}}`,
         },
         {
           headers: {
