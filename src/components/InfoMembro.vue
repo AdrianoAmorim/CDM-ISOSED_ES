@@ -4,6 +4,7 @@
       <ion-toolbar mode="ios">
         <ion-button
           v-if="page == 'editar'"
+          :disabled="ativarBtnDelete"
           fill="clear"
           router-direction="back"
           slot="end"
@@ -15,6 +16,7 @@
         /></ion-button>
 
         <ion-button
+        :disabled ="ativarBtnVoltar"
           fill="clear"
           router-direction="back"
           slot="end"
@@ -59,15 +61,26 @@
     <ion-content>
       <ion-grid v-if="loader">
         <ion-row class="ion-justify-content-center ion-align-items-center">
-          <ion-col size="5">
+          <ion-col size="7">
             <ion-row class="ion-justify-content-center">
-              <ion-avatar class="avatarFoto" @click="tirarFoto()">
-                <ion-img
-                  :class="membro.url_foto ? '' : 'fotoMembro'"
-                  :src="membro.url_foto ? membro.url_foto : '/img/camera.png'"
-                  alt="Avatar do Membro"
-                />
-              </ion-avatar>
+              <ion-col size="7" class="ion-text-center">
+                <ion-avatar class="avatarFoto" @click="tirarFoto()">
+                  <ion-img
+                    :class="membro.url_foto ? '' : 'fotoMembro'"
+                    :src="membro.url_foto ? membro.url_foto : '/img/camera.png'"
+                    alt="Avatar do Membro"
+                  />
+                </ion-avatar>
+                <ion-button v-if="page == 'editar'" fill="clear" color="secondary" @click="downloadFoto(membro.url_foto,membro.nome)" :disabled="membro.url_foto?false:true">
+                  <ion-icon
+                    slot="icon-only"
+                    class="iconButton"
+                    :icon="download"
+                  />
+                </ion-button>
+              </ion-col>
+
+            
             </ion-row>
           </ion-col>
         </ion-row>
@@ -297,9 +310,11 @@
 <script>
 import axios from "axios";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
+//import { Filesystem, Directory } from "@capacitor/filesystem";
 import { mask } from "vue-the-mask";
 import { defineComponent } from "vue";
 import {
+  download,
   camera,
   save,
   closeCircle,
@@ -357,6 +372,8 @@ export default defineComponent({
   },
   data() {
     return {
+      ativarBtnVoltar:false,
+      ativarBtnDelete:false,
       ativarBtnSalvar: true,
       loader: false,
       msgSistema: null,
@@ -379,6 +396,7 @@ export default defineComponent({
         bairro: null,
         cidade: null,
       },
+      download,
       save,
       camera,
       closeCircle,
@@ -393,6 +411,12 @@ export default defineComponent({
     page: String,
   },
   methods: {
+    downloadFoto(url,fileName) {
+      const downloadLink = document.createElement("a");
+      downloadLink.href = url;
+      downloadLink.download = `${fileName}`;
+      downloadLink.click();
+    },
     async tirarFoto() {
       const image = await Camera.getPhoto({
         quality: 100,
@@ -400,7 +424,6 @@ export default defineComponent({
         allowEditing: true,
         resultType: CameraResultType.DataUrl,
       });
-      //const fileName = new Date().getTime() + ".jpeg";
       this.membro.url_foto = image.dataUrl;
     },
     retirarMascara(input) {
@@ -512,6 +535,7 @@ export default defineComponent({
       if (validar) {
         const telSemMask = this.retirarMascara(membro.telefone);
         this.ativarBtnSalvar = true;
+        this.ativarBtnVoltar = true;
         this.loader = false;
         const response = await axios.post(
           "https://cdm-isosed.hasura.app/v1/graphql",
@@ -566,6 +590,8 @@ export default defineComponent({
       if (validar) {
         const telSemMask = this.retirarMascara(membro.telefone);
         this.ativarBtnSalvar = true;
+        this.ativarBtnDelete = true;
+        this.ativarBtnVoltar = true;
         this.loader = false;
         const response = await axios.post(
           "https://cdm-isosed.hasura.app/v1/graphql",
@@ -679,6 +705,7 @@ export default defineComponent({
       if (this.page == "editar") {
         if (this.membro != null && this.cargos != null) {
           this.loader = true;
+          console.log(this.membro);
         }
       }
     },
