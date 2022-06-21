@@ -179,10 +179,14 @@ export default defineComponent({
       personAdd,
       create,
       listaMembros: null,
-      resultBusca:""
+      resultBusca: ""
     };
   },
   methods: {
+    async testeServer(){
+ const response = await axios.post("http://localhost:4041/Membros");
+ alert(response.data);
+    },
     async getMembros() {
       const response = await axios.post(
         "https://cdm-isosed.hasura.app/v1/graphql",
@@ -201,7 +205,6 @@ export default defineComponent({
       this.listaMembros = response.data.data.membros;
     },
        async buscarMembros(resultBusca) {
-        this.loader = false
       const response = await axios.post(
         "https://cdm-isosed.hasura.app/v1/graphql",
         {
@@ -228,7 +231,8 @@ export default defineComponent({
   },
 
   ionViewWillEnter() {
-    this.getMembros();
+    this.testeServer();
+    //this.getMembros();
   },
   ionViewDidLeave() {
     this.loader = false;

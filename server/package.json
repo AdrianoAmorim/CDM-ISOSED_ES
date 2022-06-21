@@ -1,0 +1,15 @@
+{
+  "name": "server-membro-isosed",
+  "version": "1.0.0",
+  "description": "servidor do app Membros Isosed",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "author": "Adriano Amorim",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.1",
+    "nodemon": "^2.0.16"
+  }
+}
