@@ -19,12 +19,17 @@ app.use(cors())
  * Params >> /Produtos/9234244asd/ (para parametros de rotas q serao obrigatorios)
  * Query >> /produtos?id=24234234&tipo=23424  (se quiser passar mais de um coloca &)
  */
-async function getMembros() {
-    const membros = await prisma.membros.findMany()
-    return membros
-}
-app.get("/Membros", (req, resp) => {
-const objMembros = getMembros();
-    return resp.json({result: objMembros})
+app.get("/Membros", async (req, resp) => {
+    const membros = await prisma.membros.findMany({
+        select:{
+            id: true,
+            nome: true
+            //url_foto: true,
+        },
+        orderBy: {
+            nome: "asc"
+          }
+    })
+    resp.json(membros)
 })
 app.listen(4041, () => console.log("Servidor rodando com express"))

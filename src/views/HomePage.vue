@@ -183,8 +183,9 @@ export default defineComponent({
   methods: {
     async testeServer() {
       const response = await axios.get("http://localhost:4041/Membros");
-
-      console.log(JSON.stringify(response.data.result));
+          this.listaMembros =JSON.parse(response);
+      console.log("retorno no front");
+      console.log(this.listaMembros);
     },
     async getMembros() {
       const response = await axios.post(
