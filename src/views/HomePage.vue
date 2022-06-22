@@ -2,130 +2,128 @@
 a barra de Ferramentas e a lista de membros cadastrados -->
 <template>
   <ion-page>
-      <ion-header mode="ios">
-        <ion-toolbar mode="ios">
-          <ion-grid>
-            <ion-row class="ion-align-items-center">
-              <ion-col size="7">
-                <ion-row class="ion-justify-content-center">
-                  <ion-searchbar
-                    color="light"
-                    show-cancel-button="never"
-                    placeholder="Buscar Membro"
-                    style="margin: 0; padding: 0"
-                    v-model="resultBusca"
-                  />
-                </ion-row>
-              </ion-col>
+    <ion-header mode="ios">
+      <ion-toolbar mode="ios">
+        <ion-grid>
+          <ion-row class="ion-align-items-center">
+            <ion-col size="7">
+              <ion-row class="ion-justify-content-center">
+                <ion-searchbar
+                  color="light"
+                  show-cancel-button="never"
+                  placeholder="Buscar Membro"
+                  style="margin: 0; padding: 0"
+                  v-model="resultBusca"
+                />
+              </ion-row>
+            </ion-col>
 
-              <ion-col size="5">
-                <ion-row class="ion-justify-content-end">
-                  <ion-button
+            <ion-col size="5">
+              <ion-row class="ion-justify-content-end">
+                <ion-button
                   @click="buscarMembros(resultBusca)"
-                    fill="clear"
-                    size="small"
-                    color="primary"
-                    class="ion-align-self-start"
-                  >
-                    <ion-icon
-                      slot="icon-only"
-                      class="iconToolbar"
-                      :icon="searchCircle"
-                  /></ion-button>
-
-                  <ion-button
-                    fill="clear"
-                    color="success"
-                    size="small"
-                    @click="this.$router.replace('/cadastrar')"
-                    class="ion-align-self-end"
-                    ><ion-icon
-                      slot="icon-only"
-                      class="iconToolbar"
-                      :icon="personAdd"
-                  /></ion-button>
-                </ion-row>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-toolbar>
-      </ion-header>
-
-      <ion-content >
-        <ion-grid v-if="loader">
-          <ion-row class="ion-justify-content-center">
-            <ion-col size="12">
-              <ion-list>
-                <ion-row
-                  class="ion-justify-content-evenly"
-                  v-for="Membro in listaMembros"
-                  :key="Membro.id"
+                  fill="clear"
+                  size="small"
+                  color="primary"
+                  class="ion-align-self-start"
                 >
-                  <ion-col size="12">
-                    <ion-item>
-                      <ion-col size="9">
-                        <ion-row
-                          class="
-                            ion-justify-content-between ion-align-items-center
-                          "
-                        >
-                          <ion-col size="4">
-                            <ion-avatar>
-                              <ion-img
-                                :class="Membro.url_foto ? '' : 'fotoMembro'"
-                                :src="
-                                  Membro.url_foto
-                                    ? Membro.url_foto
-                                    : '/img/camera.png'
-                                "
-                                alt="Avatar do Membro"
-                              />
-                            </ion-avatar>
-                          </ion-col>
+                  <ion-icon
+                    slot="icon-only"
+                    class="iconToolbar"
+                    :icon="searchCircle"
+                /></ion-button>
 
-                          <ion-col size="8">
-                            <ion-label
-                              class="ion-text-wrap"
-                              style="overflow: visible"
-                            >
-                              {{ Membro.nome }}
-                            </ion-label>
-                            <ion-label color="danger"
-                              ><b>{{ Membro.cargo_membro.nome }}</b></ion-label
-                            >
-                          </ion-col>
-                        </ion-row>
-                      </ion-col>
-
-                      <ion-col size="3">
-                        <ion-row class="ion-justify-content-end">
-                          <ion-button
-                            @click="
-                              this.$router.push('/editar/' + `${Membro.id}`)
-                            "
-                            color="secondary"
-                            fill="clear"
-                            size="large"
-                          >
-                            <ion-icon
-                              slot="icon-only"
-                              class="iconButton"
-                              :icon="create"
-                            />
-                          </ion-button>
-                        </ion-row>
-                      </ion-col>
-                    </ion-item>
-                  </ion-col>
-                </ion-row>
-              </ion-list>
+                <ion-button
+                  fill="clear"
+                  color="success"
+                  size="small"
+                  @click="this.$router.replace('/cadastrar')"
+                  class="ion-align-self-end"
+                  ><ion-icon
+                    slot="icon-only"
+                    class="iconToolbar"
+                    :icon="personAdd"
+                /></ion-button>
+              </ion-row>
             </ion-col>
           </ion-row>
         </ion-grid>
-        <ion-progress-bar v-else type="indeterminate"></ion-progress-bar>
-      </ion-content>
-    
-    
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+      <ion-grid v-if="loader">
+        <ion-row class="ion-justify-content-center">
+          <ion-col size="12">
+            <ion-list>
+              <ion-row
+                class="ion-justify-content-evenly"
+                v-for="Membro in listaMembros"
+                :key="Membro.id"
+              >
+                <ion-col size="12">
+                  <ion-item>
+                    <ion-col size="9">
+                      <ion-row
+                        class="
+                          ion-justify-content-between ion-align-items-center
+                        "
+                      >
+                        <ion-col size="4">
+                          <ion-avatar>
+                            <ion-img
+                              :class="Membro.url_foto ? '' : 'fotoMembro'"
+                              :src="
+                                Membro.url_foto
+                                  ? Membro.url_foto
+                                  : '/img/camera.png'
+                              "
+                              alt="Avatar do Membro"
+                            />
+                          </ion-avatar>
+                        </ion-col>
+
+                        <ion-col size="8">
+                          <ion-label
+                            class="ion-text-wrap"
+                            style="overflow: visible"
+                          >
+                            {{ Membro.nome }}
+                          </ion-label>
+                          <ion-label color="danger"
+                            ><b>{{ Membro.cargo_membro.nome }}</b></ion-label
+                          >
+                        </ion-col>
+                      </ion-row>
+                    </ion-col>
+
+                    <ion-col size="3">
+                      <ion-row class="ion-justify-content-end">
+                        <ion-button
+                          @click="
+                            this.$router.push('/editar/' + `${Membro.id}`)
+                          "
+                          color="secondary"
+                          fill="clear"
+                          size="large"
+                        >
+                          <ion-icon
+                            slot="icon-only"
+                            class="iconButton"
+                            :icon="create"
+                          />
+                        </ion-button>
+                      </ion-row>
+                    </ion-col>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-progress-bar v-else type="indeterminate"></ion-progress-bar>
+    </ion-content>
   </ion-page>
 </template>
 
@@ -179,13 +177,14 @@ export default defineComponent({
       personAdd,
       create,
       listaMembros: null,
-      resultBusca: ""
+      resultBusca: "",
     };
   },
   methods: {
-    async testeServer(){
- const response = await axios.post("http://localhost:4041/Membros");
- alert(response.data);
+    async testeServer() {
+      const response = await axios.get("http://localhost:4041/Membros");
+
+      console.log(JSON.stringify(response.data.result));
     },
     async getMembros() {
       const response = await axios.post(
@@ -204,12 +203,11 @@ export default defineComponent({
       );
       this.listaMembros = response.data.data.membros;
     },
-       async buscarMembros(resultBusca) {
+    async buscarMembros(resultBusca) {
       const response = await axios.post(
         "https://cdm-isosed.hasura.app/v1/graphql",
         {
-          query:
-            `query buscarMembros{membros (where: {nome: {_ilike: "${resultBusca}%"}},order_by: {nome: asc})  {id,nome,url_foto cargo_membro {nome}}}`,
+          query: `query buscarMembros{membros (where: {nome: {_ilike: "${resultBusca}%"}},order_by: {nome: asc})  {id,nome,url_foto cargo_membro {nome}}}`,
         },
         {
           headers: {
