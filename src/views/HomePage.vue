@@ -91,7 +91,7 @@ a barra de Ferramentas e a lista de membros cadastrados -->
                             {{ Membro.nome }}
                           </ion-label>
                           <ion-label color="danger"
-                            ><b>{{ Membro.cargo_membro.nome }}</b></ion-label
+                            ><b>CARGO</b></ion-label
                           >
                         </ion-col>
                       </ion-row>
@@ -183,9 +183,7 @@ export default defineComponent({
   methods: {
     async testeServer() {
       const response = await axios.get("http://localhost:4041/Membros");
-          this.listaMembros =JSON.parse(response);
-      console.log("retorno no front");
-      console.log(this.listaMembros);
+          this.listaMembros = response.data
     },
     async getMembros() {
       const response = await axios.post(
