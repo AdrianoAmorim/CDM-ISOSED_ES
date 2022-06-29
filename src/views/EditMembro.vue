@@ -28,59 +28,14 @@ export default defineComponent({
   },
   methods:{
     async getMembro(idMembro) {
-      const response = await axios.post(
-        "https://cdm-isosed.hasura.app/v1/graphql",
-        {
-          query: `query getMembro {
-            membros(where: {id: {_eq: ${idMembro}}}) {
-                   id
-                   dtBatismo
-                  dtNascimento
-                  estCivil
-                  id_logradouro
-                  url_foto
-                  mae
-                  nome
-                  pai
-                  telefone
-                  logradouro_membro {
-                      bairro
-                      cidade
-                      endereco
-                      numero
-                    }
-                    cargo_membro {
-                      id
-                    }
-                  }
-                }`,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "x-hasura-admin-secret":
-              "HqDOmCJCXSI1ITFKPRVp4bwtis0FKbh0aJQxkrR6ZSCKala8GLITbR79brjAA3LM",
-          },
-        }
-      );
-      this.membro = response.data.data.membros[0];
+      const response = await axios.get(`http://localhost:4041/membro/${idMembro}` );
+      console.log(response.data)
+      this.membro = response.data;
     },
-        async getCargos() {
-      const response = await axios.post(
-        "https://cdm-isosed.hasura.app/v1/graphql",
-        {
-          query: "query getCargos {cargo {id,nome}}",
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "x-hasura-admin-secret":
-              "HqDOmCJCXSI1ITFKPRVp4bwtis0FKbh0aJQxkrR6ZSCKala8GLITbR79brjAA3LM",
-          },
-        }
-      );
-      this.cargos = response.data.data.cargo;
-    },
+      async getCargos() {
+      const response = await axios.get("http://localhost:4041/cargos");
+      this.cargos = response.data;
+      }
   },
   beforeMount(){
     this.getMembro(this.id);

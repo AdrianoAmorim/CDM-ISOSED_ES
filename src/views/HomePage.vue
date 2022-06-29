@@ -91,7 +91,7 @@ a barra de Ferramentas e a lista de membros cadastrados -->
                             {{ Membro.nome }}
                           </ion-label>
                           <ion-label color="danger"
-                            ><b>CARGO</b></ion-label
+                            ><b>{{Membro.cargo.nome}}</b></ion-label
                           >
                         </ion-col>
                       </ion-row>
@@ -181,26 +181,9 @@ export default defineComponent({
     };
   },
   methods: {
-    async testeServer() {
-      const response = await axios.get("http://localhost:4041/Membros");
-          this.listaMembros = response.data
-    },
     async getMembros() {
-      const response = await axios.post(
-        "https://cdm-isosed.hasura.app/v1/graphql",
-        {
-          query:
-            "query getMembros{membros (order_by: {nome: asc})  {id,nome,url_foto cargo_membro {nome}}}",
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "x-hasura-admin-secret":
-              "HqDOmCJCXSI1ITFKPRVp4bwtis0FKbh0aJQxkrR6ZSCKala8GLITbR79brjAA3LM",
-          },
-        }
-      );
-      this.listaMembros = response.data.data.membros;
+       const response = await axios.get("http://localhost:4041/membros");
+      this.listaMembros = response.data;
     },
     async buscarMembros(resultBusca) {
       const response = await axios.post(
@@ -228,8 +211,7 @@ export default defineComponent({
   },
 
   ionViewWillEnter() {
-    this.testeServer();
-    //this.getMembros();
+    this.getMembros();
   },
   ionViewDidLeave() {
     this.loader = false;

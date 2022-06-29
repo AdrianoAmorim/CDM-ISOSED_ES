@@ -520,11 +520,11 @@ export default defineComponent({
       this.membro.dtBatismo = membroEdit.dtBatismo;
       this.membro.estCivil = membroEdit.estCivil;
       this.membro.url_foto = membroEdit.url_foto;
-      this.membro.id_cargo = membroEdit.cargo_membro.id;
-      this.logradouro.endereco = membroEdit.logradouro_membro.endereco;
-      this.logradouro.bairro = membroEdit.logradouro_membro.bairro;
-      this.logradouro.cidade = membroEdit.logradouro_membro.cidade;
-      this.logradouro.numero = membroEdit.logradouro_membro.numero;
+      this.membro.id_cargo = membroEdit.id_cargo;
+      this.logradouro.endereco = membroEdit.logradouro.endereco;
+      this.logradouro.bairro = membroEdit.logradouro.bairro;
+      this.logradouro.cidade = membroEdit.logradouro.cidade;
+      this.logradouro.numero = membroEdit.logradouro.numero;
     },
 
     async setMembro(membro, logradouro) {

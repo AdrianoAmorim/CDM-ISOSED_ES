@@ -24,10 +24,9 @@ export default defineComponent({
   },
   methods: {
     async getCargos() {
-      const response = await axios.get("http://localhost:4041/Cargos");
+      const response = await axios.get("http://localhost:4041/cargos");
       this.cargos = response.data;
-      console.log(response.data)
-      },
+      }
   },
   beforeMount() {
     this.getCargos();
