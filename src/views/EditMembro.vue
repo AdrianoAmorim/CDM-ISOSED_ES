@@ -29,7 +29,7 @@ export default defineComponent({
   methods:{
     async getMembro(idMembro) {
       const response = await axios.get(`http://localhost:4041/membro/${idMembro}` );
-      console.log(response.data)
+     
       this.membro = response.data;
     },
       async getCargos() {

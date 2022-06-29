@@ -512,12 +512,14 @@ export default defineComponent({
     },
 
     setDadosInp(membroEdit) {
+      var dtNascimento = membroEdit.dtNascimento.substring(0, 10);
+      var dtBatismo = membroEdit.dtBatismo.substring(0, 10);
       this.membro.nome = membroEdit.nome;
       this.membro.pai = membroEdit.pai;
       this.membro.mae = membroEdit.mae;
       this.membro.telefone = membroEdit.telefone;
-      this.membro.dtNascimento = membroEdit.dtNascimento;
-      this.membro.dtBatismo = membroEdit.dtBatismo;
+      this.membro.dtNascimento = dtNascimento;
+      this.membro.dtBatismo = dtBatismo;
       this.membro.estCivil = membroEdit.estCivil;
       this.membro.url_foto = membroEdit.url_foto;
       this.membro.id_cargo = membroEdit.id_cargo;
