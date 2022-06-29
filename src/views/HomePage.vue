@@ -186,20 +186,8 @@ export default defineComponent({
       this.listaMembros = response.data;
     },
     async buscarMembros(resultBusca) {
-      const response = await axios.post(
-        "https://cdm-isosed.hasura.app/v1/graphql",
-        {
-          query: `query buscarMembros{membros (where: {nome: {_ilike: "${resultBusca}%"}},order_by: {nome: asc})  {id,nome,url_foto cargo_membro {nome}}}`,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "x-hasura-admin-secret":
-              "HqDOmCJCXSI1ITFKPRVp4bwtis0FKbh0aJQxkrR6ZSCKala8GLITbR79brjAA3LM",
-          },
-        }
-      );
-      this.listaMembros = response.data.data.membros;
+    const response = await axios.get(`http://localhost:4041/buscar/${resultBusca}`);
+      this.listaMembros = response.data;
     },
   },
   watch: {

@@ -12,10 +12,36 @@ app.get('/membros', async (req, res) => {
     select: {
       id: true,
       nome: true,
-      url_foto:true,
-      cargo:{
-        select:{
-          nome:true
+      url_foto: true,
+      cargo: {
+        select: {
+          nome: true
+        }
+      }
+    },
+    orderBy: {
+      nome: "asc"
+    }
+  });
+  res.send(membros)
+})
+
+//BUSCA OS MEMBROS QUE COMECAO COM O CONTEUDO RETORNADO DO FRONT
+app.get('/buscar/:nome', async (req, res) => {
+  const {nome} = req.params
+  const membros = await prisma.membros.findMany({
+    where: {
+      nome:{
+        startsWith: nome
+      }
+    },
+    select: {
+      id: true,
+      nome: true,
+      url_foto: true,
+      cargo: {
+        select: {
+          nome: true
         }
       }
     },
@@ -34,25 +60,27 @@ app.get('/cargos', async (req, res) => {
 
 
 //PEGA O MEMBRO SELECIONADO PELO ID
-app.get("/membro/:id", async (req,res)=>{
-  const {id} = req.params;
-    const membro = await prisma.membros.findUnique({
-      where:{
-        id: parseInt(id)
-      },
-      include:{
-        logradouro:{
-          select:{
-            endereco:true,
-            numero:true,
-            bairro:true,
-            cidade:true
-          }
+app.get("/membro/:id", async (req, res) => {
+  const { id } = req.params;
+  const membro = await prisma.membros.findUnique({
+    where: {
+      id: parseInt(id)
+    },
+    include: {
+      logradouro: {
+        select: {
+          endereco: true,
+          numero: true,
+          bairro: true,
+          cidade: true
         }
       }
-    })
-    res.send(membro)
-  });
+    }
+  })
+  res.send(membro)
+});
+
+
 app.listen(4041, () => {
   console.log("Servidor Express Funcionando!!")
 })
