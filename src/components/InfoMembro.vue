@@ -16,7 +16,7 @@
         /></ion-button>
 
         <ion-button
-        :disabled ="ativarBtnVoltar"
+          :disabled="ativarBtnVoltar"
           fill="clear"
           router-direction="back"
           slot="end"
@@ -38,7 +38,7 @@
           size="small"
           color="success"
           :disabled="ativarBtnSalvar"
-          @click="updateMembro(this.membro, this.logradouro)"
+          @click="updateMembro(this.membro)"
         >
           <ion-icon slot="icon-only" class="iconToolbar" :icon="save"
         /></ion-button>
@@ -51,7 +51,7 @@
           size="small"
           color="success"
           :disabled="ativarBtnSalvar"
-          @click="setMembro(this.membro, this.logradouro)"
+          @click="setMembro(this.membro)"
         >
           <ion-icon slot="icon-only" class="iconToolbar" :icon="save"
         /></ion-button>
@@ -71,7 +71,13 @@
                     alt="Avatar do Membro"
                   />
                 </ion-avatar>
-                <ion-button v-if="page == 'editar'" fill="clear" color="secondary" @click="downloadFoto(membro.url_foto,membro.nome)" :disabled="membro.url_foto?false:true">
+                <ion-button
+                  v-if="page == 'editar'"
+                  fill="clear"
+                  color="secondary"
+                  @click="downloadFoto(membro.url_foto, membro.nome)"
+                  :disabled="membro.url_foto ? false : true"
+                >
                   <ion-icon
                     slot="icon-only"
                     class="iconButton"
@@ -79,8 +85,6 @@
                   />
                 </ion-button>
               </ion-col>
-
-            
             </ion-row>
           </ion-col>
         </ion-row>
@@ -105,7 +109,7 @@
                 <ion-label position="floating">Endereço: </ion-label>
                 <ion-input
                   @ionChange="validarCampos()"
-                  v-model="logradouro.endereco"
+                  v-model="membro.endereco"
                   color="secondary"
                 ></ion-input>
               </ion-item>
@@ -115,7 +119,7 @@
                 <ion-label position="floating">Nº: </ion-label>
                 <ion-input
                   @ionChange="validarCampos()"
-                  v-model="logradouro.numero"
+                  v-model="membro.numero"
                   type="number"
                   inputmode="numeric"
                   color="secondary"
@@ -130,7 +134,7 @@
                 <ion-label position="floating">Bairro: </ion-label>
                 <ion-input
                   @ionChange="validarCampos()"
-                  v-model="logradouro.bairro"
+                  v-model="membro.bairro"
                   color="secondary"
                 ></ion-input>
               </ion-item>
@@ -140,7 +144,7 @@
                 <ion-label position="floating">Cidade: </ion-label>
                 <ion-input
                   @ionChange="validarCampos()"
-                  v-model="logradouro.cidade"
+                  v-model="membro.cidade"
                   color="secondary"
                 ></ion-input>
               </ion-item>
@@ -371,8 +375,8 @@ export default defineComponent({
   },
   data() {
     return {
-      ativarBtnVoltar:false,
-      ativarBtnDelete:false,
+      ativarBtnVoltar: false,
+      ativarBtnDelete: false,
       ativarBtnSalvar: true,
       loader: false,
       msgSistema: null,
@@ -388,8 +392,6 @@ export default defineComponent({
         telefone: null,
         id_cargo: null,
         url_foto: "",
-      },
-      logradouro: {
         endereco: null,
         numero: null,
         bairro: null,
@@ -410,7 +412,7 @@ export default defineComponent({
     page: String,
   },
   methods: {
-    downloadFoto(url,fileName) {
+    downloadFoto(url, fileName) {
       const downloadLink = document.createElement("a");
       downloadLink.href = url;
       downloadLink.download = `${fileName}`;
@@ -444,10 +446,10 @@ export default defineComponent({
       this.membro.estCivil = null;
       this.membro.url_foto = "";
       this.membro.id_cargo = null;
-      this.logradouro.endereco = null;
-      this.logradouro.numero = null;
-      this.logradouro.bairro = null;
-      this.logradouro.cidade = null;
+      this.membro.endereco = null;
+      this.membro.numero = null;
+      this.membro.bairro = null;
+      this.membro.cidade = null;
     },
     async confirmDelete() {
       const alert = await alertController.create({
@@ -494,14 +496,14 @@ export default defineComponent({
         (this.membro.estCivil == "") |
         (this.membro.id_cargo == null) |
         (this.membro.id_cargo == "") |
-        (this.logradouro.endereco == null) |
-        (this.logradouro.endereco == "") |
-        (this.logradouro.numero == null) |
-        (this.logradouro.numero == "") |
-        (this.logradouro.bairro == null) |
-        (this.logradouro.bairro == "") |
-        (this.logradouro.cidade == null) |
-        (this.logradouro.cidade == "")
+        (this.membro.endereco == null) |
+        (this.membro.endereco == "") |
+        (this.membro.numero == null) |
+        (this.membro.numero == "") |
+        (this.membro.bairro == null) |
+        (this.membro.bairro == "") |
+        (this.membro.cidade == null) |
+        (this.membro.cidade == "")
       ) {
         this.ativarBtnSalvar = true;
         return false;
@@ -523,67 +525,36 @@ export default defineComponent({
       this.membro.estCivil = membroEdit.estCivil;
       this.membro.url_foto = membroEdit.url_foto;
       this.membro.id_cargo = membroEdit.id_cargo;
-      this.logradouro.endereco = membroEdit.logradouro.endereco;
-      this.logradouro.bairro = membroEdit.logradouro.bairro;
-      this.logradouro.cidade = membroEdit.logradouro.cidade;
-      this.logradouro.numero = membroEdit.logradouro.numero;
+      this.membro.endereco = membroEdit.logradouro.endereco;
+      this.membro.bairro = membroEdit.logradouro.bairro;
+      this.membro.cidade = membroEdit.logradouro.cidade;
+      this.membro.numero = membroEdit.logradouro.numero;
     },
 
-    async setMembro(membro, logradouro) {
+    async setMembro(membro) {
       const validar = this.validarCampos();
       if (validar) {
-        const telSemMask = this.retirarMascara(membro.telefone);
+        membro.telefone = this.retirarMascara(membro.telefone);
         this.ativarBtnSalvar = true;
         this.ativarBtnVoltar = true;
         this.loader = false;
-        const response = await axios.post(
-          "https://cdm-isosed.hasura.app/v1/graphql",
-          {
-            query: `mutation setMembro{
-              insert_membros_one(object:{
-                nome: "${membro.nome}",
-                telefone: ${telSemMask},
-                id_cargo: ${membro.id_cargo},
-                pai: "${membro.pai}",
-                mae: "${membro.mae}",
-                dtNascimento: "${membro.dtNascimento}",
-                dtBatismo: "${membro.dtBatismo}",
-                estCivil: "${membro.estCivil}",
-                url_foto: "${membro.url_foto}",
-                logradouro_membro:{
-                  data:{
-                    endereco: "${logradouro.endereco}",
-                    numero: ${logradouro.numero},
-                    bairro: "${logradouro.bairro}",
-                    cidade: "${logradouro.cidade}"
-                  }
-                }
-            }){id}}`,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "x-hasura-admin-secret":
-                "HqDOmCJCXSI1ITFKPRVp4bwtis0FKbh0aJQxkrR6ZSCKala8GLITbR79brjAA3LM",
-            },
-          }
-        );
-        if (response.data.data.insert_membros_one.id > 0) {
+        const response = await axios.post("http://localhost:4041/cadastrar", membro);
+        if (response.data.id > 0) {
           this.limparCampos();
-          this.msgSistema = "Membro Cadastrado com Sucesso!!";
+          this.msgSistema = "Membro Atualizado com Sucesso!!";
           this.statusInfoSistema = true;
           setTimeout(() => {
             this.statusInfoSistema = false;
             this.$router.replace("/");
           }, 3000);
-        } else {
-          this.msgSistema = "Erro ao Cadastrar novo Membro";
-          this.statusInfoSistema = true;
+        }else{
+          alert("Houve Algum erro ao Inserir no banco !")
         }
       } else {
         alert("Favor Preencher todas as Informações do Membro!");
       }
     },
+
     async updateMembro(membro, logradouro) {
       const validar = this.validarCampos();
       if (validar) {
@@ -642,8 +613,8 @@ export default defineComponent({
 
     async deleteMembro(id) {
       this.ativarBtnSalvar = true;
-        this.ativarBtnDelete = true;
-        this.ativarBtnVoltar = true;
+      this.ativarBtnDelete = true;
+      this.ativarBtnVoltar = true;
       const response = await axios.post(
         "https://cdm-isosed.hasura.app/v1/graphql",
         {
