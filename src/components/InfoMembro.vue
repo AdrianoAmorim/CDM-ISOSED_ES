@@ -383,6 +383,7 @@ export default defineComponent({
       statusInfoSistema: false,
       cargos: null,
       membro: {
+        id:null,
         dtBatismo: null,
         dtNascimento: null,
         nome: null,
@@ -391,6 +392,7 @@ export default defineComponent({
         estCivil: null,
         telefone: null,
         id_cargo: null,
+        id_logradouro:null,
         url_foto: "",
         endereco: null,
         numero: null,
@@ -480,6 +482,8 @@ export default defineComponent({
     },
     validarCampos() {
       if (
+         (this.membro.id == null) |
+        (this.membro.id == "") |
         (this.membro.nome == null) |
         (this.membro.nome == "") |
         (this.membro.telefone == null) |
@@ -516,6 +520,7 @@ export default defineComponent({
     setDadosInp(membroEdit) {
       var dtNascimento = membroEdit.dtNascimento.substring(0, 10);
       var dtBatismo = membroEdit.dtBatismo.substring(0, 10);
+      this.membro.id = membroEdit.id;
       this.membro.nome = membroEdit.nome;
       this.membro.pai = membroEdit.pai;
       this.membro.mae = membroEdit.mae;
@@ -525,10 +530,12 @@ export default defineComponent({
       this.membro.estCivil = membroEdit.estCivil;
       this.membro.url_foto = membroEdit.url_foto;
       this.membro.id_cargo = membroEdit.id_cargo;
+      this.membro.id_logradouro = membroEdit.id_logradouro
       this.membro.endereco = membroEdit.logradouro.endereco;
       this.membro.bairro = membroEdit.logradouro.bairro;
       this.membro.cidade = membroEdit.logradouro.cidade;
       this.membro.numero = membroEdit.logradouro.numero;
+
     },
 
     async setMembro(membro) {
@@ -555,46 +562,16 @@ export default defineComponent({
       }
     },
 
-    async updateMembro(membro, logradouro) {
-      const validar = this.validarCampos();
+    async updateMembro(membro) {
+        const validar = this.validarCampos();
       if (validar) {
-        const telSemMask = this.retirarMascara(membro.telefone);
+        membro.telefone = this.retirarMascara(membro.telefone);
         this.ativarBtnSalvar = true;
-        this.ativarBtnDelete = true;
         this.ativarBtnVoltar = true;
+        this.ativarBtnDelete = true;
         this.loader = false;
-        const response = await axios.post(
-          "https://cdm-isosed.hasura.app/v1/graphql",
-          {
-            query: `mutation updateMembro {
-                      update_membros(where: {id: {_eq:${this.idMembro}}}, _set: 
-                        {  nome: "${membro.nome}",
-                            url_foto: "${membro.url_foto}",
-                            telefone: ${telSemMask},
-                            id_cargo: ${membro.id_cargo},
-                            pai: "${membro.pai}",
-                            mae: "${membro.mae}",
-                            dtNascimento: "${membro.dtNascimento}",
-                            dtBatismo: "${membro.dtBatismo}",
-                            estCivil: "${membro.estCivil}"}) {
-                              affected_rows
-                            }
-                      update_logradouro(where: {id: {_eq:${this.idMembro} }}, _set: 
-                        {endereco: "${logradouro.endereco}",
-                          numero: ${logradouro.numero},
-                          bairro: "${logradouro.bairro}",
-                          cidade: "${logradouro.cidade}"}) {
-                              affected_rows}}`,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "x-hasura-admin-secret":
-                "HqDOmCJCXSI1ITFKPRVp4bwtis0FKbh0aJQxkrR6ZSCKala8GLITbR79brjAA3LM",
-            },
-          }
-        );
-        if (response.data.data.update_membros.affected_rows > 0) {
+        const response = await axios.put("http://localhost:4041/atualizar", membro);
+        if (response.data.id > 0) {
           this.limparCampos();
           this.msgSistema = "Membro Atualizado com Sucesso!!";
           this.statusInfoSistema = true;
@@ -602,12 +579,11 @@ export default defineComponent({
             this.statusInfoSistema = false;
             this.$router.replace("/");
           }, 3000);
-        } else {
-          this.msgSistema = "Erro ao Atualizar o Membro";
-          this.statusInfoSistema = true;
+        }else{
+          alert("Houve Algum erro ao Inserir no banco !")
         }
       } else {
-        alert("Favor Preencher todas as Informações");
+        alert("Favor Preencher todas as Informações do Membro!");
       }
     },
 
