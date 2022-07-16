@@ -393,7 +393,7 @@ export default defineComponent({
         telefone: null,
         id_cargo: null,
         id_logradouro:null,
-        url_foto: "",
+        url_foto: null,
         endereco: null,
         numero: null,
         bairro: null,
@@ -408,7 +408,6 @@ export default defineComponent({
     };
   },
   props: {
-    idMembro: null,
     cargosLs: null,
     membroEd: null,
     page: String,
@@ -472,7 +471,7 @@ export default defineComponent({
             id: "confirm-button",
             cssClass: "btn-confirm",
             handler: () => {
-              this.deleteMembro(this.idMembro);
+              this.deleteMembro(this.membro.id,this.membro.id_logradouro);
               this.loader = false;
             },
           },
@@ -482,8 +481,6 @@ export default defineComponent({
     },
     validarCampos() {
       if (
-         (this.membro.id == null) |
-        (this.membro.id == "") |
         (this.membro.nome == null) |
         (this.membro.nome == "") |
         (this.membro.telefone == null) |
@@ -587,60 +584,17 @@ export default defineComponent({
       }
     },
 
-    async deleteMembro(id) {
+    async deleteMembro(idMembro,idLogradouro) {
       this.ativarBtnSalvar = true;
       this.ativarBtnDelete = true;
       this.ativarBtnVoltar = true;
-      const response = await axios.post(
-        "https://cdm-isosed.hasura.app/v1/graphql",
-        {
-          query: `mutation MyMutation {
-                delete_membros(where: {id: {_eq: ${id}}}) {
-                  affected_rows
-                  returning {
-                    logradouro_membro {
-                      id
-                    }
-                  }
-                }
-              }`,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "x-hasura-admin-secret":
-              "HqDOmCJCXSI1ITFKPRVp4bwtis0FKbh0aJQxkrR6ZSCKala8GLITbR79brjAA3LM",
-          },
-        }
-      );
-      const idLogradouro =
-        response.data.data.delete_membros.returning[0].logradouro_membro.id;
-      const response2 = await axios.post(
-        "https://cdm-isosed.hasura.app/v1/graphql",
-        {
-          query: `mutation MyMutation {
-                  delete_logradouro(where: {id: {_eq: ${idLogradouro}}}) {
-                    affected_rows
-                  }
-                }`,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "x-hasura-admin-secret":
-              "HqDOmCJCXSI1ITFKPRVp4bwtis0FKbh0aJQxkrR6ZSCKala8GLITbR79brjAA3LM",
-          },
-        }
-      );
-
-      if (
-        response.data.data.delete_membros.affected_rows &&
-        response2.data.data.delete_logradouro.affected_rows > 0
-      ) {
-        this.$router.push("/");
-      } else {
-        alert("Ouve um erro ao Deletar o Membro");
+      let ids = {
+        "idMembro": idMembro,
+        "idLogradouro": idLogradouro
       }
+      console.log(ids)
+      const response = await axios.delete(`http://localhost:4041/deletar/?id_membro=${idMembro}&id_logradouro=${idLogradouro}`)
+      console.log (response);
     },
   },
   watch: {
