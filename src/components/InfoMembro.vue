@@ -584,16 +584,18 @@ export default defineComponent({
       }
     },
 
-    async deleteMembro(idMembro,idLogradouro) {
+    async deleteMembro(id_membro,id_logradouro) {
       this.ativarBtnSalvar = true;
       this.ativarBtnDelete = true;
       this.ativarBtnVoltar = true;
-      let ids = {
-        "idMembro": idMembro,
-        "idLogradouro": idLogradouro
+      var ids = {
+        idMembro: id_membro,
+        idLogradouro: id_logradouro
       }
+      
       console.log(ids)
-      const response = await axios.delete(`http://localhost:4041/deletar/?id_membro=${idMembro}&id_logradouro=${idLogradouro}`)
+      //const response = await axios.delete(`http://localhost:4041/deletar/?id_membro=${idMembro}&id_logradouro=${idLogradouro}`)
+      const response = await axios.delete("http://localhost:4041/deletar/",ids)
       console.log (response);
     },
   },
