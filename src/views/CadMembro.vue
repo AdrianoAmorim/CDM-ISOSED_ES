@@ -24,7 +24,7 @@ export default defineComponent({
   },
   methods: {
     async getCargos() {
-      const response = await axios.get("http://localhost:4041/cargos");
+      const response = await axios.get("http://192.168.18.4:4041/cargos");
       this.cargos = response.data;
       }
   },

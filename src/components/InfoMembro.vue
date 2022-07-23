@@ -476,7 +476,7 @@ export default defineComponent({
             cssClass: "btn-confirm",
             handler: () => {
               this.deleteMembro(this.membro.id,this.membro.id_logradouro);
-              this.loader = true;
+              
             },
           },
         ],
@@ -546,7 +546,7 @@ export default defineComponent({
         this.ativarBtnSalvar = true;
         this.ativarBtnVoltar = true;
         this.loader = true;
-        const response = await axios.post("http://localhost:4041/cadastrar", membro);
+        const response = await axios.post("http://192.168.18.4:4041/cadastrar", membro);
         if (response.data.id > 0) {
           this.limparCampos();
           this.msgSistema = "Membro Atualizado com Sucesso!!";
@@ -571,7 +571,7 @@ export default defineComponent({
         this.ativarBtnVoltar = true;
         this.ativarBtnDelete = true;
         this.loader = true;
-        const response = await axios.put("http://localhost:4041/atualizar", membro);
+        const response = await axios.put("http://192.168.18.4:4041/atualizar", membro);
         if (response.data.id > 0) {
           this.limparCampos();
           this.msgSistema = "Membro Atualizado com Sucesso!!";
@@ -592,11 +592,21 @@ export default defineComponent({
       this.ativarBtnSalvar = true;
       this.ativarBtnDelete = true;
       this.ativarBtnVoltar = true;
-      this.ids.idMembro = id_membro;
-      this.ids.idLogradouro = id_logradouro
-      console.log(this.ids)
-      //const response = await axios.delete(`http://localhost:4041/deletar/?id_membro=${idMembro}&id_logradouro=${idLogradouro}`)
-      const response = await axios.delete("http://localhost:4041/deletar",this.ids)
+        this.loader = true;
+      //this.ids.idMembro = id_membro;
+      //this.ids.idLogradouro = id_logradouro
+      //console.log(this.ids)
+      const response = await axios.delete(`http://192.168.18.4:4041/deletar/?id_membro=${id_membro}&id_logradouro=${id_logradouro}`)
+      //const response = await axios.delete("http://192.168.18.4:4041/deletar",this.ids)
+      if(response.data.id > 0){
+         this.limparCampos();
+          this.msgSistema = "Membro Deletado com Sucesso!!";
+          this.statusInfoSistema = true;
+          setTimeout(() => {
+            this.statusInfoSistema = false;
+            this.$router.replace("/");
+          }, 3000);
+      }
       console.log (response);
     },
   },

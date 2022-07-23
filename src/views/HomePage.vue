@@ -182,14 +182,14 @@ export default defineComponent({
   },
   methods: {
     async getMembros() {
-       const response = await axios.get("http://localhost:4041/membros");
+       const response = await axios.get("http://192.168.18.4:4041/membros");
       this.listaMembros = response.data;
     },
     async buscarMembros(resultBusca) {
       if(resultBusca == ""){
         this.loader = true
       }else{
-    const response = await axios.get(`http://localhost:4041/buscar/${resultBusca}`);
+    const response = await axios.get(`http://192.168.18.4:4041/buscar/${resultBusca}`);
       this.listaMembros = response.data;
       }
     },
