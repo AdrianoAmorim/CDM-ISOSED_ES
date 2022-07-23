@@ -52,7 +52,7 @@ a barra de Ferramentas e a lista de membros cadastrados -->
     </ion-header>
 
     <ion-content>
-      <ion-grid v-if="loader">
+      <ion-grid v-if="!loader">
         <ion-row class="ion-justify-content-center">
           <ion-col size="12">
             <ion-list>
@@ -172,7 +172,7 @@ export default defineComponent({
   },
   data() {
     return {
-      loader: false,
+      loader: true,
       searchCircle,
       personAdd,
       create,
@@ -186,14 +186,18 @@ export default defineComponent({
       this.listaMembros = response.data;
     },
     async buscarMembros(resultBusca) {
+      if(resultBusca == ""){
+        this.loader = true
+      }else{
     const response = await axios.get(`http://localhost:4041/buscar/${resultBusca}`);
       this.listaMembros = response.data;
+      }
     },
   },
   watch: {
     listaMembros() {
       if (this.listaMembros != null) {
-        this.loader = true;
+        this.loader = false;
       }
     },
   },
@@ -202,7 +206,7 @@ export default defineComponent({
     this.getMembros();
   },
   ionViewDidLeave() {
-    this.loader = false;
+    this.loader = true;
   },
 });
 </script>

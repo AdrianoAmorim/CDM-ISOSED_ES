@@ -59,7 +59,7 @@
     </ion-header>
 
     <ion-content>
-      <ion-grid v-if="loader">
+      <ion-grid v-if="!loader">
         <ion-row class="ion-justify-content-center ion-align-items-center">
           <ion-col size="7">
             <ion-row class="ion-justify-content-center">
@@ -378,10 +378,14 @@ export default defineComponent({
       ativarBtnVoltar: false,
       ativarBtnDelete: false,
       ativarBtnSalvar: true,
-      loader: false,
+      loader: true,
       msgSistema: null,
       statusInfoSistema: false,
       cargos: null,
+      ids:{
+        idMembro:null,
+        idLogradouro:null
+      },
       membro: {
         id:null,
         dtBatismo: null,
@@ -472,7 +476,7 @@ export default defineComponent({
             cssClass: "btn-confirm",
             handler: () => {
               this.deleteMembro(this.membro.id,this.membro.id_logradouro);
-              this.loader = false;
+              this.loader = true;
             },
           },
         ],
@@ -541,7 +545,7 @@ export default defineComponent({
         membro.telefone = this.retirarMascara(membro.telefone);
         this.ativarBtnSalvar = true;
         this.ativarBtnVoltar = true;
-        this.loader = false;
+        this.loader = true;
         const response = await axios.post("http://localhost:4041/cadastrar", membro);
         if (response.data.id > 0) {
           this.limparCampos();
@@ -566,7 +570,7 @@ export default defineComponent({
         this.ativarBtnSalvar = true;
         this.ativarBtnVoltar = true;
         this.ativarBtnDelete = true;
-        this.loader = false;
+        this.loader = true;
         const response = await axios.put("http://localhost:4041/atualizar", membro);
         if (response.data.id > 0) {
           this.limparCampos();
@@ -588,14 +592,11 @@ export default defineComponent({
       this.ativarBtnSalvar = true;
       this.ativarBtnDelete = true;
       this.ativarBtnVoltar = true;
-      var ids = {
-        idMembro: id_membro,
-        idLogradouro: id_logradouro
-      }
-      
-      console.log(ids)
+      this.ids.idMembro = id_membro;
+      this.ids.idLogradouro = id_logradouro
+      console.log(this.ids)
       //const response = await axios.delete(`http://localhost:4041/deletar/?id_membro=${idMembro}&id_logradouro=${idLogradouro}`)
-      const response = await axios.delete("http://localhost:4041/deletar/",ids)
+      const response = await axios.delete("http://localhost:4041/deletar",this.ids)
       console.log (response);
     },
   },
@@ -604,12 +605,12 @@ export default defineComponent({
       this.cargos = this.cargosLs;
       if (this.page == "cadastro") {
         if (this.cargos != null) {
-          this.loader = true;
+          this.loader = false;
         }
       }
       if (this.page == "editar") {
         if (this.membro != null && this.cargos != null) {
-          this.loader = true;
+          this.loader = false;
         }
       }
     },
