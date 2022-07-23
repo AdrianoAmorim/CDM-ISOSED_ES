@@ -1,15 +1,13 @@
 Coisas para fazer:
 
-TELA CADASTRO
->criar funcao para abrir camera e salvar fotos
->CRIAR ALERT DE AVISO DE CAMPOS VAZIOS
-
-
 TELA HOME
 >CRIAR BOTAO DE RELATORIOS
 
 
 TELA DE EDITAR MEMBRO:
- > Criado o Update (falta revisar query)
+
+BUGS ENCONTRADO:
+
+> botao salvar as vezes fica desabilitado mesmo com todos os dados preenchidos
 
 

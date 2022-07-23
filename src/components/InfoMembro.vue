@@ -549,7 +549,7 @@ export default defineComponent({
         const response = await axios.post("http://192.168.18.4:4041/cadastrar", membro);
         if (response.data.id > 0) {
           this.limparCampos();
-          this.msgSistema = "Membro Atualizado com Sucesso!!";
+          this.msgSistema = "Membro Cadastrado com Sucesso!!";
           this.statusInfoSistema = true;
           setTimeout(() => {
             this.statusInfoSistema = false;

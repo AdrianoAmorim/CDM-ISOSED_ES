@@ -9,6 +9,7 @@ a barra de Ferramentas e a lista de membros cadastrados -->
             <ion-col size="7">
               <ion-row class="ion-justify-content-center">
                 <ion-searchbar
+                @ionChange="statusBtnBuscar()"
                   color="light"
                   show-cancel-button="never"
                   placeholder="Buscar Membro"
@@ -22,6 +23,7 @@ a barra de Ferramentas e a lista de membros cadastrados -->
               <ion-row class="ion-justify-content-end">
                 <ion-button
                   @click="buscarMembros(resultBusca)"
+                  :disabled="ativarBtnBuscar"
                   fill="clear"
                   size="small"
                   color="primary"
@@ -91,7 +93,7 @@ a barra de Ferramentas e a lista de membros cadastrados -->
                             {{ Membro.nome }}
                           </ion-label>
                           <ion-label color="danger"
-                            ><b>{{Membro.cargo.nome}}</b></ion-label
+                            ><b>{{ Membro.cargo.nome }}</b></ion-label
                           >
                         </ion-col>
                       </ion-row>
@@ -172,6 +174,7 @@ export default defineComponent({
   },
   data() {
     return {
+      ativarBtnBuscar: true,
       loader: true,
       searchCircle,
       personAdd,
@@ -181,17 +184,29 @@ export default defineComponent({
     };
   },
   methods: {
+    statusBtnBuscar(){
+      if(this.resultBusca != ""){
+        this.ativarBtnBuscar = false
+      }else{
+        this.ativarBtnBuscar = true
+      }
+    },
     async getMembros() {
-       const response = await axios.get("http://192.168.18.4:4041/membros");
+      const response = await axios.get("http://192.168.18.4:4041/membros");
       this.listaMembros = response.data;
     },
     async buscarMembros(resultBusca) {
-      if(resultBusca == ""){
-        this.loader = true
-      }else{
-    const response = await axios.get(`http://192.168.18.4:4041/buscar/${resultBusca}`);
-      this.listaMembros = response.data;
-      }
+      this.resultBusca = ""
+      this.loader = true
+        const response = await axios.get(
+          `http://192.168.18.4:4041/buscar/${resultBusca}`);
+        this.listaMembros = response.data;
+        if(response.data.id > 0){
+          this.loader = false
+        }else{
+          this.loader = true
+        }
+      
     },
   },
   watch: {
