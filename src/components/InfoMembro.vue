@@ -382,10 +382,6 @@ export default defineComponent({
       msgSistema: null,
       statusInfoSistema: false,
       cargos: null,
-      ids:{
-        idMembro:null,
-        idLogradouro:null
-      },
       membro: {
         id:null,
         dtBatismo: null,
@@ -593,11 +589,12 @@ export default defineComponent({
       this.ativarBtnDelete = true;
       this.ativarBtnVoltar = true;
         this.loader = true;
-      //this.ids.idMembro = id_membro;
-      //this.ids.idLogradouro = id_logradouro
-      //console.log(this.ids)
-      const response = await axios.delete(`http://192.168.18.4:4041/deletar/?id_membro=${id_membro}&id_logradouro=${id_logradouro}`)
-      //const response = await axios.delete("http://192.168.18.4:4041/deletar",this.ids)
+        const ids={
+          id_membro: id_membro,
+          id_logradouro:id_logradouro
+        }
+
+      const response = await axios.delete("http://192.168.18.4:4041/deletar",{data:ids})
       if(response.data.id > 0){
          this.limparCampos();
           this.msgSistema = "Membro Deletado com Sucesso!!";
