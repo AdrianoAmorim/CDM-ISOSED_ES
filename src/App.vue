@@ -52,8 +52,4 @@ object-fit: fill;
 font-size:36px;
 object-fit: fill;
 }
-
-
-
-
 </style>

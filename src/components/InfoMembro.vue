@@ -375,15 +375,15 @@ export default defineComponent({
   },
   data() {
     return {
-      ativarBtnVoltar: false,
-      ativarBtnDelete: false,
+      ativarBtnVoltar: true,
+      ativarBtnDelete: true,
       ativarBtnSalvar: true,
       loader: true,
       msgSistema: null,
       statusInfoSistema: false,
       cargos: null,
       membro: {
-        id:null,
+        id: null,
         dtBatismo: null,
         dtNascimento: null,
         nome: null,
@@ -392,7 +392,7 @@ export default defineComponent({
         estCivil: null,
         telefone: null,
         id_cargo: null,
-        id_logradouro:null,
+        id_logradouro: null,
         url_foto: null,
         endereco: null,
         numero: null,
@@ -471,8 +471,7 @@ export default defineComponent({
             id: "confirm-button",
             cssClass: "btn-confirm",
             handler: () => {
-              this.deleteMembro(this.membro.id,this.membro.id_logradouro);
-              
+              this.deleteMembro(this.membro.id, this.membro.id_logradouro);
             },
           },
         ],
@@ -527,12 +526,11 @@ export default defineComponent({
       this.membro.estCivil = membroEdit.estCivil;
       this.membro.url_foto = membroEdit.url_foto;
       this.membro.id_cargo = membroEdit.id_cargo;
-      this.membro.id_logradouro = membroEdit.id_logradouro
+      this.membro.id_logradouro = membroEdit.id_logradouro;
       this.membro.endereco = membroEdit.logradouro.endereco;
       this.membro.bairro = membroEdit.logradouro.bairro;
       this.membro.cidade = membroEdit.logradouro.cidade;
       this.membro.numero = membroEdit.logradouro.numero;
-
     },
 
     async setMembro(membro) {
@@ -542,33 +540,41 @@ export default defineComponent({
         this.ativarBtnSalvar = true;
         this.ativarBtnVoltar = true;
         this.loader = true;
-        const response = await axios.post("http://192.168.18.4:4041/cadastrar", membro);
-        if (response.data.id > 0) {
+    
+    try{
+        const response = await axios.post("http://192.168.18.4:4041/cadastrar",membro)
+        console.log("dentro do try");
+        console.log(response);
           this.limparCampos();
-          this.msgSistema = "Membro Cadastrado com Sucesso!!";
-          this.statusInfoSistema = true;
-          setTimeout(() => {
-            this.statusInfoSistema = false;
-            this.$router.replace("/");
-          }, 3000);
-        }else{
-          alert("Houve Algum erro ao Inserir no banco !")
-        }
+        this.msgSistema = "Membro Cadastrado com Sucesso!!";
+        this.statusInfoSistema = true;
+        setTimeout(() => {
+          this.statusInfoSistema = false;
+          this.$router.replace("/");
+        }, 3000);
+    }
+    catch(e){
+        alert("Houve um erro Ao cadastrar!! "+ e)
+        this.loader = false
+    }
+       
+      
       } else {
         alert("Favor Preencher todas as Informações do Membro!");
       }
     },
 
     async updateMembro(membro) {
-        const validar = this.validarCampos();
+      const validar = this.validarCampos();
       if (validar) {
         membro.telefone = this.retirarMascara(membro.telefone);
         this.ativarBtnSalvar = true;
         this.ativarBtnVoltar = true;
         this.ativarBtnDelete = true;
         this.loader = true;
-        const response = await axios.put("http://192.168.18.4:4041/atualizar", membro);
-        if (response.data.id > 0) {
+        try{
+        const response = await axios.put("http://192.168.18.4:4041/atualizar",membro);
+        console.log(response)
           this.limparCampos();
           this.msgSistema = "Membro Atualizado com Sucesso!!";
           this.statusInfoSistema = true;
@@ -576,35 +582,39 @@ export default defineComponent({
             this.statusInfoSistema = false;
             this.$router.replace("/");
           }, 3000);
-        }else{
-          alert("Houve Algum erro ao Inserir no banco !")
+         
         }
+      catch(e){
+          alert("Erro ao atualizar o membro!! "+ e)
+      }
       } else {
         alert("Favor Preencher todas as Informações do Membro!");
       }
     },
 
-    async deleteMembro(id_membro,id_logradouro) {
+    async deleteMembro(id_membro, id_logradouro) {
       this.ativarBtnSalvar = true;
       this.ativarBtnDelete = true;
       this.ativarBtnVoltar = true;
-        this.loader = true;
-        const ids={
-          id_membro: id_membro,
-          id_logradouro:id_logradouro
-        }
+      this.loader = true;
+      const ids = {
+        id_membro: id_membro,
+        id_logradouro: id_logradouro,
+      };
 
-      const response = await axios.delete("http://192.168.18.4:4041/deletar",{data:ids})
-      if(response.data.id > 0){
-         this.limparCampos();
-          this.msgSistema = "Membro Deletado com Sucesso!!";
-          this.statusInfoSistema = true;
-          setTimeout(() => {
-            this.statusInfoSistema = false;
-            this.$router.replace("/");
-          }, 3000);
+      const response = await axios.delete("http://192.168.18.4:4041/deletar", {
+        data: ids,
+      });
+      if (response.data.id > 0) {
+        this.limparCampos();
+        this.msgSistema = "Membro Deletado com Sucesso!!";
+        this.statusInfoSistema = true;
+        setTimeout(() => {
+          this.statusInfoSistema = false;
+          this.$router.replace("/");
+        }, 3000);
       }
-      console.log (response);
+      console.log(response);
     },
   },
   watch: {
@@ -612,11 +622,14 @@ export default defineComponent({
       this.cargos = this.cargosLs;
       if (this.page == "cadastro") {
         if (this.cargos != null) {
+          this.ativarBtnVoltar = false;
           this.loader = false;
         }
       }
       if (this.page == "editar") {
         if (this.membro != null && this.cargos != null) {
+          this.ativarBtnVoltar = false;
+          this.ativarBtnDelete = false;
           this.loader = false;
         }
       }

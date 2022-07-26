@@ -20,7 +20,7 @@ a barra de Ferramentas e a lista de membros cadastrados -->
             </ion-col>
 
             <ion-col size="5">
-              <ion-row class="ion-justify-content-end">
+              <ion-row class="ion-justify-content-between">
                 <ion-button
                   @click="buscarMembros(resultBusca)"
                   :disabled="ativarBtnBuscar"

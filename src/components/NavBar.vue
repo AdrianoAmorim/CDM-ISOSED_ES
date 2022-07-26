@@ -1,7 +1,7 @@
 <template>
   <ion-toolbar color="primary">
     <ion-thumbnail slot="start">
-      <ion-img class="imgAvatar" :src="imgLogo" alt="logomarca" />
+      <ion-img  :src="imgLogo" alt="logomarca" />
     </ion-thumbnail>
 
     <ion-title>CDM - ISOSED ES</ion-title>
@@ -32,6 +32,9 @@ export default defineComponent({
 ion-thumbnail {
   --size: 50px;
   margin: 10px;
+}
+ion-thumbnail ion-img{
+  object-fit: contain;
 }
 ion-title {
   overflow:visible;
