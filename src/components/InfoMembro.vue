@@ -63,8 +63,8 @@
         <ion-row class="ion-justify-content-center ion-align-items-center">
           <ion-col size="7">
             <ion-row class="ion-justify-content-center">
-              <ion-col size="7" class="ion-text-center">
-                <ion-avatar class="avatarFoto" @click="tirarFoto()">
+              <ion-col size="7" >
+                <ion-avatar class="avatarFoto ion-text-center" @click="tirarFoto()">
                   <ion-img
                     :class="membro.url_foto ? '' : 'fotoMembro'"
                     :src="membro.url_foto ? membro.url_foto : '/img/camera.png'"
@@ -72,6 +72,7 @@
                   />
                 </ion-avatar>
                 <ion-button
+                  class="iconDownload ion-text-center"
                   v-if="page == 'editar'"
                   fill="clear"
                   color="secondary"
@@ -80,7 +81,6 @@
                 >
                   <ion-icon
                     slot="icon-only"
-                    class="iconButton"
                     :icon="download"
                   />
                 </ion-button>
@@ -646,6 +646,10 @@ export default defineComponent({
   border: 2px solid #427aa1;
   width: 100px;
   height: 100px;
+}
+.iconDownload{
+  font-size:26px;
+  object-fit: fill;
 }
 
 .diferencaRadioBtn {
