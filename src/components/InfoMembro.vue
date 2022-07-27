@@ -4,7 +4,7 @@
       <ion-toolbar mode="ios">
         <ion-button
           v-if="page == 'editar'"
-          :disabled="ativarBtnDelete"
+          :disabled="desativarBtnDelete"
           fill="clear"
           router-direction="back"
           slot="end"
@@ -16,7 +16,7 @@
         /></ion-button>
 
         <ion-button
-          :disabled="ativarBtnVoltar"
+          :disabled="desativarBtnVoltar"
           fill="clear"
           router-direction="back"
           slot="end"
@@ -37,7 +37,7 @@
           slot="end"
           size="small"
           color="success"
-          :disabled="ativarBtnSalvar"
+          :disabled="desativarBtnSalvar"
           @click="updateMembro(this.membro)"
         >
           <ion-icon slot="icon-only" class="iconToolbar" :icon="save"
@@ -50,7 +50,7 @@
           slot="end"
           size="small"
           color="success"
-          :disabled="ativarBtnSalvar"
+          :disabled="desativarBtnSalvar"
           @click="setMembro(this.membro)"
         >
           <ion-icon slot="icon-only" class="iconToolbar" :icon="save"
@@ -375,9 +375,9 @@ export default defineComponent({
   },
   data() {
     return {
-      ativarBtnVoltar: true,
-      ativarBtnDelete: true,
-      ativarBtnSalvar: true,
+      desativarBtnVoltar: true,
+      desativarBtnDelete: true,
+      desativarBtnSalvar: true,
       loader: true,
       msgSistema: null,
       statusInfoSistema: false,
@@ -505,10 +505,10 @@ export default defineComponent({
         (this.membro.cidade == null) |
         (this.membro.cidade == "")
       ) {
-        this.ativarBtnSalvar = true;
+        this.desativarBtnSalvar = true;
         return false;
       } else {
-        this.ativarBtnSalvar = false;
+        this.desativarBtnSalvar = false;
         return true;
       }
     },
@@ -537,8 +537,8 @@ export default defineComponent({
       const validar = this.validarCampos();
       if (validar) {
         membro.telefone = this.retirarMascara(membro.telefone);
-        this.ativarBtnSalvar = true;
-        this.ativarBtnVoltar = true;
+        this.desativarBtnSalvar = true;
+        this.desativarBtnVoltar = true;
         this.loader = true;
     
     try{
@@ -568,9 +568,9 @@ export default defineComponent({
       const validar = this.validarCampos();
       if (validar) {
         membro.telefone = this.retirarMascara(membro.telefone);
-        this.ativarBtnSalvar = true;
-        this.ativarBtnVoltar = true;
-        this.ativarBtnDelete = true;
+        this.desativarBtnSalvar = true;
+        this.desativarBtnVoltar = true;
+        this.desativarBtnDelete = true;
         this.loader = true;
         try{
         const response = await axios.put("http://192.168.18.4:4041/atualizar",membro);
@@ -593,9 +593,9 @@ export default defineComponent({
     },
 
     async deleteMembro(id_membro, id_logradouro) {
-      this.ativarBtnSalvar = true;
-      this.ativarBtnDelete = true;
-      this.ativarBtnVoltar = true;
+      this.desativarBtnSalvar = true;
+      this.desativarBtnDelete = true;
+      this.desativarBtnVoltar = true;
       this.loader = true;
       const ids = {
         id_membro: id_membro,
@@ -622,14 +622,15 @@ export default defineComponent({
       this.cargos = this.cargosLs;
       if (this.page == "cadastro") {
         if (this.cargos != null) {
-          this.ativarBtnVoltar = false;
+          this.desativarBtnVoltar = false;
           this.loader = false;
         }
       }
       if (this.page == "editar") {
         if (this.membro != null && this.cargos != null) {
-          this.ativarBtnVoltar = false;
-          this.ativarBtnDelete = false;
+          this.desativarBtnVoltar = false;
+          this.desativarBtnDelete = false;
+          this.desativarBtnSalvar = false;
           this.loader = false;
         }
       }
