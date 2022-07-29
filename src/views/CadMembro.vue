@@ -14,7 +14,7 @@ export default defineComponent({
   name: "CadMembro",
   data() {
     return {
-      urlServer:"http://192.168.15.18:4041",
+      urlServer:"http://192.168.18.4:4041",
       nomePg: "cadastro",
       cargos: null,
     };

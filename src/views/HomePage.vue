@@ -9,7 +9,7 @@ a barra de Ferramentas e a lista de membros cadastrados -->
             <ion-col size="7">
               <ion-row class="ion-justify-content-center">
                 <ion-searchbar
-                @ionChange="statusBtnBuscar()"
+                  @ionChange="statusBtnBuscar()"
                   color="light"
                   show-cancel-button="never"
                   placeholder="Buscar Membro"
@@ -174,7 +174,7 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer:"http://192.168.15.18:4041",
+      urlServer: "http://192.168.18.4:4041",
       ativarBtnBuscar: true,
       loader: true,
       searchCircle,
@@ -185,11 +185,11 @@ export default defineComponent({
     };
   },
   methods: {
-    statusBtnBuscar(){
-      if(this.resultBusca != ""){
-        this.ativarBtnBuscar = false
-      }else{
-        this.ativarBtnBuscar = true
+    statusBtnBuscar() {
+      if (this.resultBusca != "") {
+        this.ativarBtnBuscar = false;
+      } else {
+        this.ativarBtnBuscar = true;
       }
     },
     async getMembros() {
@@ -197,17 +197,23 @@ export default defineComponent({
       this.listaMembros = response.data;
     },
     async buscarMembros(resultBusca) {
-      this.resultBusca = ""
-      this.loader = true
-        const response = await axios.get(
-          `${this.urlServer}/buscar/${resultBusca}`);
-        this.listaMembros = response.data;
-        if(response.data.id > 0){
-          this.loader = false
+      this.loader = true;
+      try {
+        const response = await axios.get(`${this.urlServer}/buscar/${resultBusca}`);
+        console.log(response)
+        if(response.data.length > 0){
+          this.loader = false;
+          this.resultBusca = "";
+          this.listaMembros = response.data
         }else{
-          this.loader = true
+          alert("Membro não Encontrado!");
+          this.getMembros();
         }
-      
+        
+      } catch (e) {
+        alert("Erro Ao Buscar o Membro - " + e.message)
+        this.getMembros();
+      }
     },
   },
   watch: {
