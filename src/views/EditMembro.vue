@@ -18,6 +18,7 @@ export default defineComponent({
   },
   data() {
     return {
+      urlServer:"http://192.168.15.18:4041",
       nomePg: "editar",
       membro: null,
       cargos: null
@@ -28,11 +29,11 @@ export default defineComponent({
   },
   methods:{
     async getMembro(idMembro) {
-      const response = await axios.get(`http://192.168.18.4:4041/membro/${idMembro}` );
+      const response = await axios.get(`${this.urlServer}/membro/${idMembro}` );
       this.membro = response.data;
     },
       async getCargos() {
-      const response = await axios.get("http://192.168.18.4:4041/cargos");
+      const response = await axios.get(`${this.urlServer}/cargos`);
       this.cargos = response.data;
       }
   },

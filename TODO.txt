@@ -7,7 +7,3 @@ TELA HOME
 TELA DE EDITAR MEMBRO:
 
 BUGS ENCONTRADO:
-
-> botao salvar as vezes fica desabilitado mesmo com todos os dados preenchidos
-
-

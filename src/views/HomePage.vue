@@ -174,6 +174,7 @@ export default defineComponent({
   },
   data() {
     return {
+      urlServer:"http://192.168.15.18:4041",
       ativarBtnBuscar: true,
       loader: true,
       searchCircle,
@@ -192,14 +193,14 @@ export default defineComponent({
       }
     },
     async getMembros() {
-      const response = await axios.get("http://192.168.18.4:4041/membros");
+      const response = await axios.get(`${this.urlServer}/membros`);
       this.listaMembros = response.data;
     },
     async buscarMembros(resultBusca) {
       this.resultBusca = ""
       this.loader = true
         const response = await axios.get(
-          `http://192.168.18.4:4041/buscar/${resultBusca}`);
+          `${this.urlServer}/buscar/${resultBusca}`);
         this.listaMembros = response.data;
         if(response.data.id > 0){
           this.loader = false

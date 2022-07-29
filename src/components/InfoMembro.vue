@@ -64,27 +64,29 @@
           <ion-col size="7">
             <ion-row class="ion-justify-content-center">
               <ion-col size="7" >
-                <ion-avatar class="avatarFoto ion-text-center" @click="tirarFoto()">
+                <ion-avatar class="avatarFoto " @click="tirarFoto()">
                   <ion-img
                     :class="membro.url_foto ? '' : 'fotoMembro'"
                     :src="membro.url_foto ? membro.url_foto : '/img/camera.png'"
                     alt="Avatar do Membro"
                   />
                 </ion-avatar>
-                <ion-button
-                  class="iconDownload ion-text-center"
-                  v-if="page == 'editar'"
-                  fill="clear"
-                  color="secondary"
-                  @click="downloadFoto(membro.url_foto, membro.nome)"
-                  :disabled="membro.url_foto ? false : true"
-                >
-                  <ion-icon
-                    slot="icon-only"
-                    :icon="download"
-                  />
-                </ion-button>
               </ion-col>
+              <ion-col size="7">
+                  <ion-button
+                    class="iconDownload"
+                    v-if="page == 'editar'"
+                    fill="clear"
+                    color="secondary"
+                    @click="downloadFoto(membro.url_foto, membro.nome)"
+                    :disabled="membro.url_foto ? false : true"
+                  >
+                    <ion-icon
+                      slot="icon-only"
+                      :icon="download"
+                    />
+                  </ion-button>
+                </ion-col>
             </ion-row>
           </ion-col>
         </ion-row>
@@ -375,6 +377,7 @@ export default defineComponent({
   },
   data() {
     return {
+      urlServer:"http://192.168.15.18:4041",
       desativarBtnVoltar: true,
       desativarBtnDelete: true,
       desativarBtnSalvar: true,
@@ -479,6 +482,9 @@ export default defineComponent({
       return alert.present();
     },
     validarCampos() {
+      if(this.membro.telefone == "("){
+        this.membro.telefone = null
+      }
       if (
         (this.membro.nome == null) |
         (this.membro.nome == "") |
@@ -542,7 +548,7 @@ export default defineComponent({
         this.loader = true;
     
     try{
-        const response = await axios.post("http://192.168.18.4:4041/cadastrar",membro)
+        const response = await axios.post(`${this.urlServer}/cadastrar`,membro)
         console.log("dentro do try");
         console.log(response);
           this.limparCampos();
@@ -573,7 +579,7 @@ export default defineComponent({
         this.desativarBtnDelete = true;
         this.loader = true;
         try{
-        const response = await axios.put("http://192.168.18.4:4041/atualizar",membro);
+        const response = await axios.put(`${this.urlServer}/atualizar`,membro);
         console.log(response)
           this.limparCampos();
           this.msgSistema = "Membro Atualizado com Sucesso!!";
@@ -602,7 +608,7 @@ export default defineComponent({
         id_logradouro: id_logradouro,
       };
 
-      const response = await axios.delete("http://192.168.18.4:4041/deletar", {
+      const response = await axios.delete(`${this.urlServer}/deletar`, {
         data: ids,
       });
       if (response.data.id > 0) {
