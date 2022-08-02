@@ -200,18 +200,18 @@ export default defineComponent({
       this.loader = true;
       try {
         const response = await axios.get(`${this.urlServer}/buscar/${resultBusca}`);
-        console.log(response)
-        if(response.data.length > 0){
+       if(response.data.length > 0){
           this.loader = false;
           this.resultBusca = "";
           this.listaMembros = response.data
-        }else{
+       }else if(response.data.length == 0){
           alert("Membro não Encontrado!");
           this.getMembros();
-        }
-        
+       }
+         
       } catch (e) {
         alert("Erro Ao Buscar o Membro - " + e.message)
+        console.log(e)
         this.getMembros();
       }
     },
