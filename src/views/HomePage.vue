@@ -102,9 +102,7 @@ a barra de Ferramentas e a lista de membros cadastrados -->
                     <ion-col size="3">
                       <ion-row class="ion-justify-content-end">
                         <ion-button
-                          @click="
-                            this.$router.push('/editar/' + `${Membro.id}`)
-                          "
+                          @click="this.$router.push('/editar/' + `${Membro.id}`)"
                           color="secondary"
                           fill="clear"
                           size="large"
@@ -174,7 +172,7 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer: "http://192.168.18.4:4041",
+      urlServer: "http://192.168.18.103:4041",
       ativarBtnBuscar: true,
       loader: true,
       searchCircle,
@@ -185,6 +183,7 @@ export default defineComponent({
     };
   },
   methods: {
+    //PARA DEFINIR A ATIVACAO DO BOTAO BUSCAR QUANDO NAO HOUVER NADA DIGITADO NO CAMPO DE BUSCA
     statusBtnBuscar() {
       if (this.resultBusca != "") {
         this.ativarBtnBuscar = false;
@@ -192,14 +191,30 @@ export default defineComponent({
         this.ativarBtnBuscar = true;
       }
     },
+    //BUSCA TODOS OS MEMBROS CADASTRADO, CASO NÃO HOUVER NENHUM REDIRECIONA PARA O CADASTRO
     async getMembros() {
+      try{
       const response = await axios.get(`${this.urlServer}/membros`);
-      this.listaMembros = response.data;
+       if(response.data.length > 0){
+          this.listaMembros = response.data
+       }else if(response.data.length == 0){
+          alert("Nenhum Membro Cadastrado!! Favor Cadastrar um novo Membro!");
+          this.$router.replace("/cadastrar");
+       }else if(response.data.error == true){
+        alert("Error no Servidor: " + response.data.msg)
+       }
+      }catch(e){
+        alert("Erro ao Listar Todos os Membros: " + e.message)
+        this.getMembros()
+      }
     },
+    /*EFETUA UMA BUSCA AO MEMBRO DIGITADO NO CAMPO DE BUSCA, CASO NAO ACHE RECARREGA A LISTA COM TODOS
+    MEMBROS*/
     async buscarMembros(resultBusca) {
       this.loader = true;
       try {
         const response = await axios.get(`${this.urlServer}/buscar/${resultBusca}`);
+
        if(response.data.length > 0){
           this.loader = false;
           this.resultBusca = "";
@@ -207,11 +222,13 @@ export default defineComponent({
        }else if(response.data.length == 0){
           alert("Membro não Encontrado!");
           this.getMembros();
+       }else if(response.data.error == true){
+        alert("Error no Servidor: " + response.data.msg)
        }
-         
+       
       } catch (e) {
         alert("Erro Ao Buscar o Membro - " + e.message)
-        console.log(e)
+        console.log("Dentro do catch "+e)
         this.getMembros();
       }
     },

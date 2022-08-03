@@ -18,7 +18,7 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer:"http://192.168.18.4:4041",
+      urlServer:"http://192.168.18.103:4041",
       nomePg: "editar",
       membro: null,
       cargos: null
@@ -29,13 +29,37 @@ export default defineComponent({
   },
   methods:{
     async getMembro(idMembro) {
-      const response = await axios.get(`${this.urlServer}/membro/${idMembro}` );
-      this.membro = response.data;
-    },
-      async getCargos() {
-      const response = await axios.get(`${this.urlServer}/cargos`);
-      this.cargos = response.data;
+      try{
+        const response = await axios.get(`${this.urlServer}/membro/${idMembro}` );
+        console.log(response)
+        if(response.data.id >0){
+        this.membro = response.data;
+        }else if(response.data.id == 0){
+          alert("Não Conseguimos Encontrar o Membro Selecionado para Editar!!")
+        }else if(response.data.error ==true){
+          alert("Erro interno no Servidor: " + response.data.msg)
+        }
+
       }
+      catch(e){
+          alert("Houve Um erro Ao Buscar o Membro selecionado para Edição!! " + e.message)
+      }
+    },
+    async getCargos() {
+        try{
+          const response = await axios.get(`${this.urlServer}/cargos`);
+            if(response.data.length > 0){
+              this.cargos = response.data;
+            }else if(response.data.length == 0){
+              alert("Nenhum Cargo Cadastrado!")
+            }else if(response.data.error == true){
+              alert("Erro Interno no Servidor: "+ response.data.msg)
+            }
+            }
+          catch(e){
+              alert("Houve Um erro ao Carrega os Cargos!! "+ e.message)
+          }
+    }
   },
   beforeMount(){
     this.getMembro(this.id);

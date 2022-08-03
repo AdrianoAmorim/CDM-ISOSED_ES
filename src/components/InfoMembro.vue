@@ -63,8 +63,8 @@
         <ion-row class="ion-justify-content-center ion-align-items-center">
           <ion-col size="7">
             <ion-row class="ion-justify-content-center">
-              <ion-col size="7" >
-                <ion-avatar class="avatarFoto " @click="tirarFoto()">
+              <ion-col size="7">
+                <ion-avatar class="avatarFoto" @click="tirarFoto()">
                   <ion-img
                     :class="membro.url_foto ? '' : 'fotoMembro'"
                     :src="membro.url_foto ? membro.url_foto : '/img/camera.png'"
@@ -73,20 +73,17 @@
                 </ion-avatar>
               </ion-col>
               <ion-col size="7">
-                  <ion-button
-                    class="iconDownload"
-                    v-if="page == 'editar'"
-                    fill="clear"
-                    color="secondary"
-                    @click="downloadFoto(membro.url_foto, membro.nome)"
-                    :disabled="membro.url_foto ? false : true"
-                  >
-                    <ion-icon
-                      slot="icon-only"
-                      :icon="download"
-                    />
-                  </ion-button>
-                </ion-col>
+                <ion-button
+                  class="iconDownload"
+                  v-if="page == 'editar'"
+                  fill="clear"
+                  color="secondary"
+                  @click="downloadFoto(membro.url_foto, membro.nome)"
+                  :disabled="membro.url_foto ? false : true"
+                >
+                  <ion-icon slot="icon-only" :icon="download" />
+                </ion-button>
+              </ion-col>
             </ion-row>
           </ion-col>
         </ion-row>
@@ -377,7 +374,7 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer:"http://192.168.18.4:4041",
+      urlServer: "http://192.168.18.103:4041",
       desativarBtnVoltar: true,
       desativarBtnDelete: true,
       desativarBtnSalvar: true,
@@ -482,8 +479,8 @@ export default defineComponent({
       return alert.present();
     },
     validarCampos() {
-      if(this.membro.telefone == "("){
-        this.membro.telefone = null
+      if (this.membro.telefone == "(") {
+        this.membro.telefone = null;
       }
       if (
         (this.membro.nome == null) |
@@ -546,25 +543,31 @@ export default defineComponent({
         this.desativarBtnSalvar = true;
         this.desativarBtnVoltar = true;
         this.loader = true;
-    
-    try{
-        const response = await axios.post(`${this.urlServer}/cadastrar`,membro)
-        console.log("dentro do try");
-        console.log(response);
-          this.limparCampos();
-        this.msgSistema = "Membro Cadastrado com Sucesso!!";
-        this.statusInfoSistema = true;
-        setTimeout(() => {
-          this.statusInfoSistema = false;
-          this.$router.replace("/");
-        }, 3000);
-    }
-    catch(e){
-        alert("Houve um erro Ao cadastrar!! "+ e)
-        this.loader = false
-    }
-       
-      
+
+        try {
+          const response = await axios.post(
+            `${this.urlServer}/cadastrar`,
+            membro
+          );
+          console.log(response);
+          if (response.data.id > 0) {
+            this.limparCampos();
+            this.msgSistema = "Membro Cadastrado com Sucesso!!";
+            this.statusInfoSistema = true;
+            setTimeout(() => {
+              this.statusInfoSistema = false;
+              this.$router.replace("/");
+            }, 3000);
+          } else if (response.data.error == true) {
+            alert("Erro interno no Servidor: " + response.data.msg);
+            this.desativarBtnSalvar = true;
+            this.desativarBtnVoltar = true;
+            this.loader = false;
+          }
+        } catch (e) {
+          alert("Houve um erro Ao cadastrar!! " + e.message);
+          this.loader = false;
+        }
       } else {
         alert("Favor Preencher todas as Informações do Membro!");
       }
@@ -578,21 +581,29 @@ export default defineComponent({
         this.desativarBtnVoltar = true;
         this.desativarBtnDelete = true;
         this.loader = true;
-        try{
-        const response = await axios.put(`${this.urlServer}/atualizar`,membro);
-        console.log(response)
-          this.limparCampos();
-          this.msgSistema = "Membro Atualizado com Sucesso!!";
-          this.statusInfoSistema = true;
-          setTimeout(() => {
-            this.statusInfoSistema = false;
-            this.$router.replace("/");
-          }, 3000);
-         
+        try {
+          const response = await axios.put(
+            `${this.urlServer}/atualizar`,
+            membro
+          );
+          if (response.data.id > 0) {
+            this.limparCampos();
+            this.msgSistema = "Membro Atualizado com Sucesso!!";
+            this.statusInfoSistema = true;
+            setTimeout(() => {
+              this.statusInfoSistema = false;
+              this.$router.replace("/");
+            }, 3000);
+          } else if (response.data.error == true) {
+            alert("Erro interno no Servidor: " + response.data.msg);
+            this.loader = false;
+            this.desativarBtnSalvar = true;
+            this.desativarBtnDelete = true;
+            this.desativarBtnVoltar = true;
+          }
+        } catch (e) {
+          alert("Erro ao atualizar o membro!! " + e.message);
         }
-      catch(e){
-          alert("Erro ao atualizar o membro!! "+ e)
-      }
       } else {
         alert("Favor Preencher todas as Informações do Membro!");
       }
@@ -607,20 +618,28 @@ export default defineComponent({
         id_membro: id_membro,
         id_logradouro: id_logradouro,
       };
-
-      const response = await axios.delete(`${this.urlServer}/deletar`, {
-        data: ids,
-      });
-      if (response.data.id > 0) {
-        this.limparCampos();
-        this.msgSistema = "Membro Deletado com Sucesso!!";
-        this.statusInfoSistema = true;
-        setTimeout(() => {
-          this.statusInfoSistema = false;
-          this.$router.replace("/");
-        }, 3000);
+      try {
+        const response = await axios.delete(`${this.urlServer}/deletar`, {
+          data: ids,
+        });
+        if (response.data.id > 0) {
+          this.limparCampos();
+          this.msgSistema = "Membro Deletado com Sucesso!!";
+          this.statusInfoSistema = true;
+          setTimeout(() => {
+            this.statusInfoSistema = false;
+            this.$router.replace("/");
+          }, 3000);
+        } else if (response.data.error == true) {
+          alert("Erro interno no Servidor: " + response.data.msg);
+          this.desativarBtnSalvar = true;
+          this.desativarBtnDelete = true;
+          this.desativarBtnVoltar = true;
+          this.loader = false;
+        }
+      } catch (e) {
+        alert("Houve Um Erro ao deletar o Membro: " + e.message);
       }
-      console.log(response);
     },
   },
   watch: {
@@ -654,8 +673,8 @@ export default defineComponent({
   width: 100px;
   height: 100px;
 }
-.iconDownload{
-  font-size:26px;
+.iconDownload {
+  font-size: 26px;
   object-fit: fill;
 }
 
