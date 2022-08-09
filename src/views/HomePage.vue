@@ -39,6 +39,7 @@ a barra de Ferramentas e a lista de membros cadastrados -->
                   fill="clear"
                   color="success"
                   size="small"
+                  router-direction="forward"
                   @click="this.$router.replace('/cadastrar')"
                   class="ion-align-self-end"
                   ><ion-icon
@@ -66,22 +67,12 @@ a barra de Ferramentas e a lista de membros cadastrados -->
                 <ion-col size="12">
                   <ion-item>
                     <ion-col size="9">
-                      <ion-row
-                        class="
-                          ion-justify-content-between ion-align-items-center
-                        "
-                      >
+                      <ion-row class="ion-justify-content-between ion-align-items-center">
                         <ion-col size="4">
                           <ion-avatar>
                             <ion-img
                               :class="Membro.url_foto ? '' : 'fotoMembro'"
-                              :src="
-                                Membro.url_foto
-                                  ? Membro.url_foto
-                                  : '/img/camera.png'
-                              "
-                              alt="Avatar do Membro"
-                            />
+                              :src="Membro.url_foto? Membro.url_foto: '/img/camera.png'" alt="Avatar do Membro"/>
                           </ion-avatar>
                         </ion-col>
 
@@ -122,7 +113,11 @@ a barra de Ferramentas e a lista de membros cadastrados -->
           </ion-col>
         </ion-row>
       </ion-grid>
-      <ion-progress-bar v-else type="indeterminate"></ion-progress-bar>
+     <div v-else>
+            <ion-progress-bar  type="indeterminate">
+      </ion-progress-bar>
+      <h3 id="tagAguardeLoader">Aguarde...</h3>
+        </div>
     </ion-content>
   </ion-page>
 </template>
@@ -133,6 +128,7 @@ import axios from "axios";
 import { searchCircle, personAdd, create } from "ionicons/icons";
 import {
   IonImg,
+  alertController,
   IonHeader,
   IonGrid,
   IonRow,
@@ -172,7 +168,7 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer: "http://192.168.18.103:4041",
+      urlServer: "http://192.168.18.4:4041",
       ativarBtnBuscar: true,
       loader: true,
       searchCircle,
@@ -183,13 +179,30 @@ export default defineComponent({
     };
   },
   methods: {
+    //CRIA UMA JANELA DE AVISO COM PARAMETROS ...
+     async alertInfoSistema(header,subHeader,message) {
+      const alert = await alertController.create({
+        header: header,
+        subHeader: subHeader,
+        message: message,
+        buttons: ["OK"],
+      });
+       await alert.present();
+    },
     //PARA DEFINIR A ATIVACAO DO BOTAO BUSCAR QUANDO NAO HOUVER NADA DIGITADO NO CAMPO DE BUSCA
     statusBtnBuscar() {
+      if(new RegExp(/[a-z0-9]/gi).test(this.resultBusca)){
+      console.log(this.resultBusca)
+      }else{
+        this.alertInfoSistema("AVISO","","CARACTER NÃO ACEITO!!")
+      }
+
       if (this.resultBusca != "") {
         this.ativarBtnBuscar = false;
       } else {
         this.ativarBtnBuscar = true;
       }
+     
     },
     //BUSCA TODOS OS MEMBROS CADASTRADO, CASO NÃO HOUVER NENHUM REDIRECIONA PARA O CADASTRO
     async getMembros() {
@@ -220,20 +233,20 @@ export default defineComponent({
           this.resultBusca = "";
           this.listaMembros = response.data
        }else if(response.data.length == 0){
-          alert("Membro não Encontrado!");
+          this.alertInfoSistema("AVISO!!","","Membro não Encontrado!!")
           this.getMembros();
        }else if(response.data.error == true){
-        alert("Error no Servidor: " + response.data.msg)
+        this.alertInfoSistema("ERROR!!","Error no Servidor: ", response.data.msg)
        }
        
       } catch (e) {
         alert("Erro Ao Buscar o Membro - " + e.message)
-        console.log("Dentro do catch "+e)
         this.getMembros();
       }
     },
   },
   watch: {
+    //OBSERVA SE A VARIAVEL NAO ESTIVER VAZIA DESABILITA O LOADER
     listaMembros() {
       if (this.listaMembros != null) {
         this.loader = false;
@@ -251,4 +264,9 @@ export default defineComponent({
 </script>
 
 <style scoped>
+#tagAguardeLoader{
+  color: #427aa1;
+  margin:15px;
+
+}
 </style>

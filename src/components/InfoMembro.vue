@@ -72,6 +72,7 @@
                   />
                 </ion-avatar>
               </ion-col>
+
               <ion-col size="7">
                 <ion-button
                   class="iconDownload"
@@ -261,7 +262,7 @@
                       >Est. Civil:</ion-label
                     >
 
-                    <ion-item class="diferencaRadioBtn">
+                    <ion-item class="diferencaRadioBtn" lines="none">
                       <ion-label>Casado</ion-label>
                       <ion-radio
                         color="secondary"
@@ -270,7 +271,7 @@
                       ></ion-radio>
                     </ion-item>
 
-                    <ion-item class="diferencaRadioBtn">
+                    <ion-item class="diferencaRadioBtn" lines="none">
                       <ion-label>Solteiro</ion-label>
                       <ion-radio
                         color="secondary"
@@ -279,7 +280,7 @@
                       ></ion-radio>
                     </ion-item>
 
-                    <ion-item class="diferencaRadioBtn">
+                    <ion-item class="diferencaRadioBtn" lines="none">
                       <ion-label>Viúvo(a)</ion-label>
                       <ion-radio
                         color="secondary"
@@ -294,7 +295,10 @@
           </ion-row>
         </form>
       </ion-grid>
-      <ion-progress-bar v-else type="indeterminate"></ion-progress-bar>
+      <div v-else>
+        <ion-progress-bar type="indeterminate"> </ion-progress-bar>
+        <h3 id="tagAguardeLoader">Aguarde...</h3>
+      </div>
 
       <ion-grid>
         <ion-row v-if="statusInfoSistema" class="ion-justify-content-start">
@@ -374,7 +378,7 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer: "http://192.168.18.103:4041",
+      urlServer: "http://192.168.18.4:4041",
       desativarBtnVoltar: true,
       desativarBtnDelete: true,
       desativarBtnSalvar: true,
@@ -420,13 +424,17 @@ export default defineComponent({
       downloadLink.click();
     },
     async tirarFoto() {
-      const image = await Camera.getPhoto({
-        quality: 100,
-        source: CameraSource.CAMERA,
-        allowEditing: true,
-        resultType: CameraResultType.DataUrl,
-      });
-      this.membro.url_foto = image.dataUrl;
+      try {
+        const image = await Camera.getPhoto({
+          quality: 100,
+          source: CameraSource.Camera,
+          allowEditing: true,
+          resultType: CameraResultType.DataUrl,
+        });
+        this.membro.url_foto = image.dataUrl;
+      } catch (e) {
+        this.alertInfoSistem("AVISO","","TIRAR FOTO CANCELADO!")
+      }
     },
     retirarMascara(input) {
       var val = input;
@@ -451,6 +459,15 @@ export default defineComponent({
       this.membro.numero = null;
       this.membro.bairro = null;
       this.membro.cidade = null;
+    },
+    async alertInfoSistema(header,subHeader,message) {
+      const alert = await alertController.create({
+        header: header,
+        subHeader: subHeader,
+        message: message,
+        buttons: ["OK"],
+      });
+       await alert.present();
     },
     async confirmDelete() {
       const alert = await alertController.create({
@@ -549,7 +566,6 @@ export default defineComponent({
             `${this.urlServer}/cadastrar`,
             membro
           );
-          console.log(response);
           if (response.data.id > 0) {
             this.limparCampos();
             this.msgSistema = "Membro Cadastrado com Sucesso!!";
@@ -559,17 +575,17 @@ export default defineComponent({
               this.$router.replace("/");
             }, 3000);
           } else if (response.data.error == true) {
-            alert("Erro interno no Servidor: " + response.data.msg);
+            this.alertInfoSistem("ERROR","","ERRO INTERNO NO SERVIDOR! "+ response.data.msg)
             this.desativarBtnSalvar = true;
             this.desativarBtnVoltar = true;
             this.loader = false;
           }
         } catch (e) {
-          alert("Houve um erro Ao cadastrar!! " + e.message);
+          this.alertInfoSistem("ERROR","","HOUVE UM ERRO AO CADASTRAR: "+  e.message)
           this.loader = false;
         }
       } else {
-        alert("Favor Preencher todas as Informações do Membro!");
+        this.alertInfoSistem("AVISO","","FAVOR PREENCHER TODAS AS INFORMAÇÕES DO MEMBRO!!")
       }
     },
 
@@ -595,17 +611,17 @@ export default defineComponent({
               this.$router.replace("/");
             }, 3000);
           } else if (response.data.error == true) {
-            alert("Erro interno no Servidor: " + response.data.msg);
+            this.alertInfoSistem("ERROR","","ERRO INTERNO NO SERVIDOR! "+ response.data.msg)
             this.loader = false;
             this.desativarBtnSalvar = true;
             this.desativarBtnDelete = true;
             this.desativarBtnVoltar = true;
           }
         } catch (e) {
-          alert("Erro ao atualizar o membro!! " + e.message);
+          this.alertInfoSistem("ERROR","","ERRO AO ATUALIZAR O MEMBRO: "+ e.message)
         }
       } else {
-        alert("Favor Preencher todas as Informações do Membro!");
+        this.alertInfoSistem("AVISO","","FAVOR PREENCHER TODAS AS INFORMAÇÕES DO MEMBRO!!")
       }
     },
 
@@ -631,14 +647,14 @@ export default defineComponent({
             this.$router.replace("/");
           }, 3000);
         } else if (response.data.error == true) {
-          alert("Erro interno no Servidor: " + response.data.msg);
+          this.alertInfoSistem("ERROR","","ERRO INTERNO NO SERVIDOR! "+ response.data.msg)
           this.desativarBtnSalvar = true;
           this.desativarBtnDelete = true;
           this.desativarBtnVoltar = true;
           this.loader = false;
         }
       } catch (e) {
-        alert("Houve Um Erro ao deletar o Membro: " + e.message);
+        this.alertInfoSistem("ERROR","","HOUVE UM ERRO AO DELETAR O MEMBRO: "+ e.message);
       }
     },
   },
@@ -668,6 +684,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
+#tagAguardeLoader {
+  color: #427aa1;
+  margin: 15px;
+}
 .avatarFoto {
   border: 2px solid #427aa1;
   width: 100px;
