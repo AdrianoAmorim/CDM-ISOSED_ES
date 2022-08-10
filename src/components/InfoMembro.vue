@@ -378,7 +378,7 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer: "http://192.168.18.4:4041",
+      urlServer: "http://192.168.0.37:4041",
       desativarBtnVoltar: true,
       desativarBtnDelete: true,
       desativarBtnSalvar: true,
@@ -562,10 +562,7 @@ export default defineComponent({
         this.loader = true;
 
         try {
-          const response = await axios.post(
-            `${this.urlServer}/cadastrar`,
-            membro
-          );
+          const response = await axios.post(`${this.urlServer}/cadastrar`,membro);
           if (response.data.id > 0) {
             this.limparCampos();
             this.msgSistema = "Membro Cadastrado com Sucesso!!";
@@ -635,9 +632,7 @@ export default defineComponent({
         id_logradouro: id_logradouro,
       };
       try {
-        const response = await axios.delete(`${this.urlServer}/deletar`, {
-          data: ids,
-        });
+        const response = await axios.delete(`${this.urlServer}/deletar`, {data: ids });
         if (response.data.id > 0) {
           this.limparCampos();
           this.msgSistema = "Membro Deletado com Sucesso!!";

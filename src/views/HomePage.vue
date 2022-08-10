@@ -168,7 +168,7 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer: "http://192.168.18.4:4041",
+      urlServer: "http://192.168.0.37:4041",
       ativarBtnBuscar: true,
       loader: true,
       searchCircle,
@@ -191,11 +191,7 @@ export default defineComponent({
     },
     //PARA DEFINIR A ATIVACAO DO BOTAO BUSCAR QUANDO NAO HOUVER NADA DIGITADO NO CAMPO DE BUSCA
     statusBtnBuscar() {
-      if(new RegExp(/[a-z0-9]/gi).test(this.resultBusca)){
-      console.log(this.resultBusca)
-      }else{
-        this.alertInfoSistema("AVISO","","CARACTER NÃO ACEITO!!")
-      }
+     
 
       if (this.resultBusca != "") {
         this.ativarBtnBuscar = false;
@@ -226,7 +222,8 @@ export default defineComponent({
     async buscarMembros(resultBusca) {
       this.loader = true;
       try {
-        const response = await axios.get(`${this.urlServer}/buscar/${resultBusca}`);
+        console.log(resultBusca)
+        const response = await axios.get(`${this.urlServer}/buscar?nome=${resultBusca}`);
 
        if(response.data.length > 0){
           this.loader = false;
@@ -237,6 +234,7 @@ export default defineComponent({
           this.getMembros();
        }else if(response.data.error == true){
         this.alertInfoSistema("ERROR!!","Error no Servidor: ", response.data.msg)
+        this.getMembros();
        }
        
       } catch (e) {
