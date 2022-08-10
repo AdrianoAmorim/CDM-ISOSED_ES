@@ -462,6 +462,7 @@ export default defineComponent({
     },
     async alertInfoSistema(header,subHeader,message) {
       const alert = await alertController.create({
+        cssClass: "alert-info",
         header: header,
         subHeader: subHeader,
         message: message,

@@ -7,7 +7,7 @@
 <script>
 import axios from "axios";
 import { defineComponent } from "vue";
-import { IonPage } from "@ionic/vue";
+import { IonPage,alertController } from "@ionic/vue";
 import InfoMembro from "@/components/InfoMembro.vue";
 
 export default defineComponent({
@@ -24,19 +24,29 @@ export default defineComponent({
     InfoMembro,
   },
   methods: {
+      async alertInfoSistema(header,subHeader,message) {
+      const alert = await alertController.create({
+        cssClass: "alert-info",
+        header: header,
+        subHeader: subHeader,
+        message: message,
+        buttons: ["OK"],
+      });
+       await alert.present();
+    },
     async getCargos() {
       try{
       const response = await axios.get(`${this.urlServer}/cargos`);
         if(response.data.length > 0){
           this.cargos = response.data;
         }else if(response.data.length == 0){
-          alert("Nenhum Cargo Cadastrado!")
+          this.alertInfoSistema("AVISO",'',"Nenhum Cargo Cadastrado!")
         }else if(response.data.error ==true){
-          alert("Erro Interno no Servidor: "+ response.data.msg)
+           this.alertInfoSistema("ERROR",'',"Error Interno no Servidor: "+ response.data.msg)
         }
         }
       catch(e){
-          alert("Houve Um erro ao Carrega os Cargos!! "+ e.message)
+         this.alertInfoSistema("ERROR",'',"Houve Um erro ao Carrega os Cargos!! "+ e.message);
       }
     }
   },

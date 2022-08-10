@@ -15,7 +15,6 @@ import { IonApp, IonHeader, IonContent, IonRouterOutlet } from "@ionic/vue";
 import { defineComponent } from "vue";
 import NavBar from "@/components/NavBar.vue";
 
-
 export default defineComponent({
   name: "App",
   components: {
@@ -29,27 +28,66 @@ export default defineComponent({
 </script>
 
 <style>
-.alert-delete .btn-delete{
+
+/* ESTILIZANDO ALERTS DE AVISOS DE INFORMAÇÃO E SUCESSOS*/
+ .alert-info .alert-wrapper{
+  border-radius: 18px;
+}
+.alert-info .alert-title {
+  color: #ffffff;
+}
+.alert-info .alert-head {
+  background: #21c05e;
+}
+.alert-info .alert-message{
+  padding-top: 20px !important; 
+  font-size: 18px;
+  color: black;
+}
+  .alert-info .alert-button-group span{
+     color:#21c05e;
+     font-size: 18px;
+     font-weight: bold;
+  }
+/* ESTILIZANDO ALERTS DE AVISOS DE ERROS E CUIDADOS */
+.alert-delete .alert-wrapper{
+  border-radius: 18px;
+}
+.alert-delete .alert-title {
+  color: #ffffff;
+}
+.alert-delete .alert-head {
+  background: #cf3c4f;
+}
+.alert-delete .alert-message{
+  padding-top: 20px !important; 
+  font-size: 18px;
+  color: black;
+}
+.alert-delete .btn-delete {
   color: #eb445a !important;
+  font-size: 18px;
+  font-weight: bold;
 }
-.alert-delete .btn-confirm{
+.alert-delete .btn-confirm {
   color: #21c05e !important;
+  font-size: 18px;
+  font-weight: bold;
 }
-.fotoMembro{
+/*FIM DAS ESTILIZACOES DE ALERTS DO SISTEMA */
+/*------------------------------------ */
+
+.fotoMembro {
   border-radius: 0px;
   display: block;
-  margin:12px auto;
+  margin: 12px auto;
   object-fit: contain;
-  height: 65% ;
-  width: 65% ;
+  height: 65%;
+  width: 65%;
 }
 
-.iconToolbar{
-font-size:30px;
-object-fit: fill;
-}
-.iconButton{
-font-size:36px;
-object-fit: fill;
+.iconToolbar {
+  font-size: 30px;
+  object-fit: fill;
 }
 </style>

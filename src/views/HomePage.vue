@@ -100,7 +100,7 @@ a barra de Ferramentas e a lista de membros cadastrados -->
                         >
                           <ion-icon
                             slot="icon-only"
-                            class="iconButton"
+                            class="iconButtonEdit"
                             :icon="create"
                           />
                         </ion-button>
@@ -182,6 +182,7 @@ export default defineComponent({
     //CRIA UMA JANELA DE AVISO COM PARAMETROS ...
      async alertInfoSistema(header,subHeader,message) {
       const alert = await alertController.create({
+        cssClass: "alert-info",
         header: header,
         subHeader: subHeader,
         message: message,
@@ -265,6 +266,9 @@ export default defineComponent({
 #tagAguardeLoader{
   color: #427aa1;
   margin:15px;
-
+}
+.iconButtonEdit {
+  font-size: 36px;
+  object-fit: fill;
 }
 </style>
