@@ -168,7 +168,7 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer: "http://192.168.0.37:4041",
+      urlServer: "http://192.168.18.4:4041",
       ativarBtnBuscar: true,
       loader: true,
       searchCircle,

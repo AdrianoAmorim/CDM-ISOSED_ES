@@ -1,6 +1,6 @@
 Coisas para fazer:
 Implementa camera Preview ...
-Implementar Expressao regular para campo busca alfanumerico
+
 TELA HOME
 >CRIAR BOTAO DE RELATORIOS
 

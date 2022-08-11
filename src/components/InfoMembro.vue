@@ -71,6 +71,7 @@
                     alt="Avatar do Membro"
                   />
                 </ion-avatar>
+                <video id="camera" autoplay></video>
               </ion-col>
 
               <ion-col size="7">
@@ -378,7 +379,7 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer: "http://192.168.0.37:4041",
+      urlServer: "http://192.168.18.4:4041",
       desativarBtnVoltar: true,
       desativarBtnDelete: true,
       desativarBtnSalvar: true,
@@ -417,6 +418,35 @@ export default defineComponent({
     page: String,
   },
   methods: {
+    async foto() {
+      const video = document.querySelector('#camera')
+        video.setAttribute('autoplay', '');
+        video.setAttribute('muted', '');
+        video.setAttribute('playsinline', '');
+        
+      const constraints = {
+        video: {
+          
+          width: {
+            min: 720,
+            ideal: 720,
+            max: 2560,
+          },
+          height: {
+            min: 480,
+            ideal: 480,
+            max: 1440,
+          },
+          facingMode: "environment"
+        }
+      }
+      try {
+        const videoStream = await navigator.mediaDevices.getUserMedia(constraints);
+        video.srcObject = videoStream
+      } catch (e) {
+        alert(e);
+      }
+    },
     downloadFoto(url, fileName) {
       const downloadLink = document.createElement("a");
       downloadLink.href = url;
@@ -427,13 +457,16 @@ export default defineComponent({
       try {
         const image = await Camera.getPhoto({
           quality: 100,
-          source: CameraSource.Camera,
+          source: CameraSource.CAMERA,
+          presentationStyle: 'fullscreen',
           allowEditing: true,
+          PermissionState: 'camera',
+          webUseInput: false,
           resultType: CameraResultType.DataUrl,
         });
         this.membro.url_foto = image.dataUrl;
       } catch (e) {
-        this.alertInfoSistem("AVISO","","TIRAR FOTO CANCELADO!")
+        this.alertInfoSistem("AVISO", "", "TIRAR FOTO CANCELADO!");
       }
     },
     retirarMascara(input) {
@@ -460,7 +493,7 @@ export default defineComponent({
       this.membro.bairro = null;
       this.membro.cidade = null;
     },
-    async alertInfoSistema(header,subHeader,message) {
+    async alertInfoSistema(header, subHeader, message) {
       const alert = await alertController.create({
         cssClass: "alert-info",
         header: header,
@@ -468,7 +501,7 @@ export default defineComponent({
         message: message,
         buttons: ["OK"],
       });
-       await alert.present();
+      await alert.present();
     },
     async confirmDelete() {
       const alert = await alertController.create({
@@ -563,7 +596,10 @@ export default defineComponent({
         this.loader = true;
 
         try {
-          const response = await axios.post(`${this.urlServer}/cadastrar`,membro);
+          const response = await axios.post(
+            `${this.urlServer}/cadastrar`,
+            membro
+          );
           if (response.data.id > 0) {
             this.limparCampos();
             this.msgSistema = "Membro Cadastrado com Sucesso!!";
@@ -573,17 +609,29 @@ export default defineComponent({
               this.$router.replace("/");
             }, 3000);
           } else if (response.data.error == true) {
-            this.alertInfoSistem("ERROR","","ERRO INTERNO NO SERVIDOR! "+ response.data.msg)
+            this.alertInfoSistem(
+              "ERROR",
+              "",
+              "ERRO INTERNO NO SERVIDOR! " + response.data.msg
+            );
             this.desativarBtnSalvar = true;
             this.desativarBtnVoltar = true;
             this.loader = false;
           }
         } catch (e) {
-          this.alertInfoSistem("ERROR","","HOUVE UM ERRO AO CADASTRAR: "+  e.message)
+          this.alertInfoSistem(
+            "ERROR",
+            "",
+            "HOUVE UM ERRO AO CADASTRAR: " + e.message
+          );
           this.loader = false;
         }
       } else {
-        this.alertInfoSistem("AVISO","","FAVOR PREENCHER TODAS AS INFORMAÇÕES DO MEMBRO!!")
+        this.alertInfoSistem(
+          "AVISO",
+          "",
+          "FAVOR PREENCHER TODAS AS INFORMAÇÕES DO MEMBRO!!"
+        );
       }
     },
 
@@ -609,17 +657,29 @@ export default defineComponent({
               this.$router.replace("/");
             }, 3000);
           } else if (response.data.error == true) {
-            this.alertInfoSistem("ERROR","","ERRO INTERNO NO SERVIDOR! "+ response.data.msg)
+            this.alertInfoSistem(
+              "ERROR",
+              "",
+              "ERRO INTERNO NO SERVIDOR! " + response.data.msg
+            );
             this.loader = false;
             this.desativarBtnSalvar = true;
             this.desativarBtnDelete = true;
             this.desativarBtnVoltar = true;
           }
         } catch (e) {
-          this.alertInfoSistem("ERROR","","ERRO AO ATUALIZAR O MEMBRO: "+ e.message)
+          this.alertInfoSistem(
+            "ERROR",
+            "",
+            "ERRO AO ATUALIZAR O MEMBRO: " + e.message
+          );
         }
       } else {
-        this.alertInfoSistem("AVISO","","FAVOR PREENCHER TODAS AS INFORMAÇÕES DO MEMBRO!!")
+        this.alertInfoSistem(
+          "AVISO",
+          "",
+          "FAVOR PREENCHER TODAS AS INFORMAÇÕES DO MEMBRO!!"
+        );
       }
     },
 
@@ -633,7 +693,9 @@ export default defineComponent({
         id_logradouro: id_logradouro,
       };
       try {
-        const response = await axios.delete(`${this.urlServer}/deletar`, {data: ids });
+        const response = await axios.delete(`${this.urlServer}/deletar`, {
+          data: ids,
+        });
         if (response.data.id > 0) {
           this.limparCampos();
           this.msgSistema = "Membro Deletado com Sucesso!!";
@@ -643,14 +705,22 @@ export default defineComponent({
             this.$router.replace("/");
           }, 3000);
         } else if (response.data.error == true) {
-          this.alertInfoSistem("ERROR","","ERRO INTERNO NO SERVIDOR! "+ response.data.msg)
+          this.alertInfoSistem(
+            "ERROR",
+            "",
+            "ERRO INTERNO NO SERVIDOR! " + response.data.msg
+          );
           this.desativarBtnSalvar = true;
           this.desativarBtnDelete = true;
           this.desativarBtnVoltar = true;
           this.loader = false;
         }
       } catch (e) {
-        this.alertInfoSistem("ERROR","","HOUVE UM ERRO AO DELETAR O MEMBRO: "+ e.message);
+        this.alertInfoSistem(
+          "ERROR",
+          "",
+          "HOUVE UM ERRO AO DELETAR O MEMBRO: " + e.message
+        );
       }
     },
   },

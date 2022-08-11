@@ -18,7 +18,7 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer:"http://192.168.0.37:4041",
+      urlServer:"http://192.168.18.4:4041",
       nomePg: "editar",
       membro: null,
       cargos: null
@@ -31,7 +31,6 @@ export default defineComponent({
     async getMembro(idMembro) {
       try{
         const response = await axios.get(`${this.urlServer}/membro/${idMembro}` );
-        console.log(response)
         if(response.data.id >0){
         this.membro = response.data;
         }else if(response.data.id == 0){
