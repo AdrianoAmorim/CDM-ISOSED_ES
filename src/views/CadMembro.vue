@@ -51,7 +51,7 @@ export default defineComponent({
     }
   },
   beforeMount() {
-    this.getCargos();
+    //this.getCargos();
   },
 });
 </script>
