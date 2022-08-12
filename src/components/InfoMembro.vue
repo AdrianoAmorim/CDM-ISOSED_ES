@@ -383,7 +383,7 @@ export default defineComponent({
       desativarBtnVoltar: true,
       desativarBtnDelete: true,
       desativarBtnSalvar: true,
-      loader: true,
+      loader: false,
       msgSistema: null,
       statusInfoSistema: false,
       cargos: null,
@@ -457,7 +457,7 @@ export default defineComponent({
       try {
         const image = await Camera.getPhoto({
           quality: 100,
-          source: CameraSource.CAMERA,
+          source: CameraSource.Camera,
           presentationStyle: 'fullscreen',
           allowEditing: true,
           PermissionState: 'camera',
@@ -466,7 +466,7 @@ export default defineComponent({
         });
         this.membro.url_foto = image.dataUrl;
       } catch (e) {
-        this.alertInfoSistem("AVISO", "", "TIRAR FOTO CANCELADO!");
+        this.alertInfoSistema("AVISO", "", "TIRAR FOTO CANCELADO!");
       }
     },
     retirarMascara(input) {
