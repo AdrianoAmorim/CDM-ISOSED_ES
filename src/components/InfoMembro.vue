@@ -71,7 +71,6 @@
                     alt="Avatar do Membro"
                   />
                 </ion-avatar>
-                <video id="camera" autoplay></video>
               </ion-col>
 
               <ion-col size="7">
@@ -383,7 +382,7 @@ export default defineComponent({
       desativarBtnVoltar: true,
       desativarBtnDelete: true,
       desativarBtnSalvar: true,
-      loader: false,
+      loader: true,
       msgSistema: null,
       statusInfoSistema: false,
       cargos: null,
@@ -418,35 +417,7 @@ export default defineComponent({
     page: String,
   },
   methods: {
-    async foto() {
-      const video = document.querySelector('#camera')
-        video.setAttribute('autoplay', '');
-        video.setAttribute('muted', '');
-        video.setAttribute('playsinline', '');
-        
-      const constraints = {
-        video: {
-          
-          width: {
-            min: 720,
-            ideal: 720,
-            max: 2560,
-          },
-          height: {
-            min: 480,
-            ideal: 480,
-            max: 1440,
-          },
-          facingMode: "environment"
-        }
-      }
-      try {
-        const videoStream = await navigator.mediaDevices.getUserMedia(constraints);
-        video.srcObject = videoStream
-      } catch (e) {
-        alert(e);
-      }
-    },
+   
     downloadFoto(url, fileName) {
       const downloadLink = document.createElement("a");
       downloadLink.href = url;
@@ -735,15 +706,20 @@ export default defineComponent({
       }
       if (this.page == "editar") {
         if (this.membro != null && this.cargos != null) {
+          console.log("dentro do editar")
           this.desativarBtnVoltar = false;
           this.desativarBtnDelete = false;
           this.desativarBtnSalvar = false;
-          this.loader = false;
+          //this.loader = false;
         }
       }
     },
     membroEd() {
+      console.log("dentro do membro")
       this.setDadosInp(this.membroEd);
+      if(this.membro.estCivil != null ){
+        this.loader = false
+      }
     },
   },
 });
