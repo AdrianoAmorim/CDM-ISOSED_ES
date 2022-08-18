@@ -378,7 +378,7 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer: "http://192.168.18.4:4041",
+      urlServer: "http://192.168.0.37:4041",
       desativarBtnVoltar: true,
       desativarBtnDelete: true,
       desativarBtnSalvar: true,
@@ -715,7 +715,6 @@ export default defineComponent({
       }
     },
     membroEd() {
-      console.log("dentro do membro")
       this.setDadosInp(this.membroEd);
       if(this.membro.estCivil != null ){
         this.loader = false
