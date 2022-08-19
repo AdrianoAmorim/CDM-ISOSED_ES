@@ -14,7 +14,7 @@ export default defineComponent({
   name: "CadMembro",
   data() {
     return {
-      urlServer:"http://192.168.0.37:4041",
+      urlServer:"https://isosed-server.herokuapp.com",
       nomePg: "cadastro",
       cargos: null,
     };

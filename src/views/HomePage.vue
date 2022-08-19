@@ -168,7 +168,7 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer: "https://back-end-isosed.herokuapp.com/",
+      urlServer: "https://isosed-server.herokuapp.com",
       ativarBtnBuscar: true,
       loader: true,
       searchCircle,

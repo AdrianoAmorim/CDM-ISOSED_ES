@@ -378,7 +378,7 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer: "http://192.168.0.37:4041",
+      urlServer: "https://isosed-server.herokuapp.com",
       desativarBtnVoltar: true,
       desativarBtnDelete: true,
       desativarBtnSalvar: true,
