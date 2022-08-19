@@ -67,12 +67,22 @@ a barra de Ferramentas e a lista de membros cadastrados -->
                 <ion-col size="12">
                   <ion-item>
                     <ion-col size="9">
-                      <ion-row class="ion-justify-content-between ion-align-items-center">
+                      <ion-row
+                        class="
+                          ion-justify-content-between ion-align-items-center
+                        "
+                      >
                         <ion-col size="4">
-                          <ion-avatar>
+                          <ion-avatar @click="setStatusModal(true)">
                             <ion-img
                               :class="Membro.url_foto ? '' : 'fotoMembro'"
-                              :src="Membro.url_foto? Membro.url_foto: '/img/camera.png'" alt="Avatar do Membro"/>
+                              :src="
+                                Membro.url_foto
+                                  ? Membro.url_foto
+                                  : '/img/camera.png'
+                              "
+                              alt="Avatar do Membro"
+                            />
                           </ion-avatar>
                         </ion-col>
 
@@ -93,7 +103,9 @@ a barra de Ferramentas e a lista de membros cadastrados -->
                     <ion-col size="3">
                       <ion-row class="ion-justify-content-end">
                         <ion-button
-                          @click="this.$router.push('/editar/' + `${Membro.id}`)"
+                          @click="
+                            this.$router.push('/editar/' + `${Membro.id}`)
+                          "
                           color="secondary"
                           fill="clear"
                           size="large"
@@ -113,17 +125,18 @@ a barra de Ferramentas e a lista de membros cadastrados -->
           </ion-col>
         </ion-row>
       </ion-grid>
-     <div v-else>
-            <ion-progress-bar  type="indeterminate">
-      </ion-progress-bar>
-      <h3 id="tagAguardeLoader">Aguarde...</h3>
-        </div>
+      <div v-else>
+        <ion-progress-bar type="indeterminate"> </ion-progress-bar>
+        <h3 id="tagAguardeLoader">Aguarde...</h3>
+      </div>
+      <ModalViewMembro :statusModal="statusModal" />
     </ion-content>
   </ion-page>
 </template>
 
 <script>
 import { defineComponent } from "vue";
+import ModalViewMembro from "@/components/ModalViewMembro.vue";
 import axios from "axios";
 import { searchCircle, personAdd, create } from "ionicons/icons";
 import {
@@ -149,6 +162,7 @@ import {
 export default defineComponent({
   name: "HomePage",
   components: {
+    ModalViewMembro,
     IonProgressBar,
     IonIcon,
     IonPage,
@@ -176,11 +190,16 @@ export default defineComponent({
       create,
       listaMembros: null,
       resultBusca: "",
+      statusModal: false,
     };
   },
   methods: {
+    //SETA O ESTADO DO MODAL.. PARA PASSAR PARA O COMPONENTE VIA PROPS
+    setStatusModal(statusModal) {
+      this.statusModal = statusModal;
+    },
     //CRIA UMA JANELA DE AVISO COM PARAMETROS ...
-     async alertInfoSistema(header,subHeader,message) {
+    async alertInfoSistema(header, subHeader, message) {
       const alert = await alertController.create({
         cssClass: "alert-info",
         header: header,
@@ -188,34 +207,31 @@ export default defineComponent({
         message: message,
         buttons: ["OK"],
       });
-       await alert.present();
+      await alert.present();
     },
     //PARA DEFINIR A ATIVACAO DO BOTAO BUSCAR QUANDO NAO HOUVER NADA DIGITADO NO CAMPO DE BUSCA
     statusBtnBuscar() {
-     
-
       if (this.resultBusca != "") {
         this.ativarBtnBuscar = false;
       } else {
         this.ativarBtnBuscar = true;
       }
-     
     },
     //BUSCA TODOS OS MEMBROS CADASTRADO, CASO NÃO HOUVER NENHUM REDIRECIONA PARA O CADASTRO
     async getMembros() {
-      try{
-      const response = await axios.get(`${this.urlServer}/membros`);
-       if(response.data.length > 0){
-          this.listaMembros = response.data
-       }else if(response.data.length == 0){
+      try {
+        const response = await axios.get(`${this.urlServer}/membros`);
+        if (response.data.length > 0) {
+          this.listaMembros = response.data;
+        } else if (response.data.length == 0) {
           alert("Nenhum Membro Cadastrado!! Favor Cadastrar um novo Membro!");
           this.$router.replace("/cadastrar");
-       }else if(response.data.error == true){
-        alert("Error no Servidor: " + response.data.msg)
-       }
-      }catch(e){
-        alert("Erro ao Listar Todos os Membros: " + e.message)
-        this.getMembros()
+        } else if (response.data.error == true) {
+          alert("Error no Servidor: " + response.data.msg);
+        }
+      } catch (e) {
+        alert("Erro ao Listar Todos os Membros: " + e.message);
+        this.getMembros();
       }
     },
     /*EFETUA UMA BUSCA AO MEMBRO DIGITADO NO CAMPO DE BUSCA, CASO NAO ACHE RECARREGA A LISTA COM TODOS
@@ -223,23 +239,28 @@ export default defineComponent({
     async buscarMembros(resultBusca) {
       this.loader = true;
       try {
-        console.log(resultBusca)
-        const response = await axios.get(`${this.urlServer}/buscar?nome=${resultBusca}`);
+        console.log(resultBusca);
+        const response = await axios.get(
+          `${this.urlServer}/buscar?nome=${resultBusca}`
+        );
 
-       if(response.data.length > 0){
+        if (response.data.length > 0) {
           this.loader = false;
           this.resultBusca = "";
-          this.listaMembros = response.data
-       }else if(response.data.length == 0){
-          this.alertInfoSistema("AVISO!!","","Membro não Encontrado!!")
+          this.listaMembros = response.data;
+        } else if (response.data.length == 0) {
+          this.alertInfoSistema("AVISO!!", "", "Membro não Encontrado!!");
           this.getMembros();
-       }else if(response.data.error == true){
-        this.alertInfoSistema("ERROR!!","Error no Servidor: ", response.data.msg)
-        this.getMembros();
-       }
-       
+        } else if (response.data.error == true) {
+          this.alertInfoSistema(
+            "ERROR!!",
+            "Error no Servidor: ",
+            response.data.msg
+          );
+          this.getMembros();
+        }
       } catch (e) {
-        alert("Erro Ao Buscar o Membro - " + e.message)
+        alert("Erro Ao Buscar o Membro - " + e.message);
         this.getMembros();
       }
     },
@@ -263,9 +284,9 @@ export default defineComponent({
 </script>
 
 <style scoped>
-#tagAguardeLoader{
+#tagAguardeLoader {
   color: #427aa1;
-  margin:15px;
+  margin: 15px;
 }
 .iconButtonEdit {
   font-size: 36px;
