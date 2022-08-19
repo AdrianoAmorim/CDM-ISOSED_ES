@@ -80,10 +80,10 @@ export default defineComponent({
 .fotoMembro {
   border-radius: 0px;
   display: block;
-  margin: 12px auto;
+  margin: 14px auto;
   object-fit: contain;
-  height: 65%;
-  width: 65%;
+  height: 70%;
+  width: 70%;
 }
 
 .iconToolbar {

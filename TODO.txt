@@ -1,5 +1,6 @@
 Coisas para fazer:
-Implementa camera Preview ...
+Acrescentar tela modal para visualizar os dados dos Membros
+
 
 TELA HOME
 >CRIAR BOTAO DE RELATORIOS
