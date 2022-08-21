@@ -73,7 +73,7 @@ a barra de Ferramentas e a lista de membros cadastrados -->
                         "
                       >
                         <ion-col size="4">
-                          <ion-avatar @click="setStatusModal(true)">
+                          <ion-avatar @click="openModal(Membro.id)">
                             <ion-img
                               :class="Membro.url_foto ? '' : 'fotoMembro'"
                               :src="
@@ -120,6 +120,7 @@ a barra de Ferramentas e a lista de membros cadastrados -->
                     </ion-col>
                   </ion-item>
                 </ion-col>
+    
               </ion-row>
             </ion-list>
           </ion-col>
@@ -129,14 +130,13 @@ a barra de Ferramentas e a lista de membros cadastrados -->
         <ion-progress-bar type="indeterminate"> </ion-progress-bar>
         <h3 id="tagAguardeLoader">Aguarde...</h3>
       </div>
-      <ModalViewMembro :statusModal="statusModal" />
     </ion-content>
   </ion-page>
 </template>
 
 <script>
 import { defineComponent } from "vue";
-import ModalViewMembro from "@/components/ModalViewMembro.vue";
+ import ModalViewMembro from '@/components/ModalViewMembro.vue';
 import axios from "axios";
 import { searchCircle, personAdd, create } from "ionicons/icons";
 import {
@@ -157,12 +157,12 @@ import {
   IonContent,
   IonSearchbar,
   IonProgressBar,
+  modalController 
 } from "@ionic/vue";
 
 export default defineComponent({
   name: "HomePage",
   components: {
-    ModalViewMembro,
     IonProgressBar,
     IonIcon,
     IonPage,
@@ -188,16 +188,29 @@ export default defineComponent({
       searchCircle,
       personAdd,
       create,
+      id:null,
       listaMembros: null,
       resultBusca: "",
       statusModal: false,
+      idMembro: null
     };
   },
   methods: {
     //SETA O ESTADO DO MODAL.. PARA PASSAR PARA O COMPONENTE VIA PROPS
-    setStatusModal(statusModal) {
-      this.statusModal = statusModal;
-    },
+      async openModal(id) {
+        const modal = await modalController.create({
+          component: ModalViewMembro,
+           componentProps: { idMembro: id },
+            cssClass: "modalViewMembro"
+        });
+        modal.present();
+
+        const {role } = await modal.onWillDismiss();
+
+        if (role === 'confirm') {
+          console.log("confirmado");
+        }
+      },
     //CRIA UMA JANELA DE AVISO COM PARAMETROS ...
     async alertInfoSistema(header, subHeader, message) {
       const alert = await alertController.create({

@@ -1,5 +1,4 @@
 <template>
-  <ion-page>
     <ion-header mode="ios">
       <ion-toolbar mode="ios">
         <ion-button
@@ -311,7 +310,7 @@
         </ion-row>
       </ion-grid>
     </ion-content>
-  </ion-page>
+ 
 </template>
 
 <script>
@@ -328,7 +327,6 @@ import {
   checkmarkCircle,
 } from "ionicons/icons";
 import {
-  IonPage,
   IonAvatar,
   IonProgressBar,
   alertController,
@@ -355,7 +353,6 @@ export default defineComponent({
   name: "InfoMembro",
   directives: { mask },
   components: {
-    IonPage,
     IonProgressBar,
     IonHeader,
     IonIcon,
