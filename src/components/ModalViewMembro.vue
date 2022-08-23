@@ -10,44 +10,44 @@
   </ion-header>
 
   <ion-content class="ion-padding">
-    <ion-item>
-      <ion-label>id: {{idMembro}}</ion-label>
+    <ion-item class="">
+      <ion-label class="conteudoItem"><span>id:</span> {{idMembro}}</ion-label>
     </ion-item>
     <ion-item>
-      <ion-label>Nome: {{membro.nome}}</ion-label>
+      <ion-label><span>Nome:</span> {{membro.nome}}</ion-label>
     </ion-item>
     <ion-item>
-      <ion-label>Endereço: {{membro.logradouro.endereco}}</ion-label>
+      <ion-label><span>Endereço:</span> {{membro.logradouro.endereco}}</ion-label>
     </ion-item>
     <ion-item>
-      <ion-label>Nº: {{membro.logradouro.numero}}</ion-label>
+      <ion-label><span>Nº:</span> {{membro.logradouro.numero}}</ion-label>
     </ion-item>
     <ion-item>
-      <ion-label>Bairro: {{membro.logradouro.bairro}}</ion-label>
+      <ion-label><span>Bairro:</span> {{membro.logradouro.bairro}}</ion-label>
     </ion-item>
     <ion-item>
-      <ion-label>Cidade: {{membro.logradouro.cidade}}</ion-label>
+      <ion-label><span>Cidade:</span> {{membro.logradouro.cidade}}</ion-label>
     </ion-item>
     <ion-item>
-      <ion-label>Telefone: {{membro.telefone}}</ion-label>
+      <ion-label><span>Telefone:</span> {{membro.telefone}}</ion-label>
     </ion-item>
     <ion-item>
-      <ion-label>Cargo: {{membro.cargo.nome}}</ion-label>
+      <ion-label><span>Cargo:</span> {{membro.cargo.nome}}</ion-label>
     </ion-item>
     <ion-item>
-      <ion-label>Pai: {{membro.pai}}</ion-label>
+      <ion-label><span>Pai:</span> {{membro.pai}}</ion-label>
     </ion-item>
     <ion-item>
-      <ion-label>Mãe: {{membro.mae}}</ion-label>
+      <ion-label><span>Mãe:</span> {{membro.mae}}</ion-label>
     </ion-item>
     <ion-item>
-      <ion-label>Dt Nascimento: {{membro.dtNascimento}}</ion-label>
+      <ion-label><span>Dt Nascimento:</span> {{membro.dtNascimento}}</ion-label>
     </ion-item>
     <ion-item>
-      <ion-label>Dt Batismo: {{membro.dtBatismo}}</ion-label>
+      <ion-label><span>Dt Batismo:</span> {{membro.dtBatismo}}</ion-label>
     </ion-item>
     <ion-item>
-      <ion-label>Est. Civil: {{membro.estCivil}}</ion-label>
+      <ion-label><span>Est. Civil:</span> {{membro.estCivil}}</ion-label>
     </ion-item>
   </ion-content>
 </template>

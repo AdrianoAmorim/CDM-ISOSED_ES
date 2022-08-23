@@ -28,8 +28,14 @@ export default defineComponent({
 </script>
 
 <style>
-.modalViewMembro ion-modal{
-  --background: red;
+.modalViewMembro ion-label span{
+  color: #427aa1 !important;
+   overflow: visible;
+  font-weight: bold;
+}
+.modalViewMembro ion-label{
+   overflow: visible !important;
+   font-size: 18px !important;
 }
 
 

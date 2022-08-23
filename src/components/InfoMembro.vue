@@ -707,7 +707,6 @@ export default defineComponent({
           this.desativarBtnVoltar = false;
           this.desativarBtnDelete = false;
           this.desativarBtnSalvar = false;
-          //this.loader = false;
         }
       }
     },
