@@ -28,6 +28,10 @@ export default defineComponent({
 </script>
 
 <style>
+.modalViewMembro ion-modal{
+  --background: red;
+}
+
 
 /* ESTILIZANDO ALERTS DE AVISOS DE INFORMAÇÃO E SUCESSOS*/
  .alert-info .alert-wrapper{

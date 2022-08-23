@@ -120,7 +120,6 @@ a barra de Ferramentas e a lista de membros cadastrados -->
                     </ion-col>
                   </ion-item>
                 </ion-col>
-    
               </ion-row>
             </ion-list>
           </ion-col>
@@ -136,7 +135,7 @@ a barra de Ferramentas e a lista de membros cadastrados -->
 
 <script>
 import { defineComponent } from "vue";
- import ModalViewMembro from '@/components/ModalViewMembro.vue';
+import ModalViewMembro from "@/components/ModalViewMembro.vue";
 import axios from "axios";
 import { searchCircle, personAdd, create } from "ionicons/icons";
 import {
@@ -157,7 +156,7 @@ import {
   IonContent,
   IonSearchbar,
   IonProgressBar,
-  modalController 
+  modalController,
 } from "@ionic/vue";
 
 export default defineComponent({
@@ -182,35 +181,43 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer: "https://isosed-server.herokuapp.com",
+      urlServer: "http://192.168.18.103:4041",
       ativarBtnBuscar: true,
       loader: true,
       searchCircle,
       personAdd,
       create,
-      id:null,
+      id: null,
       listaMembros: null,
       resultBusca: "",
       statusModal: false,
-      idMembro: null
+      idMembro: null,
     };
   },
   methods: {
-    //SETA O ESTADO DO MODAL.. PARA PASSAR PARA O COMPONENTE VIA PROPS
-      async openModal(id) {
-        const modal = await modalController.create({
-          component: ModalViewMembro,
-           componentProps: { idMembro: id },
-            cssClass: "modalViewMembro"
-        });
-        modal.present();
+    //ABRIR O MODAL.. PARA EXIBIR OS DADOS DO MEMBRO SELECIONADO
+    async openModal(id) {
+      const returnMembro = await this.getMembroSelecionado(id);
+      if(returnMembro.id > 0){
+        console.log(returnMembro)
+      const modal = await modalController.create({
+        component: ModalViewMembro,
+        componentProps: { idMembro: id,membro:returnMembro },
+        cssClass: "modalViewMembro",
+      });
+      modal.present();
+      const { role } = await modal.onWillDismiss();
+      if (role === "confirm") {
+        console.log("confirmado");
+      }
+      
+      }else if(returnMembro.id == 0 ){
+        this.alertInfoSistema("AVISO","","Não Foi Possível encontrar o Membro Selecionado!!")
+      }else if(returnMembro.error == true ){
+        this.alertInfoSistema("AVISO","","Houve um Erro ao buscar o Membro para Visualização: "+ returnMembro.msg)
+      }
 
-        const {role } = await modal.onWillDismiss();
-
-        if (role === 'confirm') {
-          console.log("confirmado");
-        }
-      },
+    },
     //CRIA UMA JANELA DE AVISO COM PARAMETROS ...
     async alertInfoSistema(header, subHeader, message) {
       const alert = await alertController.create({
@@ -228,6 +235,15 @@ export default defineComponent({
         this.ativarBtnBuscar = false;
       } else {
         this.ativarBtnBuscar = true;
+      }
+    },
+    //BUSCAR O MEMBRO SELECIONADO PRA EXIBIR AS INFORMAÇÕES NO MODAL
+    async getMembroSelecionado(id) {
+      try {
+        const response = await axios.get(`${this.urlServer}/membro/${id}`);
+          return response.data;
+      } catch (e) {
+        alert("Houve Um erro Ao Buscar o Membro selecionado para Edição!! " + e.message);
       }
     },
     //BUSCA TODOS OS MEMBROS CADASTRADO, CASO NÃO HOUVER NENHUM REDIRECIONA PARA O CADASTRO
@@ -297,6 +313,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
+
 #tagAguardeLoader {
   color: #427aa1;
   margin: 15px;
