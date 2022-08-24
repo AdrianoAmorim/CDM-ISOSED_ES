@@ -28,6 +28,9 @@ export default defineComponent({
 </script>
 
 <style>
+.modalViewMembro .modal-wrapper{
+  background-color: #064789 !important;
+}
 .modalViewMembro ion-label span{
   color: #427aa1 !important;
    overflow: visible;
@@ -86,7 +89,11 @@ export default defineComponent({
 }
 /*FIM DAS ESTILIZACOES DE ALERTS DO SISTEMA */
 /*------------------------------------ */
-
+.avatarFoto {
+  border: 2px solid #427aa1;
+  width: 100px;
+  height: 100px;
+}
 .fotoMembro {
   border-radius: 0px;
   display: block;

@@ -135,6 +135,7 @@ a barra de Ferramentas e a lista de membros cadastrados -->
 
 <script>
 import { defineComponent } from "vue";
+import moment from "moment";
 import ModalViewMembro from "@/components/ModalViewMembro.vue";
 import axios from "axios";
 import { searchCircle, personAdd, create } from "ionicons/icons";
@@ -181,7 +182,7 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer: " https://isosed-server.herokuapp.com",
+      urlServer: " http://192.168.18.4:4041",
       ativarBtnBuscar: true,
       loader: true,
       searchCircle,
@@ -197,9 +198,13 @@ export default defineComponent({
   methods: {
     //ABRIR O MODAL.. PARA EXIBIR OS DADOS DO MEMBRO SELECIONADO
     async openModal(id) {
+      this.loader = true;
       const returnMembro = await this.getMembroSelecionado(id);
       if(returnMembro.id > 0){
-        console.log(returnMembro)
+        var dtNascimento = moment(returnMembro.dtNascimento).format("DD/MM/YYYY")
+        var dtBatismo = moment(returnMembro.dtBatismo).format("DD/MM/YYYY")
+        returnMembro.dtNascimento = dtNascimento
+        returnMembro.dtBatismo = dtBatismo
       const modal = await modalController.create({
         component: ModalViewMembro,
         componentProps: { idMembro: id,membro:returnMembro },
@@ -208,7 +213,7 @@ export default defineComponent({
       modal.present();
       const { role } = await modal.onWillDismiss();
       if (role === "confirm") {
-        console.log("confirmado");
+        this.loader = false;
       }
       
       }else if(returnMembro.id == 0 ){

@@ -375,7 +375,7 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer: "https://isosed-server.herokuapp.com",
+      urlServer: "http://192.168.18.4:4041",
       desativarBtnVoltar: true,
       desativarBtnDelete: true,
       desativarBtnSalvar: true,
@@ -724,11 +724,7 @@ export default defineComponent({
   color: #427aa1;
   margin: 15px;
 }
-.avatarFoto {
-  border: 2px solid #427aa1;
-  width: 100px;
-  height: 100px;
-}
+
 .iconDownload {
   font-size: 26px;
   object-fit: fill;
