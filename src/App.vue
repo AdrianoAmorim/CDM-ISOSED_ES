@@ -28,20 +28,31 @@ export default defineComponent({
 </script>
 
 <style>
-.modalViewMembro .modal-wrapper{
-  background-color: #064789 !important;
+.modalViewMembro #bkToolbar{
+  background-color: #064789 !important ;
 }
-.modalViewMembro ion-label span{
+.modalViewMembro span{
   color: #427aa1 !important;
-   overflow: visible;
+  overflow: visible;
   font-weight: bold;
+  font-size: 14px !important;
 }
 .modalViewMembro ion-label{
    overflow: visible !important;
    font-size: 18px !important;
 }
-
-
+.modalViewMembro #lblNome{
+  font-weight: bold;
+}
+.modalViewMembro #lblTel{
+  font-size: 16px !important;
+  font-weight: bold;
+}
+.modalViewMembro #lblCargo{
+  font-weight:bold;
+  color: #eb445a;
+  font-size: 16px !important; 
+}
 /* ESTILIZANDO ALERTS DE AVISOS DE INFORMAÇÃO E SUCESSOS*/
  .alert-info .alert-wrapper{
   border-radius: 18px;
@@ -93,6 +104,10 @@ export default defineComponent({
   border: 2px solid #427aa1;
   width: 100px;
   height: 100px;
+}
+.avatarViewMembro{
+  width: 80px;
+  height: 80px;
 }
 .fotoMembro {
   border-radius: 0px;

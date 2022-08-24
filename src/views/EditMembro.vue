@@ -18,7 +18,7 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer:"http://192.168.18.4:4041",
+      urlServer:"https://isosed-server.herokuapp.com",
       nomePg: "editar",
       membro: null,
       cargos: null

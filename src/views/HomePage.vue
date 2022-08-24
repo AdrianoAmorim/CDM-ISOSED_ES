@@ -182,7 +182,7 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer: " http://192.168.18.4:4041",
+      urlServer: "https://isosed-server.herokuapp.com",
       ativarBtnBuscar: true,
       loader: true,
       searchCircle,
@@ -205,6 +205,7 @@ export default defineComponent({
         var dtBatismo = moment(returnMembro.dtBatismo).format("DD/MM/YYYY")
         returnMembro.dtNascimento = dtNascimento
         returnMembro.dtBatismo = dtBatismo
+
       const modal = await modalController.create({
         component: ModalViewMembro,
         componentProps: { idMembro: id,membro:returnMembro },
