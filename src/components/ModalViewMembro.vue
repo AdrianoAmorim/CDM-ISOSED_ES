@@ -41,10 +41,10 @@
       <ion-label><span>Mãe:</span> {{membro.mae}}</ion-label>
     </ion-item>
     <ion-item>
-      <ion-label><span>Dt Nascimento:</span> {{membro.dtNascimento}}</ion-label>
+      <ion-label><span>Dt Nascimento:</span> {{membro.dtNascimento.substring(0,10)}}</ion-label>
     </ion-item>
     <ion-item>
-      <ion-label><span>Dt Batismo:</span> {{membro.dtBatismo}}</ion-label>
+      <ion-label><span>Dt Batismo:</span> {{membro.dtBatismo.substring(0,10)}}</ion-label>
     </ion-item>
     <ion-item>
       <ion-label><span>Est. Civil:</span> {{membro.estCivil}}</ion-label>

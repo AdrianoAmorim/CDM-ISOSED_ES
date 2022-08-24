@@ -443,7 +443,6 @@ export default defineComponent({
       val = val.replace(")", "");
       val = val.replace(" ", "");
       val = val.replace("-", "");
-      val = parseInt(val);
       return val;
     },
     limparCampos() {
