@@ -28,7 +28,17 @@ export default defineComponent({
 </script>
 
 <style>
-
+ion-modal.modalViewMembro::part(content){
+ --height: 77%;
+    position: absolute; 
+    top: 10%;
+    --width: 95%;
+    display: block;
+}
+.modalViewMembro .borderModalViewMembro{
+    border: 2px solid #427aa1;
+    border-radius: 10px;
+}
 .modalViewMembro span{
   color: #427aa1 !important;
   overflow: visible;
