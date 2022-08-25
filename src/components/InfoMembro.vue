@@ -438,12 +438,14 @@ export default defineComponent({
       }
     },
     retirarMascara(input) {
+      if(input != null){
       var val = input;
       val = val.replace("(", "");
       val = val.replace(")", "");
       val = val.replace(" ", "");
       val = val.replace("-", "");
       return val;
+      }
     },
     limparCampos() {
       this.membro.nome = null;
@@ -497,14 +499,11 @@ export default defineComponent({
       return alert.present();
     },
     validarCampos() {
-      if (this.membro.telefone == "(") {
-        this.membro.telefone = null;
-      }
       if (
         (this.membro.nome == null) |
         (this.membro.nome == "") |
-        (this.membro.telefone == null) |
-        (this.membro.telefone == "") |
+        //(this.membro.telefone == null) |
+        //(this.membro.telefone == "") |
         (this.membro.dtBatismo == null) |
         (this.membro.dtBatismo == "") |
         (this.membro.dtNascimento == null) |
@@ -526,10 +525,8 @@ export default defineComponent({
         (this.membro.cidade == null) |
         (this.membro.cidade == "")
       ) {
-        this.desativarBtnSalvar = true;
         return false;
       } else {
-        this.desativarBtnSalvar = false;
         return true;
       }
     },
@@ -558,6 +555,7 @@ export default defineComponent({
       const validar = this.validarCampos();
       if (validar) {
         membro.telefone = this.retirarMascara(membro.telefone);
+        
         this.desativarBtnSalvar = true;
         this.desativarBtnVoltar = true;
         this.loader = true;
@@ -576,17 +574,17 @@ export default defineComponent({
               this.$router.replace("/");
             }, 3000);
           } else if (response.data.error == true) {
-            this.alertInfoSistem(
+            this.alertInfoSistema(
               "ERROR",
               "",
               "ERRO INTERNO NO SERVIDOR! " + response.data.msg
             );
-            this.desativarBtnSalvar = true;
-            this.desativarBtnVoltar = true;
+              this.desativarBtnSalvar = false;
+        this.desativarBtnVoltar = false;
             this.loader = false;
           }
         } catch (e) {
-          this.alertInfoSistem(
+          this.alertInfoSistema(
             "ERROR",
             "",
             "HOUVE UM ERRO AO CADASTRAR: " + e.message
@@ -594,7 +592,7 @@ export default defineComponent({
           this.loader = false;
         }
       } else {
-        this.alertInfoSistem(
+        this.alertInfoSistema(
           "AVISO",
           "",
           "FAVOR PREENCHER TODAS AS INFORMAÇÕES DO MEMBRO!!"
@@ -624,25 +622,25 @@ export default defineComponent({
               this.$router.replace("/");
             }, 3000);
           } else if (response.data.error == true) {
-            this.alertInfoSistem(
+            this.alertInfoSistema(
               "ERROR",
               "",
               "ERRO INTERNO NO SERVIDOR! " + response.data.msg
             );
             this.loader = false;
-            this.desativarBtnSalvar = true;
-            this.desativarBtnDelete = true;
-            this.desativarBtnVoltar = true;
+            this.desativarBtnSalvar = false;
+            this.desativarBtnDelete = false;
+            this.desativarBtnVoltar = false;
           }
         } catch (e) {
-          this.alertInfoSistem(
+          this.alertInfoSistema(
             "ERROR",
             "",
             "ERRO AO ATUALIZAR O MEMBRO: " + e.message
           );
         }
       } else {
-        this.alertInfoSistem(
+        this.alertInfoSistema(
           "AVISO",
           "",
           "FAVOR PREENCHER TODAS AS INFORMAÇÕES DO MEMBRO!!"
@@ -697,12 +695,12 @@ export default defineComponent({
       if (this.page == "cadastro") {
         if (this.cargos != null) {
           this.desativarBtnVoltar = false;
+          this.desativarBtnSalvar = false;
           this.loader = false;
         }
       }
       if (this.page == "editar") {
         if (this.membro != null && this.cargos != null) {
-          console.log("dentro do editar")
           this.desativarBtnVoltar = false;
           this.desativarBtnDelete = false;
           this.desativarBtnSalvar = false;
