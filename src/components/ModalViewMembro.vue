@@ -1,15 +1,18 @@
 
 <template>
- 
   <ion-header>
-    <div id="bkToolbar">
-    <ion-toolbar>
-      <ion-title>Visualizar</ion-title>
-      <ion-buttons slot="end">
-        <ion-button @click="confirm">OK</ion-button>
-      </ion-buttons>
-    </ion-toolbar>
-  </div>
+      <ion-toolbar color="primary">
+        <ion-title>Visualizar</ion-title>
+
+        <ion-button @click="confirm" color="success" slot="end" fill="clear">
+          <ion-icon
+            slot="icon-only"
+            class="iconToolbar"
+            :icon="arrowBackCircle"
+          />
+        </ion-button>
+      </ion-toolbar>
+   
   </ion-header>
   <ion-content class="ion-padding">
     <ion-grid>
@@ -19,7 +22,8 @@
             <ion-img
               :class="membro.url_foto ? '' : 'fotoMembro'"
               :src="membro.url_foto ? membro.url_foto : '/img/camera.png'"
-              alt="Avatar do Membro"/>
+              alt="Avatar do Membro"
+            />
           </ion-avatar>
         </ion-col>
 
@@ -42,7 +46,7 @@
               <span>Telefone:</span>
             </ion-col>
             <ion-col size="6">
-              <ion-label  id="lblCargo">{{ membro.cargo.nome }}</ion-label>
+              <ion-label id="lblCargo">{{ membro.cargo.nome }}</ion-label>
             </ion-col>
             <ion-col size="6">
               <ion-label id="lblTel">{{ membro.telefone }}</ion-label>
@@ -69,7 +73,7 @@
           ><span>Cidade:</span> {{ membro.logradouro.cidade }}</ion-label
         >
       </ion-item>
-    
+
       <ion-item>
         <ion-label><span>Pai:</span> {{ membro.pai }}</ion-label>
       </ion-item>
@@ -98,6 +102,7 @@
 <script>
 import {
   IonGrid,
+  IonIcon,
   IonRow,
   IonCol,
   IonContent,
@@ -106,18 +111,23 @@ import {
   IonToolbar,
   IonAvatar,
   IonImg,
-  IonButtons,
   IonButton,
   IonItem,
   IonLabel,
   modalController,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
-
+import { arrowBackCircle } from "ionicons/icons";
 export default defineComponent({
   name: "ModalViewMembro",
+  data() {
+    return {
+      arrowBackCircle,
+    };
+  },
   components: {
     IonGrid,
+    IonIcon,
     IonRow,
     IonCol,
     IonContent,
@@ -126,7 +136,6 @@ export default defineComponent({
     IonAvatar,
     IonImg,
     IonToolbar,
-    IonButtons,
     IonButton,
     IonItem,
     IonLabel,

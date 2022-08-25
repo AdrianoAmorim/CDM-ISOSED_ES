@@ -28,9 +28,7 @@ export default defineComponent({
 </script>
 
 <style>
-.modalViewMembro #bkToolbar{
-  background-color: #064789 !important ;
-}
+
 .modalViewMembro span{
   color: #427aa1 !important;
   overflow: visible;
