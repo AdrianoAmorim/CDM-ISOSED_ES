@@ -29,7 +29,7 @@ export default defineComponent({
 
 <style>
 ion-modal.modalViewMembro::part(content){
- --height: 82%;
+ --height: 85%;
     position: absolute; 
     top: 10%;
     --width: 95%;
