@@ -34,6 +34,7 @@ ion-modal.modalViewMembro::part(content){
     top: 10%;
     --width: 95%;
     display: block;
+    border-radius: 10px;
 }
 .modalViewMembro .borderModalViewMembro{
     border: 2px solid #427aa1;
