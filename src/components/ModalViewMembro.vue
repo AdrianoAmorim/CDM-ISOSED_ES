@@ -16,7 +16,9 @@
 
   <ion-content>
     <ion-grid>
-      <ion-row style="margin-bottom:5px" class="borderModalViewMembro ion-justify-content-start ion-align-items-center">
+      <ion-row
+        style="margin-bottom: 5px"
+        class="borderModalViewMembro ion-justify-content-start ion-align-items-center">
         <ion-col size="3">
           <ion-avatar class="avatarFoto avatarViewMembro">
             <ion-img
@@ -55,61 +57,66 @@
         </ion-col>
       </ion-row>
 
-      <ion-row class="borderModalViewMembro ion-justify-content-start ion-align-items-center" >
+      <ion-row
+        class="
+          borderModalViewMembro
+          ion-justify-content-start ion-align-items-center
+        "
+      >
         <ion-col size="12">
-        <span>Endereço:</span> 
+          <span>Endereço:</span>
         </ion-col>
         <ion-col size="12">
           <ion-label>{{ membro.logradouro.endereco }}</ion-label>
-       </ion-col>
-    <ion-col size="2">
-        <span>Nº:</span> 
         </ion-col>
-         <ion-col size="5">
-        <span>Bairro:</span> 
+        <ion-col size="2">
+          <span>Nº:</span>
         </ion-col>
-         <ion-col size="5">
-        <span>Cidade:</span> 
+        <ion-col size="5">
+          <span>Bairro:</span>
+        </ion-col>
+        <ion-col size="5">
+          <span>Cidade:</span>
         </ion-col>
         <ion-col size="2">
           <ion-label>{{ membro.logradouro.numero }}</ion-label>
-       </ion-col>
-       <ion-col size="5">
+        </ion-col>
+        <ion-col size="5">
           <ion-label>{{ membro.logradouro.bairro }}</ion-label>
-       </ion-col>
-       <ion-col size="5">
+        </ion-col>
+        <ion-col size="5">
           <ion-label>{{ membro.logradouro.cidade }}</ion-label>
-       </ion-col>
+        </ion-col>
         <ion-col size="12">
-        <span>Pai:</span> 
+          <span>Pai:</span>
         </ion-col>
         <ion-col size="12">
           <ion-label>{{ membro.pai }}</ion-label>
-       </ion-col>
+        </ion-col>
         <ion-col size="12">
-        <span>Mâe:</span> 
+          <span>Mâe:</span>
         </ion-col>
         <ion-col size="12">
           <ion-label>{{ membro.mae }}</ion-label>
-       </ion-col>
-       <ion-col size="6">
-        <span>Dt Nascimento:</span> 
         </ion-col>
         <ion-col size="6">
-        <span>Dt Batismo:</span> 
+          <span>Dt Nascimento:</span>
         </ion-col>
-       <ion-col size="6">
-          <ion-label>{{ membro.dtNascimento.substring(0,10) }}</ion-label>
-       </ion-col>
         <ion-col size="6">
-          <ion-label>{{ membro.dtBatismo.substring(0,10) }}</ion-label>
-       </ion-col>
-       <ion-col size="12">
-        <span>Est. Civil:</span> 
+          <span>Dt Batismo:</span>
         </ion-col>
-       <ion-col size="12">
+        <ion-col size="6">
+          <ion-label>{{ membro.dtNascimento.substring(0, 10) }}</ion-label>
+        </ion-col>
+        <ion-col size="6">
+          <ion-label>{{ membro.dtBatismo.substring(0, 10) }}</ion-label>
+        </ion-col>
+        <ion-col size="12">
+          <span>Est. Civil:</span>
+        </ion-col>
+        <ion-col size="12">
           <ion-label>{{ membro.estCivil }}</ion-label>
-       </ion-col>
+        </ion-col>
       </ion-row>
     </ion-grid>
   </ion-content>
