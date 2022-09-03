@@ -42,16 +42,16 @@
 
           <ion-row class="ion-justify-content-start ion-align-items-center">
             <ion-col size="6">
-              <span>Cargo:</span>
-            </ion-col>
-            <ion-col size="6">
               <span>Telefone:</span>
             </ion-col>
             <ion-col size="6">
-              <ion-label id="lblCargo">{{ membro.cargo.nome }}</ion-label>
+              <span>Cargo:</span>
             </ion-col>
             <ion-col size="6">
               <ion-label id="lblTel">{{ membro.telefone }}</ion-label>
+            </ion-col>
+            <ion-col size="6">
+              <ion-label id="lblCargo">{{ membro.cargo.nome }}</ion-label>
             </ion-col>
           </ion-row>
         </ion-col>

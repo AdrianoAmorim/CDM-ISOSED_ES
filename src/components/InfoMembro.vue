@@ -56,10 +56,10 @@
 
   <ion-content>
     <ion-grid v-if="!loader">
-      <ion-row class="ion-justify-content-center">
-        <ion-col size="10">
-          <ion-row class="ion-justify-content-center">
-            <ion-col size="6" push="2">
+      <ion-row class="ion-justify-content-start">
+        <ion-col size="12">
+          <ion-row class="ion-justify-content-start ion-align-items-center">
+            <ion-col size="3">
               <ion-avatar class="avatarFoto" @click="tirarFoto()">
                 <ion-img
                   :class="membro.url_foto ? '' : 'fotoMembro'"
@@ -67,9 +67,7 @@
                   alt="Avatar do Membro"
                 />
               </ion-avatar>
-            </ion-col>
 
-            <ion-col class="ion-align-self-end" size="4" pull="1">
               <ion-button
                 class="iconDownload"
                 v-if="page == 'editar'"
@@ -81,215 +79,217 @@
                 <ion-icon slot="icon-only" :icon="download" />
               </ion-button>
             </ion-col>
+
+            <ion-col size="9">
+              <ion-row class="ion-justify-content- start">
+                <ion-col size="12" >
+                  <ion-item mode="md">
+                    <ion-label position="floating">Nome: </ion-label>
+                    <ion-input
+                    style="font-weight: bold;"
+                      v-model="membro.nome"
+                      color="secondary"
+                      @ionChange="validarCampos()"
+                    ></ion-input>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+        <ion-col size="12">
+          <ion-row class="ion-justify-content-start">
+            <ion-col size="6">
+              <ion-item mode="md">
+                <ion-label position="floating">Telefone: </ion-label>
+                <ion-input
+                  @ionChange="validarCampos()"
+                  color="secondary"
+                  v-model="membro.telefone"
+                  type="text"
+                  inputmode="numeric"
+                  placeholder="(xx) xxxxx-xxxx"
+                ></ion-input>
+                <input
+                  v-mask="['(##) #####-####', '(##) ####-####']"
+                  v-model="membro.telefone"
+                  style="display: none"
+                />
+              </ion-item>
+            </ion-col>
+
+            <ion-col size="6">
+              <ion-item mode="md">
+                <ion-label position="stacked">Cargo: </ion-label>
+                <ion-select
+                  @ionChange="validarCampos()"
+                  v-model="membro.id_cargo"
+                  color="secondary"
+                  placeholder="Cargo"
+                  cancel-text="CANCELAR"
+                  ok-text="OK"
+                >
+                  <ion-select-option
+                    v-for="Cargo in cargos"
+                    :key="Cargo.id"
+                    :value="Cargo.id"
+                    >{{ Cargo.nome }}</ion-select-option
+                  >
+                </ion-select>
+              </ion-item>
+            </ion-col>
           </ion-row>
         </ion-col>
       </ion-row>
 
-      <form>
-        <ion-row>
-          <ion-col>
-            <ion-item mode="md">
-              <ion-label position="floating">Nome: </ion-label>
-              <ion-input
-                v-model="membro.nome"
-                color="secondary"
-                @ionChange="validarCampos()"
-              ></ion-input>
-            </ion-item>
-          </ion-col>
-        </ion-row>
+      <ion-row>
+        <ion-col size="8">
+          <ion-item mode="md">
+            <ion-label position="floating">Endereço: </ion-label>
+            <ion-input
+              @ionChange="validarCampos()"
+              v-model="membro.endereco"
+              color="secondary"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="4">
+          <ion-item mode="md">
+            <ion-label position="floating">Nº: </ion-label>
+            <ion-input
+              @ionChange="validarCampos()"
+              v-model="membro.numero"
+              type="number"
+              inputmode="numeric"
+              color="secondary"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
 
-        <ion-row>
-          <ion-col size="8">
-            <ion-item mode="md">
-              <ion-label position="floating">Endereço: </ion-label>
-              <ion-input
-                @ionChange="validarCampos()"
-                v-model="membro.endereco"
-                color="secondary"
-              ></ion-input>
-            </ion-item>
-          </ion-col>
-          <ion-col size="4">
-            <ion-item mode="md">
-              <ion-label position="floating">Nº: </ion-label>
-              <ion-input
-                @ionChange="validarCampos()"
-                v-model="membro.numero"
-                type="number"
-                inputmode="numeric"
-                color="secondary"
-              ></ion-input>
-            </ion-item>
-          </ion-col>
-        </ion-row>
+      <ion-row>
+        <ion-col size="6">
+          <ion-item mode="md">
+            <ion-label position="floating">Bairro: </ion-label>
+            <ion-input
+              @ionChange="validarCampos()"
+              v-model="membro.bairro"
+              color="secondary"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="6">
+          <ion-item mode="md">
+            <ion-label position="floating">Cidade: </ion-label>
+            <ion-input
+              @ionChange="validarCampos()"
+              v-model="membro.cidade"
+              color="secondary"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
 
-        <ion-row>
-          <ion-col size="6">
-            <ion-item mode="md">
-              <ion-label position="floating">Bairro: </ion-label>
-              <ion-input
-                @ionChange="validarCampos()"
-                v-model="membro.bairro"
-                color="secondary"
-              ></ion-input>
-            </ion-item>
-          </ion-col>
-          <ion-col size="6">
-            <ion-item mode="md">
-              <ion-label position="floating">Cidade: </ion-label>
-              <ion-input
-                @ionChange="validarCampos()"
-                v-model="membro.cidade"
-                color="secondary"
-              ></ion-input>
-            </ion-item>
-          </ion-col>
-        </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item mode="md">
+            <ion-label position="floating">Pai: </ion-label>
+            <ion-input
+              @ionChange="validarCampos()"
+              v-model="membro.pai"
+              type="text"
+              color="secondary"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
 
-        <ion-row>
-          <ion-col>
-            <ion-item mode="md">
-              <ion-label position="floating">Telefone: </ion-label>
-              <ion-input
-                @ionChange="validarCampos()"
-                color="secondary"
-                v-model="membro.telefone"
-                type="text"
-                inputmode="numeric"
-                placeholder="(xx) xxxxx-xxxx"
-              ></ion-input>
-              <input
-                v-mask="['(##) #####-####', '(##) ####-####']"
-                v-model="membro.telefone"
-                style="display: none"
-              />
-            </ion-item>
-          </ion-col>
+      <ion-row>
+        <ion-col>
+          <ion-item mode="md">
+            <ion-label position="floating">Mãe: </ion-label>
+            <ion-input
+              v-model="membro.mae"
+              color="secondary"
+              @ionChange="validarCampos()"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
 
-          <ion-col>
-            <ion-item mode="md">
-              <ion-label position="stacked">Cargo: </ion-label>
-              <ion-select
-                @ionChange="validarCampos()"
-                v-model="membro.id_cargo"
-                color="secondary"
-                placeholder="Selecione o Cargo"
-                cancel-text="CANCELAR"
-                ok-text="OK"
-              >
-                <ion-select-option
-                  v-for="Cargo in cargos"
-                  :key="Cargo.id"
-                  :value="Cargo.id"
-                  >{{ Cargo.nome }}</ion-select-option
+      <ion-row>
+        <ion-col size="6">
+          <ion-item mode="md">
+            <ion-label style="overflow: visible" position="stacked"
+              >Data de Nascimento:
+            </ion-label>
+            <ion-input
+              @ionChange="validarCampos()"
+              v-model="membro.dtNascimento"
+              type="date"
+              color="secondary"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="6">
+          <ion-item mode="md">
+            <ion-label position="stacked">Data de Batismo: </ion-label>
+            <ion-input
+              @ionChange="validarCampos()"
+              v-model="membro.dtBatismo"
+              type="date"
+              color="secondary"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col>
+          <ion-list>
+            <ion-radio-group
+              @ionChange="validarCampos()"
+              v-model="membro.estCivil"
+              mode="md"
+            >
+              <ion-row class="ion-justify-content-start">
+                <ion-label
+                  style="margin-right: 3px"
+                  class="ion-align-self-center"
+                  >Est. Civil:</ion-label
                 >
-              </ion-select>
-            </ion-item>
-          </ion-col>
-        </ion-row>
 
-        <ion-row>
-          <ion-col>
-            <ion-item mode="md">
-              <ion-label position="floating">Pai: </ion-label>
-              <ion-input
-                @ionChange="validarCampos()"
-                v-model="membro.pai"
-                type="text"
-                color="secondary"
-              ></ion-input>
-            </ion-item>
-          </ion-col>
-        </ion-row>
+                <ion-item class="diferencaRadioBtn" lines="none">
+                  <ion-label>Casado</ion-label>
+                  <ion-radio
+                    color="secondary"
+                    slot="start"
+                    value="Casado"
+                  ></ion-radio>
+                </ion-item>
 
-        <ion-row>
-          <ion-col>
-            <ion-item mode="md">
-              <ion-label position="floating">Mãe: </ion-label>
-              <ion-input
-                v-model="membro.mae"
-                color="secondary"
-                @ionChange="validarCampos()"
-              ></ion-input>
-            </ion-item>
-          </ion-col>
-        </ion-row>
+                <ion-item class="diferencaRadioBtn" lines="none">
+                  <ion-label>Solteiro</ion-label>
+                  <ion-radio
+                    color="secondary"
+                    slot="start"
+                    value="Solteiro"
+                  ></ion-radio>
+                </ion-item>
 
-        <ion-row>
-          <ion-col size="6">
-            <ion-item mode="md">
-              <ion-label style="overflow: visible" position="stacked"
-                >Data de Nascimento:
-              </ion-label>
-              <ion-input
-                @ionChange="validarCampos()"
-                v-model="membro.dtNascimento"
-                type="date"
-                color="secondary"
-              ></ion-input>
-            </ion-item>
-          </ion-col>
-          <ion-col size="6">
-            <ion-item mode="md">
-              <ion-label position="stacked">Data de Batismo: </ion-label>
-              <ion-input
-                @ionChange="validarCampos()"
-                v-model="membro.dtBatismo"
-                type="date"
-                color="secondary"
-              ></ion-input>
-            </ion-item>
-          </ion-col>
-        </ion-row>
-
-        <ion-row>
-          <ion-col>
-            <ion-list>
-              <ion-radio-group
-                @ionChange="validarCampos()"
-                v-model="membro.estCivil"
-                mode="md"
-              >
-                <ion-row class="ion-justify-content-start">
-                  <ion-label
-                    style="margin-right: 3px"
-                    class="ion-align-self-center"
-                    >Est. Civil:</ion-label
-                  >
-
-                  <ion-item class="diferencaRadioBtn" lines="none">
-                    <ion-label>Casado</ion-label>
-                    <ion-radio
-                      color="secondary"
-                      slot="start"
-                      value="Casado"
-                    ></ion-radio>
-                  </ion-item>
-
-                  <ion-item class="diferencaRadioBtn" lines="none">
-                    <ion-label>Solteiro</ion-label>
-                    <ion-radio
-                      color="secondary"
-                      slot="start"
-                      value="Solteiro"
-                    ></ion-radio>
-                  </ion-item>
-
-                  <ion-item class="diferencaRadioBtn" lines="none">
-                    <ion-label>Viúvo(a)</ion-label>
-                    <ion-radio
-                      color="secondary"
-                      slot="start"
-                      value="Viúvo(a)"
-                    ></ion-radio>
-                  </ion-item>
-                </ion-row>
-              </ion-radio-group>
-            </ion-list>
-          </ion-col>
-        </ion-row>
-      </form>
+                <ion-item class="diferencaRadioBtn" lines="none">
+                  <ion-label>Viúvo(a)</ion-label>
+                  <ion-radio
+                    color="secondary"
+                    slot="start"
+                    value="Viúvo(a)"
+                  ></ion-radio>
+                </ion-item>
+              </ion-row>
+            </ion-radio-group>
+          </ion-list>
+        </ion-col>
+      </ion-row>
     </ion-grid>
     <div v-else>
       <ion-progress-bar type="indeterminate"> </ion-progress-bar>
@@ -719,7 +719,7 @@ export default defineComponent({
 }
 
 .iconDownload {
-  font-size: 24px;
+  font-size: 20px;
   object-fit: fill;
 }
 

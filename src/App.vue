@@ -111,8 +111,8 @@ ion-modal.modalViewMembro::part(content){
 /*------------------------------------ */
 .avatarFoto {
   border: 2px solid #427aa1;
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
 }
 .avatarViewMembro{
   width: 80px;
