@@ -274,7 +274,6 @@ export default defineComponent({
     async buscarMembros(resultBusca) {
       this.loader = true;
       try {
-        console.log(resultBusca);
         const response = await axios.get(
           `${this.urlServer}/buscar?nome=${resultBusca}`
         );

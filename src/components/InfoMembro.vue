@@ -550,7 +550,11 @@ export default defineComponent({
       const validar = this.validarCampos();
       if (validar) {
         membro.telefone = this.retirarMascara(membro.telefone);
-
+        membro.telefone = membro.telefone ?? ""
+        console.log(membro.telefone)
+        membro.telefone = membro.telefone.padStart(11,"0")
+        
+        
         this.desativarBtnSalvar = true;
         this.desativarBtnVoltar = true;
         this.loader = true;
@@ -599,6 +603,8 @@ export default defineComponent({
       const validar = this.validarCampos();
       if (validar) {
         membro.telefone = this.retirarMascara(membro.telefone);
+        membro.telefone = membro.telefone ?? ""
+        membro.telefone = membro.telefone.padStart(11,"0")
         this.desativarBtnSalvar = true;
         this.desativarBtnVoltar = true;
         this.desativarBtnDelete = true;
