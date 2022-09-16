@@ -82,11 +82,11 @@
 
             <ion-col size="9">
               <ion-row class="ion-justify-content- start">
-                <ion-col size="12" >
+                <ion-col size="12">
                   <ion-item mode="md">
                     <ion-label position="floating">Nome: </ion-label>
                     <ion-input
-                    style="font-weight: bold;"
+                      style="font-weight: bold"
                       v-model="membro.nome"
                       color="secondary"
                       @ionChange="validarCampos()"
@@ -525,7 +525,6 @@ export default defineComponent({
         return true;
       }
     },
-
     setDadosInp(membroEdit) {
       var dtNascimento = membroEdit.dtNascimento.substring(0, 10);
       var dtBatismo = membroEdit.dtBatismo.substring(0, 10);
@@ -550,11 +549,9 @@ export default defineComponent({
       const validar = this.validarCampos();
       if (validar) {
         membro.telefone = this.retirarMascara(membro.telefone);
-        membro.telefone = membro.telefone ?? ""
-        console.log(membro.telefone)
-        membro.telefone = membro.telefone.padStart(11,"0")
-        
-        
+        membro.telefone = membro.telefone ?? "";
+        membro.telefone = membro.telefone.padStart(11, "0");
+
         this.desativarBtnSalvar = true;
         this.desativarBtnVoltar = true;
         this.loader = true;
@@ -603,8 +600,8 @@ export default defineComponent({
       const validar = this.validarCampos();
       if (validar) {
         membro.telefone = this.retirarMascara(membro.telefone);
-        membro.telefone = membro.telefone ?? ""
-        membro.telefone = membro.telefone.padStart(11,"0")
+        membro.telefone = membro.telefone ?? "";
+        membro.telefone = membro.telefone.padStart(11, "0");
         this.desativarBtnSalvar = true;
         this.desativarBtnVoltar = true;
         this.desativarBtnDelete = true;
@@ -691,28 +688,34 @@ export default defineComponent({
     },
   },
   watch: {
-    cargosLs() {
-      this.cargos = this.cargosLs;
-      if (this.page == "cadastro") {
-        if (this.cargos != null) {
-          this.desativarBtnVoltar = false;
-          this.desativarBtnSalvar = false;
-          this.loader = false;
+    cargosLs(){
+        this.cargos = this.cargosLs;
+ if (this.page == "cadastro") {
+        console.log("dentro do if do cadastro");
+        this.desativarBtnVoltar = false;
+        this.desativarBtnSalvar = false;
+        this.loader = false;
+      } 
+    },
+    membroEd() {
+    
+        console.log("dentro watch MembroEd");
+        console.log(this.cargos);
+
+        while (this.cargos == null) {
+          this.cargos = this.cargosLs;
+          console.log("dentro do while cargos");
+          break;
         }
-      }
-      if (this.page == "editar") {
-        if (this.membro != null && this.cargos != null) {
+        this.setDadosInp(this.membroEd);
+        if (this.membroEd.nome != null) {
+          console.log("dentro do if do editar");
           this.desativarBtnVoltar = false;
           this.desativarBtnDelete = false;
           this.desativarBtnSalvar = false;
+          this.loader = false;
         }
-      }
-    },
-    membroEd() {
-      this.setDadosInp(this.membroEd);
-      if (this.membro.estCivil != null) {
-        this.loader = false;
-      }
+      
     },
   },
 });
