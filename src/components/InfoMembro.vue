@@ -690,23 +690,17 @@ export default defineComponent({
   watch: {
     cargosLs(){
         this.cargos = this.cargosLs;
- if (this.page == "cadastro") {
-        console.log("dentro do if do cadastro");
-        this.desativarBtnVoltar = false;
-        this.desativarBtnSalvar = false;
-        this.loader = false;
-      } 
-    },
+        if (this.page == "cadastro") {
+                console.log("dentro do if do cadastro");
+                this.desativarBtnVoltar = false;
+                this.desativarBtnSalvar = false;
+                this.loader = false;
+              } 
+            },
     membroEd() {
-    
+        this.cargos = this.cargosLs;
         console.log("dentro watch MembroEd");
-        console.log(this.cargos);
 
-        while (this.cargos == null) {
-          this.cargos = this.cargosLs;
-          console.log("dentro do while cargos");
-          break;
-        }
         this.setDadosInp(this.membroEd);
         if (this.membroEd.nome != null) {
           console.log("dentro do if do editar");

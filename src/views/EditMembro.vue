@@ -29,10 +29,12 @@ export default defineComponent({
   },
   methods:{
     async getMembro(idMembro) {
+      this.getCargos();
       try{
         const response = await axios.get(`${this.urlServer}/membro/${idMembro}` );
         if(response.data.id >0){
         this.membro = response.data;
+        console.log(this.membro)
         }else if(response.data.id == 0){
           alert("Não Conseguimos Encontrar o Membro Selecionado para Editar!!")
         }else if(response.data.error ==true){
@@ -49,6 +51,7 @@ export default defineComponent({
           const response = await axios.get(`${this.urlServer}/cargos`);
             if(response.data.length > 0){
               this.cargos = response.data;
+              console.log(this.cargos)
             }else if(response.data.length == 0){
               alert("Nenhum Cargo Cadastrado!")
             }else if(response.data.error == true){
@@ -62,7 +65,7 @@ export default defineComponent({
   },
   beforeMount(){
     this.getMembro(this.id);
-    this.getCargos();
+    //this.getCargos();
   }
 });
 </script>
