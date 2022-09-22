@@ -6,7 +6,7 @@ a barra de Ferramentas e a lista de membros cadastrados -->
       <ion-toolbar mode="ios">
         <ion-grid>
           <ion-row class="ion-align-items-center">
-            <ion-col size="7">
+            <ion-col size="10">
               <ion-row class="ion-justify-content-center">
                 <ion-searchbar
                   @ionChange="statusBtnBuscar()"
@@ -19,34 +19,38 @@ a barra de Ferramentas e a lista de membros cadastrados -->
               </ion-row>
             </ion-col>
 
-            <ion-col size="5">
-              <ion-row class="ion-justify-content-between">
+            <ion-col size="2">
+              <ion-row class="ion-justify-content-end">
                 <ion-button
                   @click="buscarMembros(resultBusca)"
                   :disabled="ativarBtnBuscar"
                   fill="clear"
                   size="small"
                   color="primary"
-                  class="ion-align-self-start"
                 >
                   <ion-icon
                     slot="icon-only"
                     class="iconToolbar"
                     :icon="searchCircle"
                 /></ion-button>
+              </ion-row>
+            </ion-col>
+          </ion-row>
 
-                <ion-button
-                  fill="clear"
-                  color="success"
-                  size="small"
-                  router-direction="forward"
-                  @click="this.$router.replace('/cadastrar')"
-                  class="ion-align-self-end"
-                  ><ion-icon
-                    slot="icon-only"
-                    class="iconToolbar"
-                    :icon="personAdd"
-                /></ion-button>
+          <ion-row>
+            <ion-col class="ion-align-items-center" size="12">
+              <ion-row class="ion-justify-content-end">
+              <ion-button
+                fill="clear"
+                color="success"
+                size="small"
+                router-direction="forward"
+                @click="this.$router.replace('/cadastrar')"
+                ><ion-icon
+                  slot="icon-only"
+                  class="iconToolbar"
+                  :icon="personAdd"
+              /></ion-button>
               </ion-row>
             </ion-col>
           </ion-row>
@@ -200,29 +204,38 @@ export default defineComponent({
     async openModal(id) {
       this.loader = true;
       const returnMembro = await this.getMembroSelecionado(id);
-      if(returnMembro.id > 0){
-        var dtNascimento = moment(returnMembro.dtNascimento).format("DD/MM/YYYY")
-        var dtBatismo = moment(returnMembro.dtBatismo).format("DD/MM/YYYY")
-        returnMembro.dtNascimento = dtNascimento
-        returnMembro.dtBatismo = dtBatismo
+      if (returnMembro.id > 0) {
+        var dtNascimento = moment(returnMembro.dtNascimento).format(
+          "DD/MM/YYYY"
+        );
+        var dtBatismo = moment(returnMembro.dtBatismo).format("DD/MM/YYYY");
+        returnMembro.dtNascimento = dtNascimento;
+        returnMembro.dtBatismo = dtBatismo;
 
-      const modal = await modalController.create({
-        component: ModalViewMembro,
-        componentProps: { idMembro: id,membro:returnMembro },
-        cssClass: "modalViewMembro",
-      });
-      modal.present();
-      const { role } = await modal.onWillDismiss();
-      if (role === "confirm") {
-        this.loader = false;
+        const modal = await modalController.create({
+          component: ModalViewMembro,
+          componentProps: { idMembro: id, membro: returnMembro },
+          cssClass: "modalViewMembro",
+        });
+        modal.present();
+        const { role } = await modal.onWillDismiss();
+        if (role === "confirm") {
+          this.loader = false;
+        }
+      } else if (returnMembro.id == 0) {
+        this.alertInfoSistema(
+          "AVISO",
+          "",
+          "Não Foi Possível encontrar o Membro Selecionado!!"
+        );
+      } else if (returnMembro.error == true) {
+        this.alertInfoSistema(
+          "AVISO",
+          "",
+          "Houve um Erro ao buscar o Membro para Visualização: " +
+            returnMembro.msg
+        );
       }
-      
-      }else if(returnMembro.id == 0 ){
-        this.alertInfoSistema("AVISO","","Não Foi Possível encontrar o Membro Selecionado!!")
-      }else if(returnMembro.error == true ){
-        this.alertInfoSistema("AVISO","","Houve um Erro ao buscar o Membro para Visualização: "+ returnMembro.msg)
-      }
-
     },
     //CRIA UMA JANELA DE AVISO COM PARAMETROS ...
     async alertInfoSistema(header, subHeader, message) {
@@ -247,10 +260,12 @@ export default defineComponent({
     async getMembroSelecionado(id) {
       try {
         const response = await axios.get(`${this.urlServer}/membro/${id}`);
-          return response.data;
-
+        return response.data;
       } catch (e) {
-        alert("Houve Um erro Ao Buscar o Membro selecionado para Edição!! " + e.message);
+        alert(
+          "Houve Um erro Ao Buscar o Membro selecionado para Edição!! " +
+            e.message
+        );
       }
     },
     //BUSCA TODOS OS MEMBROS CADASTRADO, CASO NÃO HOUVER NENHUM REDIRECIONA PARA O CADASTRO
@@ -319,7 +334,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
 #tagAguardeLoader {
   color: #427aa1;
   margin: 15px;
