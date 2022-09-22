@@ -766,8 +766,8 @@ ion-radio {
   margin-left: 2px;
   margin-right: 1px;
 }
-ion-select-option {
-  color: #427aa1;
+ion-select {
+  color: #427aa1 !important;
 }
 .infoSistema {
   opacity: 0.8;

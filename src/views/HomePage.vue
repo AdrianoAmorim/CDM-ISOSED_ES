@@ -51,6 +51,29 @@ a barra de Ferramentas e a lista de membros cadastrados -->
                   class="iconToolbar"
                   :icon="personAdd"
               /></ion-button>
+
+                 <ion-button
+                 disabled="true"
+                fill="clear"
+                color="secondary"
+                size="small"
+                ><ion-icon
+                  slot="icon-only"
+                  class="iconToolbar"
+                  :icon="newspaper"
+              /></ion-button>
+
+                 <ion-button
+                 disabled="true"
+                fill="clear"
+                color="secondary"
+                size="small"
+                ><ion-icon
+                  slot="icon-only"
+                  class="iconToolbar"
+                  :icon="construct"
+              /></ion-button>
+
               </ion-row>
             </ion-col>
           </ion-row>
@@ -72,10 +95,7 @@ a barra de Ferramentas e a lista de membros cadastrados -->
                   <ion-item>
                     <ion-col size="9">
                       <ion-row
-                        class="
-                          ion-justify-content-between ion-align-items-center
-                        "
-                      >
+                        class="ion-justify-content-between ion-align-items-center ">
                         <ion-col size="4">
                           <ion-avatar @click="openModal(Membro.id)">
                             <ion-img
@@ -142,7 +162,7 @@ import { defineComponent } from "vue";
 import moment from "moment";
 import ModalViewMembro from "@/components/ModalViewMembro.vue";
 import axios from "axios";
-import { searchCircle, personAdd, create } from "ionicons/icons";
+import { searchCircle, personAdd, create,construct,newspaper} from "ionicons/icons";
 import {
   IonImg,
   alertController,
@@ -193,6 +213,8 @@ export default defineComponent({
       searchCircle,
       personAdd,
       create,
+      construct,
+      newspaper,
       listaMembros: null,
       resultBusca: "",
       statusModal: false,
