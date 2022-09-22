@@ -81,7 +81,7 @@
             </ion-col>
 
             <ion-col size="9">
-              <ion-row class="ion-justify-content- start">
+              <ion-row class="ion-justify-content-start">
                 <ion-col size="12">
                   <ion-item mode="md">
                     <ion-label position="floating">Nome: </ion-label>
@@ -91,6 +91,30 @@
                       color="secondary"
                       @ionChange="validarCampos()"
                     ></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="12">
+                  <ion-item mode="md">
+                    <ion-label position="stacked">Congregação: </ion-label>
+                    <ion-select color="secondary"
+                      placeholder="CARREGANDO..." v-if="!congregacoesLs">
+                    </ion-select>
+                    <ion-select
+                      v-else
+                      @ionChange="validarCampos()"
+                      v-model="membro.id_congregacao"
+                      color="secondary"
+                      placeholder="Congregação"
+                      cancel-text="CANCELAR"
+                      ok-text="OK"
+                    >
+                      <ion-select-option
+                        v-for="Congregacao in congregacoesLs"
+                        :key="Congregacao.id"
+                        :value="Congregacao.id"
+                        >{{ Congregacao.nome }}</ion-select-option
+                      >
+                    </ion-select>
                   </ion-item>
                 </ion-col>
               </ion-row>
@@ -121,7 +145,11 @@
             <ion-col size="6">
               <ion-item mode="md">
                 <ion-label position="stacked">Cargo: </ion-label>
+                <ion-select color="secondary"
+                      placeholder="CARREGANDO..." v-if="!cargosLs">
+                </ion-select>
                 <ion-select
+                  v-else
                   @ionChange="validarCampos()"
                   v-model="membro.id_cargo"
                   color="secondary"
@@ -130,7 +158,7 @@
                   ok-text="OK"
                 >
                   <ion-select-option
-                    v-for="Cargo in cargos"
+                    v-for="Cargo in cargosLs"
                     :key="Cargo.id"
                     :value="Cargo.id"
                     >{{ Cargo.nome }}</ion-select-option
@@ -372,13 +400,13 @@ export default defineComponent({
   data() {
     return {
       urlServer: "https://isosed-server.herokuapp.com",
+      //urlServer: "http://192.168.18.4:4041",
       desativarBtnVoltar: true,
       desativarBtnDelete: true,
       desativarBtnSalvar: true,
       loader: true,
       msgSistema: null,
       statusInfoSistema: false,
-      cargos: null,
       membro: {
         id: null,
         dtBatismo: null,
@@ -389,6 +417,7 @@ export default defineComponent({
         estCivil: null,
         telefone: null,
         id_cargo: null,
+        id_congregacao: null,
         id_logradouro: null,
         url_foto: null,
         endereco: null,
@@ -405,6 +434,7 @@ export default defineComponent({
     };
   },
   props: {
+    congregacoesLs: null,
     cargosLs: null,
     membroEd: null,
     page: String,
@@ -511,6 +541,8 @@ export default defineComponent({
         (this.membro.estCivil == "") |
         (this.membro.id_cargo == null) |
         (this.membro.id_cargo == "") |
+        (this.membro.id_congregacao == null) |
+        (this.membro.id_congregacao == "") |
         (this.membro.endereco == null) |
         (this.membro.endereco == "") |
         (this.membro.numero == null) |
@@ -538,6 +570,7 @@ export default defineComponent({
       this.membro.estCivil = membroEdit.estCivil;
       this.membro.url_foto = membroEdit.url_foto;
       this.membro.id_cargo = membroEdit.id_cargo;
+      this.membro.id_congregacao = membroEdit.id_congregacao;
       this.membro.id_logradouro = membroEdit.id_logradouro;
       this.membro.endereco = membroEdit.logradouro.endereco;
       this.membro.bairro = membroEdit.logradouro.bairro;
@@ -688,28 +721,23 @@ export default defineComponent({
     },
   },
   watch: {
-    cargosLs(){
-        this.cargos = this.cargosLs;
-        if (this.page == "cadastro") {
-                console.log("dentro do if do cadastro");
-                this.desativarBtnVoltar = false;
-                this.desativarBtnSalvar = false;
-                this.loader = false;
-              } 
-            },
+    cargosLs() {
+      if (this.page == "cadastro") {
+        console.log("dentro do if do cadastro");
+        this.desativarBtnVoltar = false;
+        this.desativarBtnSalvar = false;
+        this.loader = false;
+      }
+    },
     membroEd() {
-        this.cargos = this.cargosLs;
-        console.log("dentro watch MembroEd");
-
-        this.setDadosInp(this.membroEd);
-        if (this.membroEd.nome != null) {
-          console.log("dentro do if do editar");
-          this.desativarBtnVoltar = false;
-          this.desativarBtnDelete = false;
-          this.desativarBtnSalvar = false;
-          this.loader = false;
-        }
-      
+      console.log("dentro watch MembroEd");
+      this.setDadosInp(this.membroEd);
+      if (this.membroEd.nome != null) {
+        this.desativarBtnVoltar = false;
+        this.desativarBtnDelete = false;
+        this.desativarBtnSalvar = false;
+        this.loader = false;
+      }
     },
   },
 });

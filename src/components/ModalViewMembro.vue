@@ -111,12 +111,20 @@
         <ion-col size="6">
           <ion-label>{{ membro.dtBatismo.substring(0, 10) }}</ion-label>
         </ion-col>
-        <ion-col size="12">
+          <ion-col size="6">
           <span>Est. Civil:</span>
         </ion-col>
-        <ion-col size="12">
+        <ion-col size="6">
+          <span>Congregação:</span>
+        </ion-col>
+        <ion-col size="6">
           <ion-label>{{ membro.estCivil }}</ion-label>
         </ion-col>
+        <ion-col size="6">
+          <ion-label>{{ membro.congregacao.nome }}</ion-label>
+        </ion-col>
+        
+
       </ion-row>
     </ion-grid>
   </ion-content>

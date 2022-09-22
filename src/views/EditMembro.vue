@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <InfoMembro :page="nomePg" :cargosLs="this.cargos" :membroEd="this.membro" />
+    <InfoMembro :page="nomePg" :cargosLs="this.cargos" :congregacoesLs="this.congregacoes" :membroEd="this.membro" />
   </ion-page>
 </template>
 
@@ -18,10 +18,12 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer:"https://isosed-server.herokuapp.com",
+      urlServer: "https://isosed-server.herokuapp.com",
+      //urlServer:"http://192.168.18.4:4041",
       nomePg: "editar",
       membro: null,
-      cargos: null
+      cargos: null,
+      congregacoes: null
     };
   },
   props: {
@@ -30,6 +32,7 @@ export default defineComponent({
   methods:{
     async getMembro(idMembro) {
       this.getCargos();
+      this.getCongregacoes();
       try{
         const response = await axios.get(`${this.urlServer}/membro/${idMembro}` );
         if(response.data.id >0){
@@ -45,6 +48,22 @@ export default defineComponent({
       catch(e){
           alert("Houve Um erro Ao Buscar o Membro selecionado para Edição!! " + e.message)
       }
+    },
+     async getCongregacoes() {
+        try{
+          const response = await axios.get(`${this.urlServer}/congregacoes`);
+            if(response.data.length > 0){
+              this.congregacoes = response.data;
+              console.log(this.congregacoes)
+            }else if(response.data.length == 0){
+              alert("Nenhum Cargo Cadastrado!")
+            }else if(response.data.error == true){
+              alert("Erro Interno no Servidor: "+ response.data.msg)
+            }
+            }
+          catch(e){
+              alert("Houve Um erro ao Carrega os Cargos!! "+ e.message)
+          }
     },
     async getCargos() {
         try{
@@ -65,7 +84,6 @@ export default defineComponent({
   },
   beforeMount(){
     this.getMembro(this.id);
-    //this.getCargos();
   }
 });
 </script>

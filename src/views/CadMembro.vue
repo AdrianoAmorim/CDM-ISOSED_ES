@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <InfoMembro :cargosLs="this.cargos" :page="nomePg" />
+    <InfoMembro :cargosLs="this.cargos" :congregacoesLs="this.congregacoes" :page="nomePg" />
   </ion-page>
 </template>
 
@@ -15,8 +15,10 @@ export default defineComponent({
   data() {
     return {
       urlServer:"https://isosed-server.herokuapp.com",
+      //urlServer:"http://192.168.18.4:4041",
       nomePg: "cadastro",
       cargos: null,
+      congregacoes: null
     };
   },
   components: {
@@ -33,6 +35,22 @@ export default defineComponent({
         buttons: ["OK"],
       });
        await alert.present();
+    },
+       async getCongregacoes() {
+        try{
+          const response = await axios.get(`${this.urlServer}/congregacoes`);
+            if(response.data.length > 0){
+              this.congregacoes = response.data;
+              console.log(this.congregacoes)
+            }else if(response.data.length == 0){
+              alert("Nenhum Cargo Cadastrado!")
+            }else if(response.data.error == true){
+              alert("Erro Interno no Servidor: "+ response.data.msg)
+            }
+            }
+          catch(e){
+              alert("Houve Um erro ao Carrega os Cargos!! "+ e.message)
+          }
     },
     async getCargos() {
       try{
@@ -52,6 +70,7 @@ export default defineComponent({
   },
   beforeMount() {
     this.getCargos();
+    this.getCongregacoes();
   },
 });
 </script>

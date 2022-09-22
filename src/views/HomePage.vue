@@ -183,12 +183,12 @@ export default defineComponent({
   data() {
     return {
       urlServer: "https://isosed-server.herokuapp.com",
+      //urlServer: "http://192.168.18.4:4041",
       ativarBtnBuscar: true,
       loader: true,
       searchCircle,
       personAdd,
       create,
-      id: null,
       listaMembros: null,
       resultBusca: "",
       statusModal: false,
@@ -248,6 +248,7 @@ export default defineComponent({
       try {
         const response = await axios.get(`${this.urlServer}/membro/${id}`);
           return response.data;
+
       } catch (e) {
         alert("Houve Um erro Ao Buscar o Membro selecionado para Edição!! " + e.message);
       }
