@@ -1,5 +1,5 @@
 <!-- Pagina Responsavel por iniciar a aplicação contem:
-a barra de Ferramentas e a lista de membros cadastrados -->
+a barra de Ferramentas e a lista de TODOS OS membros cadastrados -->
 <template>
   <ion-page>
     <ion-header mode="ios">
@@ -64,10 +64,10 @@ a barra de Ferramentas e a lista de membros cadastrados -->
               /></ion-button>
 
                  <ion-button
-                 disabled="true"
                 fill="clear"
                 color="secondary"
                 size="small"
+                @click="this.$router.replace('/configuracoes')"
                 ><ion-icon
                   slot="icon-only"
                   class="iconToolbar"

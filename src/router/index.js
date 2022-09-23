@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from '@ionic/vue-router';
 import HomePage from '../views/HomePage.vue'
 import CadMembro from '../views/CadMembro.vue'
 import EditMembro from '../views/EditMembro.vue'
+import ConfigPage from '../views/ConfigPage.vue'
 const routes = [
 
   {
@@ -13,6 +14,11 @@ const routes = [
     path:'/cadastrar',
     name:'Cadastrar',
     component: CadMembro
+  },
+    {
+    path:'/configuracoes',
+    name:'Configuracoes',
+    component: ConfigPage
   },
   {
     path:'/editar/:id',
