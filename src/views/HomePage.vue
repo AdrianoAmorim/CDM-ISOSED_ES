@@ -42,7 +42,7 @@ a barra de Ferramentas e a lista de TODOS OS membros cadastrados -->
               <ion-row class="ion-justify-content-between">
                   <ion-button
                 fill="clear"
-                color="success"
+                color="secondary"
                 size="small"
                 @click="voltarHome()"
                 ><ion-icon

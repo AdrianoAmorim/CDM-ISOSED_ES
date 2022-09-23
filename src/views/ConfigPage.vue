@@ -33,6 +33,7 @@
                 <ion-item mode="md">
                   <ion-label position="floating">Nova Congregação: </ion-label>
                   <ion-input
+                    v-model="congregacao.nome"
                     style="font-weight: bold"
                     color="secondary"
                   ></ion-input>
@@ -41,7 +42,8 @@
 
               <ion-col size="2">
                 <ion-row class="ion-justify-content-end">
-                <ion-button color="secondary" fill="clear" size="large">
+                <ion-button color="secondary" fill="clear" size="large" 
+                  @click="setCongregacao(this.congregacao)">
                   <ion-icon
                     slot="icon-only"
                     class="iconButtonEdit"
@@ -51,12 +53,14 @@
               </ion-col>
             </ion-row>
           </ion-col>
+
            <ion-col size="12" class="ion-align-items-center">
             <ion-row class="ion-justify-content-between">
               <ion-col size="9">
                 <ion-item mode="md">
                   <ion-label position="floating">Novo Cargo: </ion-label>
                   <ion-input
+                    v-model="cargo.nome"
                     style="font-weight: bold"
                     color="secondary"
                   ></ion-input>
@@ -65,7 +69,8 @@
 
               <ion-col size="2">
                 <ion-row class="ion-justify-content-end">
-                <ion-button color="secondary" fill="clear" size="large">
+                <ion-button color="secondary" fill="clear" size="large" 
+                  @click="setCargo(this.cargo)">
                   <ion-icon
                     slot="icon-only"
                     class="iconButtonEdit"
@@ -104,7 +109,7 @@
 
 <script>
 import { defineComponent } from "vue";
-//import axios from "axios";
+import axios from "axios";
 import { arrowBackCircle,create,save,business,ribbon } from "ionicons/icons";
 import {
   IonPage,
@@ -139,13 +144,53 @@ export default defineComponent({
   },
   data() {
     return {
+       urlServer: "https://isosed-server.herokuapp.com",
+      // urlServer: "http://192.168.18.4:4041",
       arrowBackCircle,
       create,
       business,
       save,
-      ribbon
+      ribbon,
+      cargo:{
+        nome: null
+      },
+      congregacao:{
+        nome: null
+      }
     };
   },
+  methods:{
+    async setCongregacao(congregacao){
+      try {
+         const response = await axios.post(`${this.urlServer}/cadCongregacao`,congregacao)
+         
+            if(response.data.id > 0){
+              this.congregacao.nome = null;
+            }else{
+              alert(response);
+              console.log(response)
+            }
+      } catch (e) {
+        console.log(e)
+      }
+
+    },
+    async setCargo(cargo){
+      try {
+         const response = await axios.post(`${this.urlServer}/cadCargo`,cargo)
+         
+            if(response.data.id > 0){
+              this.cargo.nome = null;
+            }else{
+              alert(response);
+              console.log(response)
+            }
+      } catch (e) {
+        console.log(e)
+      }
+
+    }
+  }
 });
 </script>
 
