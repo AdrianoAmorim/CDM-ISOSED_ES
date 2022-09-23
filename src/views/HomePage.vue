@@ -39,7 +39,17 @@ a barra de Ferramentas e a lista de TODOS OS membros cadastrados -->
 
           <ion-row>
             <ion-col class="ion-align-items-center" size="12">
-              <ion-row class="ion-justify-content-end">
+              <ion-row class="ion-justify-content-between">
+                  <ion-button
+                fill="clear"
+                color="success"
+                size="small"
+                @click="voltarHome()"
+                ><ion-icon
+                  class="iconToolbar"
+                  :icon="home"
+              /></ion-button>
+
               <ion-button
                 fill="clear"
                 color="success"
@@ -71,7 +81,7 @@ a barra de Ferramentas e a lista de TODOS OS membros cadastrados -->
                 ><ion-icon
                   slot="icon-only"
                   class="iconToolbar"
-                  :icon="construct"
+                  :icon="settings"
               /></ion-button>
 
               </ion-row>
@@ -162,7 +172,7 @@ import { defineComponent } from "vue";
 import moment from "moment";
 import ModalViewMembro from "@/components/ModalViewMembro.vue";
 import axios from "axios";
-import { searchCircle, personAdd, create,construct,newspaper} from "ionicons/icons";
+import { searchCircle, personAdd, create,settings,newspaper,home} from "ionicons/icons";
 import {
   IonImg,
   alertController,
@@ -213,7 +223,8 @@ export default defineComponent({
       searchCircle,
       personAdd,
       create,
-      construct,
+      settings,
+      home,
       newspaper,
       listaMembros: null,
       resultBusca: "",
@@ -277,6 +288,11 @@ export default defineComponent({
       } else {
         this.ativarBtnBuscar = true;
       }
+    },
+    voltarHome(){
+      this.loader = true;
+      this.getMembros();
+
     },
     //BUSCAR O MEMBRO SELECIONADO PRA EXIBIR AS INFORMAÇÕES NO MODAL
     async getMembroSelecionado(id) {

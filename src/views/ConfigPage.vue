@@ -85,12 +85,14 @@
 
         <ion-row class="ion-justify-content-center">
           <ion-col class="ion-align-items-center" size="12">
-            <ion-button color="secondary"  expand="block">
+            <ion-button color="secondary"  expand="block" size="large">
+              <ion-icon slot="start" :icon="business" />
                 Congregações
                 </ion-button>
           </ion-col>
            <ion-col class="ion-align-items-center" size="12">
-            <ion-button color="secondary"  expand="block">
+            <ion-button color="secondary"  expand="block" size="large">
+              <ion-icon slot="start" :icon="ribbon"/>
                 Cargos
           </ion-button>
           </ion-col>
@@ -103,7 +105,7 @@
 <script>
 import { defineComponent } from "vue";
 //import axios from "axios";
-import { arrowBackCircle,create,save } from "ionicons/icons";
+import { arrowBackCircle,create,save,business,ribbon } from "ionicons/icons";
 import {
   IonPage,
   IonHeader,
@@ -139,7 +141,9 @@ export default defineComponent({
     return {
       arrowBackCircle,
       create,
-      save
+      business,
+      save,
+      ribbon
     };
   },
 });
