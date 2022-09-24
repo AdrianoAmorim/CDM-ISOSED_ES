@@ -21,9 +21,9 @@
     <ion-content>
       <ion-grid>
         <ion-row class="ion-justify-content-center">
-        <ion-label class="titlePageConfig">
-          Cadastrar novas informações
-        </ion-label>
+          <ion-label class="titlePageConfig">
+            Cadastrar novas informações
+          </ion-label>
         </ion-row>
 
         <ion-row class="ion-justify-content-start borderModalViewMembro">
@@ -38,23 +38,36 @@
                     color="secondary"
                   ></ion-input>
                 </ion-item>
+                <ion-label
+                  v-show="ativarAvisosSistemaA"
+                  class="tagAvisosSistema"
+                >
+                  {{ tagAvisosSistema }}
+                </ion-label>
               </ion-col>
 
-              <ion-col size="2">
-                <ion-row class="ion-justify-content-end">
-                <ion-button color="secondary" fill="clear" size="large" 
-                  @click="setCongregacao(this.congregacao)">
-                  <ion-icon
-                    slot="icon-only"
-                    class="iconButtonEdit"
-                    :icon="save"/>
-                </ion-button>
+              <ion-col size="2" >
+                <ion-row class="ion-justify-content-end ion-align-items-center">
+                  <ion-button
+                  v-if="!loaderA"
+                    color="secondary"
+                    fill="clear"
+                    size="large"
+                    @click="setCongregacao(this.congregacao)"
+                  >
+                    <ion-icon
+                      slot="icon-only"
+                      class="iconButtonEdit"
+                      :icon="save"
+                    />
+                  </ion-button>
+                  <ion-progress-bar v-else type="indeterminate" class="loader" color="warning"> </ion-progress-bar>
                 </ion-row>
               </ion-col>
             </ion-row>
           </ion-col>
 
-           <ion-col size="12" class="ion-align-items-center">
+          <ion-col size="12" class="ion-align-items-center">
             <ion-row class="ion-justify-content-between">
               <ion-col size="9">
                 <ion-item mode="md">
@@ -65,17 +78,30 @@
                     color="secondary"
                   ></ion-input>
                 </ion-item>
+                <ion-label
+                  v-show="ativarAvisosSistemaB"
+                  class="tagAvisosSistema"
+                >
+                  {{ tagAvisosSistema }}
+                </ion-label>
               </ion-col>
 
               <ion-col size="2">
                 <ion-row class="ion-justify-content-end">
-                <ion-button color="secondary" fill="clear" size="large" 
-                  @click="setCargo(this.cargo)">
-                  <ion-icon
-                    slot="icon-only"
-                    class="iconButtonEdit"
-                    :icon="save"/>
-                </ion-button>
+                  <ion-button
+                  v-if="!loaderB"
+                    color="secondary"
+                    fill="clear"
+                    size="large"
+                    @click="setCargo(this.cargo)"
+                  >
+                    <ion-icon
+                      slot="icon-only"
+                      class="iconButtonEdit"
+                      :icon="save"
+                    />
+                  </ion-button>
+                <ion-progress-bar v-else type="indeterminate" class="loader" color="warning"> </ion-progress-bar>
                 </ion-row>
               </ion-col>
             </ion-row>
@@ -83,23 +109,21 @@
         </ion-row>
 
         <ion-row class="ion-justify-content-center">
-        <ion-label class="titlePageConfig">
-          Editar Informações
-        </ion-label>
+          <ion-label class="titlePageConfig"> Editar Informações </ion-label>
         </ion-row>
 
         <ion-row class="ion-justify-content-center">
           <ion-col class="ion-align-items-center" size="12">
-            <ion-button color="secondary"  expand="block" size="large">
+            <ion-button color="secondary" expand="block" size="large">
               <ion-icon slot="start" :icon="business" />
-                Congregações
-                </ion-button>
+              Congregações
+            </ion-button>
           </ion-col>
-           <ion-col class="ion-align-items-center" size="12">
-            <ion-button color="secondary"  expand="block" size="large">
-              <ion-icon slot="start" :icon="ribbon"/>
-                Cargos
-          </ion-button>
+          <ion-col class="ion-align-items-center" size="12">
+            <ion-button color="secondary" expand="block" size="large">
+              <ion-icon slot="start" :icon="ribbon" />
+              Cargos
+            </ion-button>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -110,7 +134,13 @@
 <script>
 import { defineComponent } from "vue";
 import axios from "axios";
-import { arrowBackCircle,create,save,business,ribbon } from "ionicons/icons";
+import {
+  arrowBackCircle,
+  create,
+  save,
+  business,
+  ribbon,
+} from "ionicons/icons";
 import {
   IonPage,
   IonHeader,
@@ -123,7 +153,8 @@ import {
   IonRow,
   IonItem,
   IonInput,
-  IonLabel
+  IonLabel,
+  IonProgressBar
 } from "@ionic/vue";
 
 export default defineComponent({
@@ -141,64 +172,107 @@ export default defineComponent({
     IonItem,
     IonInput,
     IonLabel,
+    IonProgressBar
   },
   data() {
     return {
-       urlServer: "https://isosed-server.herokuapp.com",
+      urlServer: "https://isosed-server.herokuapp.com",
       // urlServer: "http://192.168.18.4:4041",
       arrowBackCircle,
       create,
       business,
       save,
       ribbon,
-      cargo:{
-        nome: null
+      loaderA: false,
+      loaderB: false,
+      ativarAvisosSistemaA: false,
+      ativarAvisosSistemaB: false,
+      tagAvisosSistema: "* Dados Incompleto!! *",
+      cargo: {
+        nome: null,
       },
-      congregacao:{
-        nome: null
-      }
+      congregacao: {
+        nome: null,
+      },
     };
   },
-  methods:{
-    async setCongregacao(congregacao){
-      try {
-         const response = await axios.post(`${this.urlServer}/cadCongregacao`,congregacao)
-         
-            if(response.data.id > 0){
-              this.congregacao.nome = null;
-            }else{
-              alert(response);
-              console.log(response)
-            }
-      } catch (e) {
-        console.log(e)
-      }
-
+  methods: {
+    desabilitarVshow(lblAviso) {
+      lblAviso = false;
+      console.log(lblAviso);
     },
-    async setCargo(cargo){
-      try {
-         const response = await axios.post(`${this.urlServer}/cadCargo`,cargo)
-         
-            if(response.data.id > 0){
-              this.cargo.nome = null;
-            }else{
-              alert(response);
-              console.log(response)
-            }
-      } catch (e) {
-        console.log(e)
+    validarCampo(input) {
+      if (input == null) {
+        return false;
+      } else {
+        return true;
       }
+    },
 
-    }
-  }
+    async setCongregacao(congregacao) {
+      const validar = this.validarCampo(congregacao.nome);
+      if (validar) {
+        try {
+          this.loaderA = true;
+          const response = await axios.post(
+            `${this.urlServer}/cadCongregacao`,
+            congregacao
+          );
+
+          if (response.data.id > 0) {
+            this.congregacao.nome = null;
+            this.loaderA = false;
+          } else {
+            alert(response.data.msg);
+          }
+        } catch (e) {
+          console.log(e);
+        }
+      } else {
+        this.ativarAvisosSistemaA = true;
+      }
+    },
+
+    async setCargo(cargo) {
+      const validar = this.validarCampo(cargo.nome);
+
+      if (validar) {
+        try {
+          this.loaderB = true
+          const response = await axios.post(
+            `${this.urlServer}/cadCargo`,
+            cargo
+          );
+
+          if (response.data.id > 0) {
+            this.cargo.nome = null;
+            this.loaderB=false;
+          } else {
+            alert(response);
+            console.log(response);
+          }
+        } catch (e) {
+          console.log(e);
+        }
+      } else {
+        this.ativarAvisosSistemaB = true;
+      }
+    },
+  },
 });
 </script>
 
 <style>
-.titlePageConfig{
+.loader{
+  color: #eeff00f6;
+}
+.tagAvisosSistema {
+  color: red;
+}
+.titlePageConfig {
   font-size: 22px;
   padding: 10px;
-  color:darkslategrey
+  color: darkslategrey;
 }
 ion-label {
   overflow: visible;
