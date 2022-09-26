@@ -4,7 +4,7 @@
     <ion-toolbar color="primary">
       <ion-title>Visualizar</ion-title>
 
-      <ion-button @click="confirm" color="success" slot="end" fill="clear">
+      <ion-button @click="confirm()" color="success" slot="end" fill="clear">
         <ion-icon
           slot="icon-only"
           class="iconToolbar"
@@ -18,7 +18,7 @@
     <ion-grid>
       <ion-row
         style="margin-bottom: 5px"
-        class="borderModalViewMembro ion-justify-content-start ion-align-items-center">
+        class="borderModalView ion-justify-content-start ion-align-items-center">
         <ion-col size="3">
           <ion-avatar class="avatarFoto avatarViewMembro">
             <ion-img
@@ -59,7 +59,7 @@
 
       <ion-row
         class="
-          borderModalViewMembro
+          borderModalView
           ion-justify-content-start ion-align-items-center
         "
       >

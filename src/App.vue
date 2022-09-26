@@ -28,7 +28,7 @@ export default defineComponent({
 </script>
 
 <style>
-ion-modal.modalViewMembro::part(content){
+ion-modal.modalView::part(content){
  --height: 80%;
     position: absolute; 
     top: 10%;
@@ -36,28 +36,28 @@ ion-modal.modalViewMembro::part(content){
     display: block;
     border-radius: 10px;
 }
-.borderModalViewMembro{
+.borderModalView{
     border: 2px solid #427aa1;
     border-radius: 10px;
 }
-.modalViewMembro span{
+.modalView span{
   color: #427aa1 !important;
   overflow: visible;
   font-weight: bold;
   font-size: 14px !important;
 }
-.modalViewMembro ion-label{
+.modalView ion-label{
    overflow: visible !important;
    font-size: 18px !important;
 }
-.modalViewMembro #lblNome{
+.modalView #lblNome{
   font-weight: bold;
 }
-.modalViewMembro #lblTel{
+.modalView #lblTel{
   font-size: 16px !important;
   font-weight: bold;
 }
-.modalViewMembro #lblCargo{
+.modalView #lblCargo{
   font-weight:bold;
   color: #eb445a;
   font-size: 16px !important; 

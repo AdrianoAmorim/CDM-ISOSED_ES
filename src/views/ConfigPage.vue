@@ -21,106 +21,14 @@
     <ion-content>
       <ion-grid>
         <ion-row class="ion-justify-content-center">
-          <ion-label class="titlePageConfig">
-            Cadastrar novas informações
-          </ion-label>
-        </ion-row>
-
-        <ion-row class="ion-justify-content-start borderModalViewMembro">
-          <ion-col size="12" class="ion-align-items-center">
-            <ion-row class="ion-justify-content-between">
-              <ion-col size="9">
-                <ion-item mode="md">
-                  <ion-label position="floating">Nova Congregação: </ion-label>
-                  <ion-input
-                    v-model="congregacao.nome"
-                    style="font-weight: bold"
-                    color="secondary"
-                  ></ion-input>
-                </ion-item>
-                <ion-label
-                  v-show="ativarAvisosSistemaA"
-                  class="tagAvisosSistema"
-                >
-                  {{ tagAvisosSistema }}
-                </ion-label>
-              </ion-col>
-
-              <ion-col size="2" >
-                <ion-row class="ion-justify-content-end ion-align-items-center">
-                  <ion-button
-                  v-if="!loaderA"
-                    color="secondary"
-                    fill="clear"
-                    size="large"
-                    @click="setCongregacao(this.congregacao)"
-                  >
-                    <ion-icon
-                      slot="icon-only"
-                      class="iconButtonEdit"
-                      :icon="save"
-                    />
-                  </ion-button>
-                  <ion-progress-bar v-else type="indeterminate" class="loader" color="warning"> </ion-progress-bar>
-                </ion-row>
-              </ion-col>
-            </ion-row>
-          </ion-col>
-
-          <ion-col size="12" class="ion-align-items-center">
-            <ion-row class="ion-justify-content-between">
-              <ion-col size="9">
-                <ion-item mode="md">
-                  <ion-label position="floating">Novo Cargo: </ion-label>
-                  <ion-input
-                    v-model="cargo.nome"
-                    style="font-weight: bold"
-                    color="secondary"
-                  ></ion-input>
-                </ion-item>
-                <ion-label
-                  v-show="ativarAvisosSistemaB"
-                  class="tagAvisosSistema"
-                >
-                  {{ tagAvisosSistema }}
-                </ion-label>
-              </ion-col>
-
-              <ion-col size="2">
-                <ion-row class="ion-justify-content-end">
-                  <ion-button
-                  v-if="!loaderB"
-                    color="secondary"
-                    fill="clear"
-                    size="large"
-                    @click="setCargo(this.cargo)"
-                  >
-                    <ion-icon
-                      slot="icon-only"
-                      class="iconButtonEdit"
-                      :icon="save"
-                    />
-                  </ion-button>
-                <ion-progress-bar v-else type="indeterminate" class="loader" color="warning"> </ion-progress-bar>
-                </ion-row>
-              </ion-col>
-            </ion-row>
-          </ion-col>
-        </ion-row>
-
-        <ion-row class="ion-justify-content-center">
-          <ion-label class="titlePageConfig"> Editar Informações </ion-label>
-        </ion-row>
-
-        <ion-row class="ion-justify-content-center">
           <ion-col class="ion-align-items-center" size="12">
-            <ion-button color="secondary" expand="block" size="large">
+            <ion-button color="secondary" expand="block" size="large" @click="openModal('congregacoes')">
               <ion-icon slot="start" :icon="business" />
               Congregações
             </ion-button>
           </ion-col>
           <ion-col class="ion-align-items-center" size="12">
-            <ion-button color="secondary" expand="block" size="large">
+            <ion-button color="secondary" expand="block" size="large" @click="openModal('cargos')">
               <ion-icon slot="start" :icon="ribbon" />
               Cargos
             </ion-button>
@@ -134,13 +42,8 @@
 <script>
 import { defineComponent } from "vue";
 import axios from "axios";
-import {
-  arrowBackCircle,
-  create,
-  save,
-  business,
-  ribbon,
-} from "ionicons/icons";
+import ModalConfig from "@/components/ModalConfig.vue";
+import { arrowBackCircle, create, business, ribbon } from "ionicons/icons";
 import {
   IonPage,
   IonHeader,
@@ -151,10 +54,7 @@ import {
   IonGrid,
   IonCol,
   IonRow,
-  IonItem,
-  IonInput,
-  IonLabel,
-  IonProgressBar
+  modalController,
 } from "@ionic/vue";
 
 export default defineComponent({
@@ -169,10 +69,6 @@ export default defineComponent({
     IonGrid,
     IonCol,
     IonRow,
-    IonItem,
-    IonInput,
-    IonLabel,
-    IonProgressBar
   },
   data() {
     return {
@@ -181,101 +77,75 @@ export default defineComponent({
       arrowBackCircle,
       create,
       business,
-      save,
       ribbon,
-      loaderA: false,
-      loaderB: false,
-      ativarAvisosSistemaA: false,
-      ativarAvisosSistemaB: false,
-      tagAvisosSistema: "* Dados Incompleto!! *",
-      cargo: {
-        nome: null,
-      },
-      congregacao: {
-        nome: null,
-      },
+      nomePage: null,
+      listaObj: null,
+      titleConfig:null
     };
   },
   methods: {
-    desabilitarVshow(lblAviso) {
-      lblAviso = false;
-      console.log(lblAviso);
-    },
-    validarCampo(input) {
-      if (input == null) {
-        return false;
-      } else {
-        return true;
+    //ABRIR O MODAL.. PARA EXIBIR OS DADOS DO MEMBRO SELECIONADO
+    async openModal(nomePg) {
+      var returnLista = null;
+      
+      if (nomePg == "congregacoes") {
+        returnLista = await this.getCongregacoes();
+        this.titleConfig = "Adicionar Nova Congregação:"
+
+      } else if (nomePg == "cargos") {
+        returnLista = await this.getCargos();
+        this.titleConfig = "Adicionar Novo Cargo:"
       }
-    },
-
-    async setCongregacao(congregacao) {
-      const validar = this.validarCampo(congregacao.nome);
-      if (validar) {
-        try {
-          this.loaderA = true;
-          const response = await axios.post(
-            `${this.urlServer}/cadCongregacao`,
-            congregacao
-          );
-
-          if (response.data.id > 0) {
-            this.congregacao.nome = null;
-            this.loaderA = false;
-          } else {
-            alert(response.data.msg);
-          }
-        } catch (e) {
-          console.log(e);
+      if (returnLista != null) {
+        const modal = await modalController.create({
+          component: ModalConfig,
+          componentProps: { nomePg: nomePg, listaObj: returnLista,titleAdd: this.titleConfig },
+          cssClass: "modalView",
+        });
+        modal.present();
+        const { role } = await modal.onWillDismiss();
+        if (role === "confirm") {
+          console.log("fechou");
         }
-      } else {
-        this.ativarAvisosSistemaA = true;
       }
     },
 
-    async setCargo(cargo) {
-      const validar = this.validarCampo(cargo.nome);
-
-      if (validar) {
-        try {
-          this.loaderB = true
-          const response = await axios.post(
-            `${this.urlServer}/cadCargo`,
-            cargo
-          );
-
-          if (response.data.id > 0) {
-            this.cargo.nome = null;
-            this.loaderB=false;
-          } else {
-            alert(response);
-            console.log(response);
-          }
-        } catch (e) {
-          console.log(e);
+    async getCongregacoes() {
+      try {
+        const response = await axios.get(`${this.urlServer}/congregacoes`);
+        if (response.data.length > 0) {
+          return response.data;
+        } else if (response.data.length == 0) {
+          alert("Nenhum Cargo Cadastrado!");
+          return null;
+        } else if (response.data.error == true) {
+          alert("Erro Interno no Servidor: " + response.data.msg);
+          return null;
         }
-      } else {
-        this.ativarAvisosSistemaB = true;
+      } catch (e) {
+        alert("Houve Um erro ao Carrega os Cargos!! " + e.message);
       }
     },
+    async getCargos() {
+        try{
+          const response = await axios.get(`${this.urlServer}/cargos`);
+            if(response.data.length > 0){
+              return response.data;
+            }else if(response.data.length == 0){
+              alert("Nenhum Cargo Cadastrado!")
+              return null
+            }else if(response.data.error == true){
+              alert("Erro Interno no Servidor: "+ response.data.msg)
+              return null
+            }
+            }
+          catch(e){
+              alert("Houve Um erro ao Carrega os Cargos!! "+ e.message)
+          }
+    }
   },
 });
 </script>
 
 <style>
-.loader{
-  color: #eeff00f6;
-}
-.tagAvisosSistema {
-  color: red;
-}
-.titlePageConfig {
-  font-size: 22px;
-  padding: 10px;
-  color: darkslategrey;
-}
-ion-label {
-  overflow: visible;
-  font-weight: bold;
-}
 </style>

@@ -228,7 +228,7 @@ export default defineComponent({
       newspaper,
       listaMembros: null,
       resultBusca: "",
-      statusModal: false,
+     
       idMembro: null,
     };
   },
@@ -248,7 +248,7 @@ export default defineComponent({
         const modal = await modalController.create({
           component: ModalViewMembro,
           componentProps: { idMembro: id, membro: returnMembro },
-          cssClass: "modalViewMembro",
+          cssClass: "modalView",
         });
         modal.present();
         const { role } = await modal.onWillDismiss();
