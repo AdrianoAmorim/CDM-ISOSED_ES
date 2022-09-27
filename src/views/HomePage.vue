@@ -20,8 +20,6 @@ a barra de Ferramentas e a lista de TODOS OS membros cadastrados -->
                 />
               </ion-row>
             </ion-col>
-
-          
           </ion-row>
 
           <ion-row>
