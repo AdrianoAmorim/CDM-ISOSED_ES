@@ -6,10 +6,10 @@ a barra de Ferramentas e a lista de TODOS OS membros cadastrados -->
       <ion-toolbar mode="ios">
         <ion-grid>
           <ion-row class="ion-align-items-center">
-            <ion-col size="10">
+            <ion-col size="12">
               <ion-row class="ion-justify-content-center">
                 <ion-searchbar
-                  @ionChange="statusBtnBuscar()"
+                  @ionChange="buscarMembros(resultBusca)"
                   color="light"
                   show-cancel-button="never"
                   placeholder="Buscar Membro"
@@ -19,22 +19,7 @@ a barra de Ferramentas e a lista de TODOS OS membros cadastrados -->
               </ion-row>
             </ion-col>
 
-            <ion-col size="2">
-              <ion-row class="ion-justify-content-end">
-                <ion-button
-                  @click="buscarMembros(resultBusca)"
-                  :disabled="ativarBtnBuscar"
-                  fill="clear"
-                  size="small"
-                  color="primary"
-                >
-                  <ion-icon
-                    slot="icon-only"
-                    class="iconToolbar"
-                    :icon="searchCircle"
-                /></ion-button>
-              </ion-row>
-            </ion-col>
+          
           </ion-row>
 
           <ion-row>
@@ -334,7 +319,7 @@ export default defineComponent({
 
         if (response.data.length > 0) {
           this.loader = false;
-          this.resultBusca = "";
+          //this.resultBusca = "";
           this.listaMembros = response.data;
         } else if (response.data.length == 0) {
           this.alertInfoSistema("AVISO!!", "", "Membro não Encontrado!!");
