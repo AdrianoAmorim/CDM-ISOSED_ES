@@ -10,6 +10,8 @@ a barra de Ferramentas e a lista de TODOS OS membros cadastrados -->
               <ion-row class="ion-justify-content-center">
                 <ion-searchbar
                   @ionChange="buscarMembros(resultBusca)"
+                  :debounce="1000"
+                  animated="true"
                   color="light"
                   show-cancel-button="never"
                   placeholder="Buscar Membro"

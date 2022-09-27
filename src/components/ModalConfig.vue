@@ -1,7 +1,7 @@
 <template>
   <ion-header>
     <ion-toolbar color="primary">
-      <ion-title>Visualizar</ion-title>
+      <ion-title>{{nomePg}}</ion-title>
 
       <ion-button @click="confirm()" color="success" slot="end" fill="clear">
         <ion-icon
