@@ -22,13 +22,13 @@
       <ion-grid>
         <ion-row class="ion-justify-content-center">
           <ion-col class="ion-align-items-center" size="12">
-            <ion-button color="secondary" expand="block" size="large" @click="openModal('congregacoes')">
+            <ion-button color="secondary" expand="block" size="large" @click="openModal('CONGREGAÇÕES')">
               <ion-icon slot="start" :icon="business" />
               Congregações
             </ion-button>
           </ion-col>
           <ion-col class="ion-align-items-center" size="12">
-            <ion-button color="secondary" expand="block" size="large" @click="openModal('cargos')">
+            <ion-button color="secondary" expand="block" size="large" @click="openModal('CARGOS')">
               <ion-icon slot="start" :icon="ribbon" />
               Cargos
             </ion-button>
@@ -78,9 +78,8 @@ export default defineComponent({
       create,
       business,
       ribbon,
-      nomePage: null,
       listaObj: null,
-      titleConfig:null
+      labelInpConfig:null
     };
   },
   methods: {
@@ -88,18 +87,18 @@ export default defineComponent({
     async openModal(nomePg) {
       var returnLista = null;
       
-      if (nomePg == "congregacoes") {
+      if (nomePg == "CONGREGAÇÕES") {
         returnLista = await this.getCongregacoes();
-        this.titleConfig = "Adicionar Nova Congregação:"
+        this.labelInpConfig = "Adicionar Congregação:"
 
-      } else if (nomePg == "cargos") {
+      } else if (nomePg == "CARGOS") {
         returnLista = await this.getCargos();
-        this.titleConfig = "Adicionar Novo Cargo:"
+        this.labelInpConfig = "Adicionar Cargo:"
       }
       if (returnLista != null) {
         const modal = await modalController.create({
           component: ModalConfig,
-          componentProps: { nomePg: nomePg, listaObj: returnLista,titleAdd: this.titleConfig },
+          componentProps: { nomePg: nomePg, listaObj: returnLista,labelInpConfig: this.labelInpConfig },
           cssClass: "modalView",
         });
         modal.present();
