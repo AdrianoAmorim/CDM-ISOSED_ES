@@ -150,10 +150,12 @@ export default defineComponent({
       return modalController.dismiss(null, "confirm");
     },
    async validarCampoAddItem(nomeItem,nomePage){
+    var response = null;
+
       if(nomeItem.nome != ""){
         if(nomePage =="CONGREGAÇÕES"){
           try{
-         const response = await this.cadItemCongregacao(nomeItem);
+         response = await this.cadItemCongregacao(nomeItem);
             if(response.data.id > 0 ){
               alert("cadastro realizado com Sucesso!");
               nomeItem.nome = "";
@@ -162,18 +164,36 @@ export default defineComponent({
             }
           }
          catch(e){
-            alert("Erro: " + e)
+            alert("Erro:congregacao " + e)
          }
         } else{
-          console.log(this.nomeObj)
+         try{
+          response = await this.cadItemCargos(nomeItem);
+            if(response.data.id > 0 ){
+              alert("cadastro realizado com Sucesso!");
+              nomeItem.nome = "";
+            }else{
+              alert("Houve um erro estamos tratando!!")
+            }
+          }
+         catch(e){
+            alert("Erro:cargo " + e)
+         }
         }
       }else{
         alert("campo vazio")
       }
     },
+
     async cadItemCongregacao(nomeItem){
       const response = await axios.post(`${this.urlServer}/cadCongregacao`,nomeItem);
-      console.log(response)
+      return response;
+    },
+
+
+     async cadItemCargos(nomeItem){
+      const response = await axios.post(`${this.urlServer}/cadCargo`,nomeItem);
+      return response;
     }
   },
   props: {
