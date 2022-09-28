@@ -14,19 +14,20 @@
 
   <ion-content>
     <ion-grid>
-      <ion-row class="ion-justify-content-center borderModalView">
+      <ion-row class="ion-justify-content-center">
         <ion-col size="12" class="ion-align-items-center">
           <ion-row class="ion-justify-content-center">
             <ion-col size="10">
               <ion-item mode="md">
-                <ion-label position="floating">{{ labelInpConfig }} </ion-label>
+                <ion-label position="floating">{{'Adicionar ' + labelInpConfig }} </ion-label>
                 <ion-input color="secondary"></ion-input>
               </ion-item>
             </ion-col>
 
             <ion-col size="2" class="ion-align-self-center">
               <ion-button color="secondary" fill="clear">
-                <ion-icon slot="icon-only" :icon="addCircle" />
+                <ion-icon slot="icon-only" :icon="addCircle" 
+                class="iconToolbar" />
               </ion-button>
             </ion-col>
           </ion-row>
@@ -40,7 +41,7 @@
               :debounce="1000"
               animated="true"
               show-cancel-button="never"
-              placeholder="Buscar Congregação"
+              :placeholder="'Buscar '+ labelInpConfig"
               class="searchBarConfig"
             />
         </ion-col>
@@ -61,7 +62,7 @@
         <ion-col size="12">
           <ion-list lines="none">
             <ion-item v-for="Obj in listaObj" :key="Obj.id" mode="ios">
-              
+
               <ion-input color="secondary" placeholder="Carregando" :value="Obj.nome"></ion-input>
 
               <ion-button size="small" fill="clear" slot="end">
@@ -177,7 +178,7 @@ ion-list ion-input{
   font-size: 20px !important;
   font-weight: bold;
 }
-.borderModalView ion-icon {
+ion-icon {
   font-size: 30px;
 }
 </style>

@@ -89,11 +89,11 @@ export default defineComponent({
       
       if (nomePg == "CONGREGAÇÕES") {
         returnLista = await this.getCongregacoes();
-        this.labelInpConfig = "Adicionar Congregação:"
+        this.labelInpConfig = "Congregação:"
 
       } else if (nomePg == "CARGOS") {
         returnLista = await this.getCargos();
-        this.labelInpConfig = "Adicionar Cargo:"
+        this.labelInpConfig = "Cargo:"
       }
       if (returnLista != null) {
         const modal = await modalController.create({
