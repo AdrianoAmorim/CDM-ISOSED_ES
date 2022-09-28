@@ -20,12 +20,12 @@
             <ion-col size="10">
               <ion-item mode="md">
                 <ion-label position="floating">{{'Adicionar ' + labelInpConfig }} </ion-label>
-                <ion-input color="secondary"></ion-input>
+                <ion-input color="secondary" v-model="item.nome"></ion-input>
               </ion-item>
             </ion-col>
 
             <ion-col size="2" class="ion-align-self-center">
-              <ion-button color="secondary" fill="clear">
+              <ion-button color="secondary" fill="clear" @click="validarCampoAddItem(item,nomePg)">
                 <ion-icon slot="icon-only" :icon="addCircle" 
                 class="iconToolbar" />
               </ion-button>
@@ -93,7 +93,7 @@
 
 <script>
 import { defineComponent } from "vue";
-//import axios from "axios";
+import axios from "axios";
 import { arrowBackCircle, addCircle, save, closeCircle } from "ionicons/icons";
 import {
   IonItem,
@@ -133,11 +133,15 @@ export default defineComponent({
   },
   data() {
     return {
+      //urlServer: "https://isosed-server.herokuapp.com",
+      urlServer: "http://192.168.18.4:4041",
       arrowBackCircle,
       addCircle,
       save,
       closeCircle,
-      nomeObj: null,
+      item: {
+        nome:""
+      },
       
     };
   },
@@ -145,9 +149,32 @@ export default defineComponent({
     confirm() {
       return modalController.dismiss(null, "confirm");
     },
-    salvarAlteracaoConfig(){
-        
+   async validarCampoAddItem(nomeItem,nomePage){
+      if(nomeItem.nome != ""){
+        if(nomePage =="CONGREGAÇÕES"){
+          try{
+         const response = await this.cadItemCongregacao(nomeItem);
+            if(response.data.id > 0 ){
+              alert("cadastro realizado com Sucesso!");
+              nomeItem.nome = "";
+            }else{
+              alert("Houve um erro estamos tratando!!")
+            }
+          }
+         catch(e){
+            alert("Erro: " + e)
+         }
+        } else{
+          console.log(this.nomeObj)
+        }
+      }else{
+        alert("campo vazio")
+      }
     },
+    async cadItemCongregacao(nomeItem){
+      const response = await axios.post(`${this.urlServer}/cadCongregacao`,nomeItem);
+      console.log(response)
+    }
   },
   props: {
     nomePg: null,
