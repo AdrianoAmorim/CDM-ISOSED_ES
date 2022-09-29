@@ -18,7 +18,6 @@
       </ion-toolbar>
     </ion-header>
 
-
     <ion-content>
       <ion-grid>
         <ion-row class="ion-justify-content-center">
@@ -27,7 +26,7 @@
               <ion-col size="10">
                 <ion-item mode="md">
                   <ion-label position="floating"
-                    >Adicionar {{lblInput}}
+                    >Adicionar {{ lblInput }}
                   </ion-label>
                   <ion-input color="secondary" v-model="item.nome"></ion-input>
                 </ion-item>
@@ -53,6 +52,8 @@
         <ion-row class="ion-justify-content-center">
           <ion-col size="12" class="ion-align-items-center">
             <ion-searchbar
+              @ionChange="buscarItem(resultBusca)"
+              v-model="resultBusca"
               mode="ios"
               :debounce="1000"
               animated="true"
@@ -75,11 +76,7 @@
 
           <ion-col size="12">
             <ion-list lines="none">
-              <ion-item
-                v-for="Obj in listaItens"
-                :key="Obj.id"
-                mode="ios"
-              >
+              <ion-item v-for="Obj in listaItens" :key="Obj.id" mode="ios">
                 <ion-input
                   color="secondary"
                   placeholder="Carregando"
@@ -142,8 +139,8 @@ export default defineComponent({
     IonLabel,
     IonInput,
     IonButton,
-     IonHeader,
-  IonToolbar,
+    IonHeader,
+    IonToolbar,
     IonContent,
     IonIcon,
     IonGrid,
@@ -153,74 +150,101 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer: "https://isosed-server.herokuapp.com",
-      //urlServer: "http://192.168.18.4:4041",
+      //urlServer: "https://isosed-server.herokuapp.com",
+      urlServer: "http://192.168.18.4:4041",
       arrowBackCircle,
       addCircle,
       save,
       closeCircle,
       lblInput: "",
-      listaItens:null,
+      listaItens: null,
       item: {
         nome: "",
       },
+      resultBusca: "",
     };
   },
   methods: {
-
-    validarCadastroItem(nomeItem){
-      if(nomeItem.nome != ""){
-        if(this.nomePg == "congregacoes"){
-          this.cadItemCongregacao(nomeItem);
-        }else{
-          this.cadItemCargo(nomeItem)
+    async buscarItem(resultBusca) {
+      if (this.nomePg == "congregacoes") {
+        const response = await axios.get(
+          `${this.urlServer}/buscarCongregacoes?nome=${resultBusca}`
+        );
+        if (response.data.length > 0) {
+          this.listaItens = response.data;
+        } else {
+          alert("nao Encontramos a busca!!");
         }
-      }else{
-        alert("Campo vazio!!")
+        console.log(response);
+      } else {
+        const response = await axios.get(
+          `${this.urlServer}/buscarCargos?nome=${resultBusca}`
+        );
+        if (response.data.length > 0) {
+          this.listaItens = response.data;
+        } else {
+          alert("nao Encontramos a busca!!");
+        }
+        console.log(response);
+      }
+    },
+    
+    validarCadastroItem(nomeItem) {
+      if (nomeItem.nome != "") {
+        if (this.nomePg == "congregacoes") {
+          this.cadItemCongregacao(nomeItem);
+        } else {
+          this.cadItemCargo(nomeItem);
+        }
+      } else {
+        alert("Campo vazio!!");
       }
     },
 
-
     async cadItemCongregacao(nomeItem) {
-      try{
-      const response = await axios.post(`${this.urlServer}/cadCongregacao`,nomeItem);
-      if(response.data.id > 0 ){
-        nomeItem.nome = ""
-        this.getCongregacoes()
-        alert("Cadastro realizado com Sucesso!!")
-      }else{
-        alert("Houve Algum erro estamos tratando!!")
-      }
-      }catch(e){
-        alert(e)
+      try {
+        const response = await axios.post(
+          `${this.urlServer}/cadCongregacao`,
+          nomeItem
+        );
+        if (response.data.id > 0) {
+          nomeItem.nome = "";
+          this.getCongregacoes();
+          alert("Cadastro realizado com Sucesso!!");
+        } else {
+          alert("Houve Algum erro estamos tratando!!");
+        }
+      } catch (e) {
+        alert(e);
       }
     },
 
     async cadItemCargos(nomeItem) {
-      try{
-      const response = await axios.post(`${this.urlServer}/cadCargo`,nomeItem);
-      if(response.data.id > 0 ){
-       nomeItem.nome = ""
-        this.getCargos()
-        alert("Cadastro realizado com Sucesso!!")
-      }else{
-        alert("Houve Algum erro estamos tratando!!")
-      }
-      }catch(e){
-        alert(e)
+      try {
+        const response = await axios.post(
+          `${this.urlServer}/cadCargo`,
+          nomeItem
+        );
+        if (response.data.id > 0) {
+          nomeItem.nome = "";
+          this.getCargos();
+          alert("Cadastro realizado com Sucesso!!");
+        } else {
+          alert("Houve Algum erro estamos tratando!!");
+        }
+      } catch (e) {
+        alert(e);
       }
     },
     async getCongregacoes() {
       try {
         const response = await axios.get(`${this.urlServer}/congregacoes`);
         if (response.data.length > 0) {
-          this.listaItens = response.data
+          this.listaItens = response.data;
         } else if (response.data.length == 0) {
           alert("Nenhum Cargo Cadastrado!");
-          
         } else if (response.data.error == true) {
           alert("Erro Interno no Servidor: " + response.data.msg);
-   
         }
       } catch (e) {
         alert("Houve Um erro ao Carrega os Cargos!! " + e.message);
@@ -230,12 +254,11 @@ export default defineComponent({
       try {
         const response = await axios.get(`${this.urlServer}/cargos`);
         if (response.data.length > 0) {
-          this.listaItens = response.data
+          this.listaItens = response.data;
         } else if (response.data.length == 0) {
           alert("Nenhum Cargo Cadastrado!");
         } else if (response.data.error == true) {
           alert("Erro Interno no Servidor: " + response.data.msg);
-        
         }
       } catch (e) {
         alert("Houve Um erro ao Carrega os Cargos!! " + e.message);
@@ -245,18 +268,17 @@ export default defineComponent({
   props: {
     nomePg: String,
   },
-  beforeMount(){
-    if(this.nomePg == "congregacoes"){
-      this.lblInput = "Congregação"
-      console.log("congregacoes")
+  beforeMount() {
+    if (this.nomePg == "congregacoes") {
+      this.lblInput = "Congregação";
+      console.log("congregacoes");
       this.getCongregacoes();
-    }else{
-      console.log("cargos")
-      this.lblInput = "Cargo"
+    } else {
+      console.log("cargos");
+      this.lblInput = "Cargo";
       this.getCargos();
     }
-  }
-
+  },
 });
 </script>
 

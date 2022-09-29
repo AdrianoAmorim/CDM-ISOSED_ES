@@ -25,15 +25,6 @@ a barra de Ferramentas e a lista de TODOS OS membros cadastrados -->
           <ion-row>
             <ion-col class="ion-align-items-center" size="12">
               <ion-row class="ion-justify-content-between">
-                  <ion-button
-                fill="clear"
-                color="secondary"
-                size="small"
-                @click="voltarHome()"
-                ><ion-icon
-                  class="iconToolbar"
-                  :icon="home"
-              /></ion-button>
 
               <ion-button
                 fill="clear"
@@ -265,19 +256,6 @@ export default defineComponent({
         buttons: ["OK"],
       });
       await alert.present();
-    },
-    //PARA DEFINIR A ATIVACAO DO BOTAO BUSCAR QUANDO NAO HOUVER NADA DIGITADO NO CAMPO DE BUSCA
-    statusBtnBuscar() {
-      if (this.resultBusca != "") {
-        this.ativarBtnBuscar = false;
-      } else {
-        this.ativarBtnBuscar = true;
-      }
-    },
-    voltarHome(){
-      this.loader = true;
-      this.getMembros();
-
     },
     //BUSCAR O MEMBRO SELECIONADO PRA EXIBIR AS INFORMAÇÕES NO MODAL
     async getMembroSelecionado(id) {
