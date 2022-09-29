@@ -71,7 +71,7 @@ export default defineComponent({
   data() {
     return {
       urlServer: "https://isosed-server.herokuapp.com",
-      //urlServer: "http://192.168.18.4:4041",
+     // urlServer: "http://192.168.18.4:4041",
       arrowBackCircle,
       create,
       business,
