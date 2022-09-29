@@ -61,7 +61,7 @@
 
         <ion-col size="12">
           <ion-list lines="none">
-            <ion-item v-for="Obj in listaObj" :key="Obj.id" mode="ios">
+            <ion-item v-for="Obj in listaObjAtualizada" :key="Obj.id" mode="ios">
 
               <ion-input color="secondary" placeholder="Carregando" :value="Obj.nome"></ion-input>
 
@@ -139,6 +139,7 @@ export default defineComponent({
       addCircle,
       save,
       closeCircle,
+      listaObjAtualizada:null,
       item: {
         nome:""
       },
@@ -159,6 +160,8 @@ export default defineComponent({
             if(response.data.id > 0 ){
               alert("cadastro realizado com Sucesso!");
               nomeItem.nome = "";
+             response = await this.getCongregacoes();
+             this.listaObjAtualizada = response
             }else{
               alert("Houve um erro estamos tratando!!")
             }
@@ -194,12 +197,50 @@ export default defineComponent({
      async cadItemCargos(nomeItem){
       const response = await axios.post(`${this.urlServer}/cadCargo`,nomeItem);
       return response;
+    },
+      async getCongregacoes() {
+      try {
+        const response = await axios.get(`${this.urlServer}/congregacoes`);
+        if (response.data.length > 0) {
+          return response.data;
+        } else if (response.data.length == 0) {
+          alert("Nenhum Cargo Cadastrado!");
+          return null;
+        } else if (response.data.error == true) {
+          alert("Erro Interno no Servidor: " + response.data.msg);
+          return null;
+        }
+      } catch (e) {
+        alert("Houve Um erro ao Carrega os Cargos!! " + e.message);
+      }
+    },
+     async getCargos() {
+        try{
+          const response = await axios.get(`${this.urlServer}/cargos`);
+            if(response.data.length > 0){
+              return response.data;
+            }else if(response.data.length == 0){
+              alert("Nenhum Cargo Cadastrado!")
+              return null
+            }else if(response.data.error == true){
+              alert("Erro Interno no Servidor: "+ response.data.msg)
+              return null
+            }
+            }
+          catch(e){
+              alert("Houve Um erro ao Carrega os Cargos!! "+ e.message)
+          }
     }
   },
   props: {
     nomePg: null,
     listaObj: null,
     labelInpConfig: null,
+  },
+  watch:{
+    listaObj(){
+      console.log("dentro do watch")
+    }
   },
 });
 </script>

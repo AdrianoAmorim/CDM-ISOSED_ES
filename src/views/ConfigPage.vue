@@ -22,13 +22,13 @@
       <ion-grid>
         <ion-row class="ion-justify-content-center">
           <ion-col class="ion-align-items-center" size="12">
-            <ion-button color="secondary" expand="block" size="large" @click="openModal('CONGREGAÇÕES')">
+            <ion-button color="secondary" expand="block" size="large" @click="this.$router.push('/infoConfiguracoes/congregacoes')">
               <ion-icon slot="start" :icon="business" />
               Congregações
             </ion-button>
           </ion-col>
           <ion-col class="ion-align-items-center" size="12">
-            <ion-button color="secondary" expand="block" size="large" @click="openModal('CARGOS')">
+            <ion-button color="secondary" expand="block" size="large" @click="this.$router.push('/infoConfiguracoes/cargos')">
               <ion-icon slot="start" :icon="ribbon" />
               Cargos
             </ion-button>
@@ -42,7 +42,6 @@
 <script>
 import { defineComponent } from "vue";
 import axios from "axios";
-import ModalConfig from "@/components/ModalConfig.vue";
 import { arrowBackCircle, create, business, ribbon } from "ionicons/icons";
 import {
   IonPage,
@@ -54,7 +53,6 @@ import {
   IonGrid,
   IonCol,
   IonRow,
-  modalController,
 } from "@ionic/vue";
 
 export default defineComponent({
@@ -73,7 +71,7 @@ export default defineComponent({
   data() {
     return {
       urlServer: "https://isosed-server.herokuapp.com",
-      // urlServer: "http://192.168.18.4:4041",
+      //urlServer: "http://192.168.18.4:4041",
       arrowBackCircle,
       create,
       business,
@@ -84,7 +82,7 @@ export default defineComponent({
   },
   methods: {
     //ABRIR O MODAL.. PARA EXIBIR OS DADOS DO MEMBRO SELECIONADO
-    async openModal(nomePg) {
+   /* async openModal(nomePg) {
       var returnLista = null;
       
       if (nomePg == "CONGREGAÇÕES") {
@@ -107,7 +105,7 @@ export default defineComponent({
           console.log("fechou");
         }
       }
-    },
+    },*/
 
     async getCongregacoes() {
       try {

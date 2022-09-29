@@ -3,6 +3,7 @@ import HomePage from '../views/HomePage.vue'
 import CadMembro from '../views/CadMembro.vue'
 import EditMembro from '../views/EditMembro.vue'
 import ConfigPage from '../views/ConfigPage.vue'
+import InfoConfiguracoes from '../views/InfoConfiguracoes.vue'
 const routes = [
 
   {
@@ -24,6 +25,12 @@ const routes = [
     path:'/editar/:id',
     name:'Editar',
     component: EditMembro,
+    props: true //usado para dizer q tem prop (nao precisa usar $route.params)
+  },
+  {
+    path:'/infoConfiguracoes/:nomePg',
+    name:'InfoConfiguracoes',
+    component: InfoConfiguracoes,
     props: true //usado para dizer q tem prop (nao precisa usar $route.params)
   }
 ]
