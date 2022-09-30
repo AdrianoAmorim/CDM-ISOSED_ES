@@ -28,6 +28,10 @@ export default defineComponent({
 </script>
 
 <style>
+.tagAguardeLoader {
+  color: #427aa1;
+  margin: 15px;
+}
 ion-modal.modalView::part(content){
  --height: 80%;
     position: absolute; 

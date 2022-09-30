@@ -74,7 +74,7 @@
             </ion-row>
           </ion-col>
 
-          <ion-col size="12">
+          <ion-col size="12" v-if="!loader">
             <ion-list lines="none">
               <ion-item v-for="Obj in listaItens" :key="Obj.id" mode="ios">
                 <ion-input
@@ -103,7 +103,12 @@
               </ion-item>
             </ion-list>
           </ion-col>
+          <div v-else>
+            <ion-progress-bar type="indeterminate"> </ion-progress-bar>
+            <h3 class="tagAguardeLoader">Aguarde...</h3>
+          </div>
         </ion-row>
+        
       </ion-grid>
     </ion-content>
   </ion-page>
@@ -128,6 +133,7 @@ import {
   IonRow,
   IonCol,
   IonSearchbar,
+  IonProgressBar,
 } from "@ionic/vue";
 
 export default defineComponent({
@@ -147,6 +153,7 @@ export default defineComponent({
     IonRow,
     IonCol,
     IonSearchbar,
+    IonProgressBar,
   },
   data() {
     return {
@@ -157,6 +164,7 @@ export default defineComponent({
       save,
       closeCircle,
       lblInput: "",
+      loader: false,
       listaItens: null,
       item: {
         nome: "",
@@ -165,30 +173,38 @@ export default defineComponent({
     };
   },
   methods: {
+    //
     async buscarItem(resultBusca) {
+      this.loader = true;
       if (this.nomePg == "congregacoes") {
         const response = await axios.get(
           `${this.urlServer}/buscarCongregacoes?nome=${resultBusca}`
         );
         if (response.data.length > 0) {
           this.listaItens = response.data;
+          this.loader = false;
         } else {
-          alert("nao Encontramos a busca!!");
+          alert("Congregação não encontrada!!");
+          this.listaItems = "";
+          this.loader = false;
         }
         console.log(response);
       } else {
-        const response = await axios.get(
-          `${this.urlServer}/buscarCargos?nome=${resultBusca}`
-        );
+        const response = await axios.get(`${this.urlServer}/buscarCargos?nome=${resultBusca}`);
         if (response.data.length > 0) {
           this.listaItens = response.data;
+          console.log("valor do listar dentro do length:")
+          console.log(this.listaItens)
+          this.loader = false;
         } else {
-          alert("nao Encontramos a busca!!");
+          alert("Cargo não Encontrado!!");
+          this.listaItens = null;
+          this.loader = false;
         }
         console.log(response);
       }
     },
-    
+
     validarCadastroItem(nomeItem) {
       if (nomeItem.nome != "") {
         if (this.nomePg == "congregacoes") {
@@ -219,7 +235,7 @@ export default defineComponent({
       }
     },
 
-    async cadItemCargos(nomeItem) {
+    async cadItemCargo(nomeItem) {
       try {
         const response = await axios.post(
           `${this.urlServer}/cadCargo`,

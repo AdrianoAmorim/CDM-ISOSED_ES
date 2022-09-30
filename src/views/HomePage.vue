@@ -335,10 +335,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-#tagAguardeLoader {
-  color: #427aa1;
-  margin: 15px;
-}
+
 .iconButtonEdit {
   font-size: 36px;
   object-fit: fill;
