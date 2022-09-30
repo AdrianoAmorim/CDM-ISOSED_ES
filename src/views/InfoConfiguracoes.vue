@@ -62,7 +62,9 @@
               class="searchBarConfig"
             />
           </ion-col>
+        </ion-row>
 
+        <ion-row class="ion-justify-content-center">
           <ion-col size="6">
             <ion-row class="ion-justify-content-start">
               <ion-label id="titleConfig">Editar:</ion-label>
@@ -73,8 +75,10 @@
               <ion-label id="infoTituloEditar">Salvar - Excluir</ion-label>
             </ion-row>
           </ion-col>
+        </ion-row>
 
-          <ion-col size="12" v-if="!loader">
+        <ion-row class="ion-justify-content-center" v-if="!loader">
+          <ion-col size="12" >
             <ion-list lines="none">
               <ion-item v-for="Obj in listaItens" :key="Obj.id" mode="ios">
                 <ion-input
@@ -103,12 +107,11 @@
               </ion-item>
             </ion-list>
           </ion-col>
-          <div v-else>
-            <ion-progress-bar type="indeterminate"> </ion-progress-bar>
-            <h3 class="tagAguardeLoader">Aguarde...</h3>
-          </div>
         </ion-row>
-        
+        <div v-else>
+          <ion-progress-bar type="indeterminate"> </ion-progress-bar>
+          <h3 class="tagAguardeLoader">Aguarde...</h3>
+        </div>
       </ion-grid>
     </ion-content>
   </ion-page>
@@ -185,16 +188,16 @@ export default defineComponent({
           this.loader = false;
         } else {
           alert("Congregação não encontrada!!");
-          this.listaItems = "";
+        this.listaItens = null;
           this.loader = false;
         }
         console.log(response);
       } else {
-        const response = await axios.get(`${this.urlServer}/buscarCargos?nome=${resultBusca}`);
+        const response = await axios.get(
+          `${this.urlServer}/buscarCargos?nome=${resultBusca}`
+        );
         if (response.data.length > 0) {
           this.listaItens = response.data;
-          console.log("valor do listar dentro do length:")
-          console.log(this.listaItens)
           this.loader = false;
         } else {
           alert("Cargo não Encontrado!!");
