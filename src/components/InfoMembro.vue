@@ -321,7 +321,7 @@
     </ion-grid>
     <div v-else>
       <ion-progress-bar type="indeterminate"> </ion-progress-bar>
-      <h3 id="tagAguardeLoader">Aguarde...</h3>
+      <h3 class="tagAguardeLoader">Aguarde...</h3>
     </div>
 
     <ion-grid>

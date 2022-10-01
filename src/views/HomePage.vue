@@ -104,7 +104,7 @@ a barra de Ferramentas e a lista de TODOS OS membros cadastrados -->
                             {{ Membro.nome }}
                           </ion-label>
                           <ion-label color="danger"
-                            ><b>{{ Membro.cargo.nome }}</b></ion-label
+                            ><b>{{Membro?.cargo?.nome}}</b></ion-label
                           >
                         </ion-col>
                       </ion-row>
@@ -137,7 +137,7 @@ a barra de Ferramentas e a lista de TODOS OS membros cadastrados -->
       </ion-grid>
       <div v-else>
         <ion-progress-bar type="indeterminate"> </ion-progress-bar>
-        <h3 id="tagAguardeLoader">Aguarde...</h3>
+        <h3 class="tagAguardeLoader">Aguarde...</h3>
       </div>
     </ion-content>
   </ion-page>

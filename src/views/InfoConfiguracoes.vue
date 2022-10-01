@@ -25,7 +25,7 @@
             <ion-row class="ion-justify-content-center">
               <ion-col size="10">
                 <ion-item mode="md">
-                  <ion-label position="floating"
+                  <ion-label class="lblInput" position="floating"
                     >Adicionar {{ lblInput }}
                   </ion-label>
                   <ion-input color="secondary" v-model="item.nome"></ion-input>
@@ -59,7 +59,6 @@
               animated="true"
               show-cancel-button="never"
               placeholder="Buscar"
-              class="searchBarConfig"
             />
           </ion-col>
         </ion-row>
@@ -290,10 +289,8 @@ export default defineComponent({
   beforeMount() {
     if (this.nomePg == "congregacoes") {
       this.lblInput = "Congregação";
-      console.log("congregacoes");
       this.getCongregacoes();
     } else {
-      console.log("cargos");
       this.lblInput = "Cargo";
       this.getCargos();
     }
@@ -302,6 +299,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.lblInput{
+  font-weight: bold !important;
+  font-size: 18px !important;
+}
 ion-item {
   --padding-start: 0px !important;
   --inner-padding-end: 0px !important;
@@ -324,4 +325,9 @@ ion-list ion-input {
 ion-icon {
   font-size: 30px;
 }
+.sc-ion-searchbar-ios-h{
+  --background: #e7edf3 !important;
+}
+
+
 </style>

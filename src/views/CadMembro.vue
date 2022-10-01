@@ -41,7 +41,6 @@ export default defineComponent({
           const response = await axios.get(`${this.urlServer}/congregacoes`);
             if(response.data.length > 0){
               this.congregacoes = response.data;
-              console.log(this.congregacoes)
             }else if(response.data.length == 0){
               alert("Nenhum Cargo Cadastrado!")
             }else if(response.data.error == true){
