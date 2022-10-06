@@ -104,7 +104,7 @@ a barra de Ferramentas e a lista de TODOS OS membros cadastrados -->
                             {{ Membro.nome }}
                           </ion-label>
                           <ion-label color="danger"
-                            ><b>{{Membro?.cargo?.nome}}</b></ion-label
+                            ><b>{{Membro?.cargo?.nome ?? "Dado Deletado!"}}</b></ion-label
                           >
                         </ion-col>
                       </ion-row>

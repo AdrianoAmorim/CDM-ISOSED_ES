@@ -77,7 +77,7 @@
         </ion-row>
 
         <ion-row class="ion-justify-content-center" v-if="!loader">
-          <ion-col size="12" >
+          <ion-col size="12">
             <ion-list lines="none">
               <ion-item v-for="Obj in listaItens" :key="Obj.id" mode="ios">
                 <ion-input
@@ -86,7 +86,7 @@
                   :value="Obj.nome"
                 ></ion-input>
 
-                <ion-button size="small" fill="clear" slot="end">
+                <ion-button size="small" fill="clear" slot="end" disabled>
                   <ion-icon
                     color="success"
                     slot="icon-only"
@@ -95,7 +95,12 @@
                   />
                 </ion-button>
 
-                <ion-button size="small" fill="clear" slot="end">
+                <ion-button
+                  size="small"
+                  fill="clear"
+                  slot="end"
+                  @click="direcionarPgDelete(Obj.id)"
+                >
                   <ion-icon
                     color="danger"
                     slot="icon-only"
@@ -160,7 +165,7 @@ export default defineComponent({
   data() {
     return {
       urlServer: "https://isosed-server.herokuapp.com",
-      //urlServer: "http://192.168.18.4:4041",
+      //urlServer: "http://192.168.18.103:4041",
       arrowBackCircle,
       addCircle,
       save,
@@ -175,6 +180,14 @@ export default defineComponent({
     };
   },
   methods: {
+    direcionarPgDelete(id) {
+      if (this.nomePg == "congregacoes") {
+        this.deletarCongregacao(id);
+      } else {
+        this.deletarCargo(id);
+      }
+    },
+
     //
     async buscarItem(resultBusca) {
       this.loader = true;
@@ -187,7 +200,7 @@ export default defineComponent({
           this.loader = false;
         } else {
           alert("Congregação não encontrada!!");
-        this.listaItens = null;
+          this.listaItens = null;
           this.loader = false;
         }
         console.log(response);
@@ -219,6 +232,59 @@ export default defineComponent({
       }
     },
 
+    async deletarCargo(id_cargo) {
+      var id = {
+        id_cargo: id_cargo,
+      };
+
+      this.loader = true;
+      try {
+        const response = await axios.delete(`${this.urlServer}/deletarCargo0`, {
+          data: id,
+        });
+        if (response.data.id > 0) {
+          this.getCargos();
+          this.loader = false;
+        } else {
+          alert("Error: " + response.data.msg);
+          this.getCargos();
+          this.loader = false;
+        }
+      } catch (e) {
+        alert("Error: " + e.message);
+        console.log(e);
+        this.getCargos();
+        this.loader = false;
+      }
+    },
+    async deletarCongregacao(id_congregacao) {
+      var id = {
+        id_congregacao: id_congregacao,
+      };
+      this.loader = true;
+      try {
+        const response = await axios.delete(
+          `${this.urlServer}/deletarCongregacao`,
+          {
+            data: id,
+          }
+        );
+        if (response.data.id > 0) {
+          this.getCongregacoes();
+          this.loader = false;
+        } else {
+          alert("Error: " + response.data.msg);
+          this.getCongregacoes();
+          this.loader = false;
+        }
+      } catch (e) {
+        alert("Error: " + e.message);
+        console.log(e);
+        this.getCongregacoes();
+        this.loader = false;
+      }
+    },
+
     async cadItemCongregacao(nomeItem) {
       try {
         const response = await axios.post(
@@ -238,6 +304,7 @@ export default defineComponent({
     },
 
     async cadItemCargo(nomeItem) {
+      this.loader = true;
       try {
         const response = await axios.post(
           `${this.urlServer}/cadCargo`,
@@ -245,20 +312,27 @@ export default defineComponent({
         );
         if (response.data.id > 0) {
           nomeItem.nome = "";
-          this.getCargos();
           alert("Cadastro realizado com Sucesso!!");
+          this.getCargos();
+          this.loader = false;
         } else {
           alert("Houve Algum erro estamos tratando!!");
+          this.getCargos();
+          this.loader = false;
         }
       } catch (e) {
         alert(e);
+        this.getCargos();
+        this.loader = false;
       }
     },
     async getCongregacoes() {
+      this.loader = true;
       try {
         const response = await axios.get(`${this.urlServer}/congregacoes`);
         if (response.data.length > 0) {
           this.listaItens = response.data;
+          this.loader = false;
         } else if (response.data.length == 0) {
           alert("Nenhum Cargo Cadastrado!");
         } else if (response.data.error == true) {
@@ -269,10 +343,12 @@ export default defineComponent({
       }
     },
     async getCargos() {
+      this.loader = true;
       try {
         const response = await axios.get(`${this.urlServer}/cargos`);
         if (response.data.length > 0) {
           this.listaItens = response.data;
+          this.loader = false;
         } else if (response.data.length == 0) {
           alert("Nenhum Cargo Cadastrado!");
         } else if (response.data.error == true) {
@@ -299,7 +375,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.lblInput{
+.lblInput {
   font-weight: bold !important;
   font-size: 18px !important;
 }
@@ -325,9 +401,7 @@ ion-list ion-input {
 ion-icon {
   font-size: 30px;
 }
-.sc-ion-searchbar-ios-h{
+.sc-ion-searchbar-ios-h {
   --background: #e7edf3 !important;
 }
-
-
 </style>
