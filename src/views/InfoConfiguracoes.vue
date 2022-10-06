@@ -239,7 +239,7 @@ export default defineComponent({
 
       this.loader = true;
       try {
-        const response = await axios.delete(`${this.urlServer}/deletarCargo0`, {
+        const response = await axios.delete(`${this.urlServer}/deletarCargo`, {
           data: id,
         });
         if (response.data.id > 0) {
