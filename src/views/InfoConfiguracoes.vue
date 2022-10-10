@@ -36,7 +36,7 @@
                 <ion-button
                   color="success"
                   fill="clear"
-                  @click="validarCadastroItem(item)"
+                  @click="direcionarCadastroItem(item)"
                 >
                   <ion-icon
                     slot="icon-only"
@@ -83,10 +83,15 @@
                 <ion-input
                   color="secondary"
                   placeholder="Carregando"
-                  :value="Obj.nome"
+                  v-model="Obj.nome"
                 ></ion-input>
 
-                <ion-button size="small" fill="clear" slot="end" disabled>
+                <ion-button
+                  size="small"
+                  fill="clear"
+                  slot="end"
+                  @click="direcionarPgAtualizar(Obj)"
+                >
                   <ion-icon
                     color="success"
                     slot="icon-only"
@@ -142,7 +147,6 @@ import {
   IonSearchbar,
   IonProgressBar,
 } from "@ionic/vue";
-
 export default defineComponent({
   name: "InfoConfiguracoes",
   components: {
@@ -180,6 +184,25 @@ export default defineComponent({
     };
   },
   methods: {
+    //METODOS DE DIRECIONAMENTO DE REQUIZIÇÃO
+    direcionarCadastroItem(nomeItem) {
+      if (nomeItem.nome != "") {
+        if (this.nomePg == "congregacoes") {
+          this.cadItemCongregacao(nomeItem);
+        } else {
+          this.cadItemCargo(nomeItem);
+        }
+      } else {
+        alert("Campo vazio!!");
+      }
+    },
+    direcionarPgAtualizar(Obj) {
+      if (this.nomePg == "congregacoes") {
+        this.atualizarCongregacao(Obj);
+      } else {
+        this.atualizarCargo(Obj);
+      }
+    },
     direcionarPgDelete(id) {
       if (this.nomePg == "congregacoes") {
         this.deletarCongregacao(id);
@@ -187,8 +210,7 @@ export default defineComponent({
         this.deletarCargo(id);
       }
     },
-
-    //
+    //FAZ UMA BUSCA NO ITEM(CARGO OU CONGREGACAO)
     async buscarItem(resultBusca) {
       this.loader = true;
       if (this.nomePg == "congregacoes") {
@@ -219,24 +241,48 @@ export default defineComponent({
         console.log(response);
       }
     },
-
-    validarCadastroItem(nomeItem) {
-      if (nomeItem.nome != "") {
-        if (this.nomePg == "congregacoes") {
-          this.cadItemCongregacao(nomeItem);
+    async atualizarCargo(obj) {
+      this.loader = true;
+      try {
+        const response = await axios.put(
+          `${this.urlServer}/atualizarCargo`,
+          obj
+        );
+        if (response.data.id > 0) {
+          this.getCargos();
+          this.loader = false;
         } else {
-          this.cadItemCargo(nomeItem);
+          alert("Error: " + response.data.msg);
+          this.getCargos();
+          this.loader = false;
         }
-      } else {
-        alert("Campo vazio!!");
+      } catch (e) {
+        console.log(e);
       }
     },
-
+    async atualizarCongregacao(obj) {
+      this.loader = true;
+      try {
+        const response = await axios.put(
+          `${this.urlServer}/atualizarCongregacao`,
+          obj
+        );
+        if (response.data.id > 0) {
+          this.getCongregacoes();
+          this.loader = false;
+        } else {
+          alert("Error: " + response.data.msg);
+          this.getCongregacoes();
+          this.loader = false;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
     async deletarCargo(id_cargo) {
       var id = {
         id_cargo: id_cargo,
       };
-
       this.loader = true;
       try {
         const response = await axios.delete(`${this.urlServer}/deletarCargo`, {
@@ -284,7 +330,6 @@ export default defineComponent({
         this.loader = false;
       }
     },
-
     async cadItemCongregacao(nomeItem) {
       try {
         const response = await axios.post(
@@ -302,7 +347,6 @@ export default defineComponent({
         alert(e);
       }
     },
-
     async cadItemCargo(nomeItem) {
       this.loader = true;
       try {
