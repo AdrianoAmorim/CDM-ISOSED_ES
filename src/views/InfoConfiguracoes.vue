@@ -84,6 +84,7 @@
                   color="secondary"
                   placeholder="Carregando"
                   v-model="Obj.nome"
+                  
                 ></ion-input>
 
                 <ion-button
@@ -184,6 +185,9 @@ export default defineComponent({
     };
   },
   methods: {
+    resetValorInpEditar(Obj){
+      alert(Obj)
+    },
     //METODOS DE DIRECIONAMENTO DE REQUIZIÇÃO
     direcionarCadastroItem(nomeItem) {
       if (nomeItem.nome != "") {
@@ -429,6 +433,7 @@ ion-item {
 }
 ion-list ion-input {
   color: black !important;
+  font-weight: bold !important;
   background-color: #e7edf3 !important;
   font-size: 18px !important;
   padding-inline-start: 5px !important;
