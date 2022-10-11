@@ -84,7 +84,8 @@
                   color="secondary"
                   placeholder="Carregando"
                   v-model="Obj.nome"
-                  
+                  @ionBlur="resetValorInpEditar(Obj)"
+                  @ionFocus="salvarVlAtualEditar(Obj.nome)"
                 ></ion-input>
 
                 <ion-button
@@ -182,11 +183,18 @@ export default defineComponent({
         nome: "",
       },
       resultBusca: "",
+      auxValorEditar: "",
     };
   },
   methods: {
-    resetValorInpEditar(Obj){
-      alert(Obj)
+    //CONTROLE DE VALORES DOS INPUTS PARA EDITAR 
+    salvarVlAtualEditar(nomeObj) {
+      this.auxValorEditar = nomeObj;
+    },
+    resetValorInpEditar(Obj) {
+      if (Obj.nome !== this.auxValorEditar || Obj.nome == "") {
+        Obj.nome = this.auxValorEditar;
+      }
     },
     //METODOS DE DIRECIONAMENTO DE REQUIZIÇÃO
     direcionarCadastroItem(nomeItem) {
