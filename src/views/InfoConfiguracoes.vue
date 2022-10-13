@@ -133,6 +133,7 @@ import { defineComponent } from "vue";
 import axios from "axios";
 import { arrowBackCircle, addCircle, save, closeCircle } from "ionicons/icons";
 import {
+  alertController,
   IonPage,
   IonItem,
   IonList,
@@ -187,7 +188,17 @@ export default defineComponent({
     };
   },
   methods: {
-    //CONTROLE DE VALORES DOS INPUTS PARA EDITAR 
+    async alertInfoSistema(header, subHeader, message) {
+      const alert = await alertController.create({
+        cssClass: "alert-info",
+        header: header,
+        subHeader: subHeader,
+        message: message,
+        buttons: ["OK"],
+      });
+      await alert.present();
+    },
+    //CONTROLE DE VALORES DOS INPUTS PARA EDITAR
     salvarVlAtualEditar(nomeObj) {
       this.auxValorEditar = nomeObj;
     },
@@ -196,7 +207,7 @@ export default defineComponent({
         Obj.nome = this.auxValorEditar;
       }
     },
-    //METODOS DE DIRECIONAMENTO DE REQUIZIÇÃO
+    //METODOS DE DIRECIONAMENTO DE REQUISIÇÃO
     direcionarCadastroItem(nomeItem) {
       if (nomeItem.nome != "") {
         if (this.nomePg == "congregacoes") {
@@ -225,34 +236,79 @@ export default defineComponent({
     //FAZ UMA BUSCA NO ITEM(CARGO OU CONGREGACAO)
     async buscarItem(resultBusca) {
       this.loader = true;
-      if (this.nomePg == "congregacoes") {
-        const response = await axios.get(
-          `${this.urlServer}/buscarCongregacoes?nome=${resultBusca}`
-        );
-        if (response.data.length > 0) {
-          this.listaItens = response.data;
-          this.loader = false;
+      try {
+        if (this.nomePg == "congregacoes") {
+          const response = await axios.get(
+            `${this.urlServer}/buscarCongregacoes?nome=${resultBusca}`
+          );
+          if (response.data.length > 0) {
+            this.listaItens = response.data;
+            this.loader = false;
+          } else {
+            this.alertInfoSistema("AVISO", "", "Congregação não encontrada!!");
+            this.listaItens = null;
+            this.loader = false;
+          }
+          console.log(response);
         } else {
-          alert("Congregação não encontrada!!");
-          this.listaItens = null;
-          this.loader = false;
+          const response = await axios.get(
+            `${this.urlServer}/buscarCargos?nome=${resultBusca}`
+          );
+          if (response.data.length > 0) {
+            this.listaItens = response.data;
+            this.loader = false;
+          } else {
+            this.alertInfoSistema("AVISO", "", "Cargo não encontrado!!");
+            this.listaItens = null;
+            this.loader = false;
+          }
         }
-        console.log(response);
-      } else {
-        const response = await axios.get(
-          `${this.urlServer}/buscarCargos?nome=${resultBusca}`
-        );
-        if (response.data.length > 0) {
-          this.listaItens = response.data;
-          this.loader = false;
-        } else {
-          alert("Cargo não Encontrado!!");
-          this.listaItens = null;
-          this.loader = false;
-        }
-        console.log(response);
+      } catch (e) {
+        this.alertInfoSistema("AVISO", "Error", "Houve um Erro: " + e.message);
       }
     },
+    //FAZ UMA BUSCA DE TODAS AS CONGREGACOES OU CARGO CADASTRADO
+    async getCongregacoes() {
+      this.loader = true;
+      try {
+        const response = await axios.get(`${this.urlServer}/congregacoes`);
+        if (response.data.length > 0) {
+          this.listaItens = response.data;
+          this.loader = false;
+        } else if (response.data.length == 0) {
+          this.alertInfoSistema(
+            "AVISO",
+            "",
+            "Nenhuma Congregação Cadastrada!!"
+          );
+        } else if (response.data.error == true) {
+          this.alertInfoSistema(
+            "AVISO",
+            "Error",
+            "Error: " + response.data.msg
+          );
+        }
+      } catch (e) {
+        this.alertInfoSistema("AVISO", "Error", "" + e.message);
+      }
+    },
+    async getCargos() {
+      this.loader = true;
+      try {
+        const response = await axios.get(`${this.urlServer}/cargos`);
+        if (response.data.length > 0) {
+          this.listaItens = response.data;
+          this.loader = false;
+        } else if (response.data.length == 0) {
+          this.alertInfoSistema("AVISO", "", "Nenhum cargo Cadastrado!");
+        } else if (response.data.error == true) {
+          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+        }
+      } catch (e) {
+        this.alertInfoSistema("AVISO", "Error", "" + e.message);
+      }
+    },
+    //ATUALIZA O NOME DO CARGO OU CONGREGACAO
     async atualizarCargo(obj) {
       this.loader = true;
       try {
@@ -264,12 +320,12 @@ export default defineComponent({
           this.getCargos();
           this.loader = false;
         } else {
-          alert("Error: " + response.data.msg);
+          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
           this.getCargos();
           this.loader = false;
         }
       } catch (e) {
-        console.log(e);
+        this.alertInfoSistema("AVISO", "Error", "" + e);
       }
     },
     async atualizarCongregacao(obj) {
@@ -283,14 +339,15 @@ export default defineComponent({
           this.getCongregacoes();
           this.loader = false;
         } else {
-          alert("Error: " + response.data.msg);
+          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
           this.getCongregacoes();
           this.loader = false;
         }
       } catch (e) {
-        console.log(e);
+        this.alertInfoSistema("AVISO", "Error", "" + e);
       }
     },
+    //DELETA O CARGO OU A CONGREGACAO
     async deletarCargo(id_cargo) {
       var id = {
         id_cargo: id_cargo,
@@ -304,12 +361,12 @@ export default defineComponent({
           this.getCargos();
           this.loader = false;
         } else {
-          alert("Error: " + response.data.msg);
+          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
           this.getCargos();
           this.loader = false;
         }
       } catch (e) {
-        alert("Error: " + e.message);
+        this.alertInfoSistema("AVISO", "Error", "" + e.message);
         console.log(e);
         this.getCargos();
         this.loader = false;
@@ -331,17 +388,17 @@ export default defineComponent({
           this.getCongregacoes();
           this.loader = false;
         } else {
-          alert("Error: " + response.data.msg);
+          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
           this.getCongregacoes();
           this.loader = false;
         }
       } catch (e) {
-        alert("Error: " + e.message);
-        console.log(e);
+        this.alertInfoSistema("AVISO", "Error", "" + e.message);
         this.getCongregacoes();
         this.loader = false;
       }
     },
+    //CADASTRA UM CARGO OU CONGREGACAO NOVA
     async cadItemCongregacao(nomeItem) {
       try {
         const response = await axios.post(
@@ -353,10 +410,10 @@ export default defineComponent({
           this.getCongregacoes();
           alert("Cadastro realizado com Sucesso!!");
         } else {
-          alert("Houve Algum erro estamos tratando!!");
+          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
         }
       } catch (e) {
-        alert(e);
+        this.alertInfoSistema("AVISO", "Error", "" + e.message);
       }
     },
     async cadItemCargo(nomeItem) {
@@ -372,46 +429,14 @@ export default defineComponent({
           this.getCargos();
           this.loader = false;
         } else {
-          alert("Houve Algum erro estamos tratando!!");
+          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
           this.getCargos();
           this.loader = false;
         }
       } catch (e) {
-        alert(e);
+        this.alertInfoSistema("AVISO", "Error", "" + e.message);
         this.getCargos();
         this.loader = false;
-      }
-    },
-    async getCongregacoes() {
-      this.loader = true;
-      try {
-        const response = await axios.get(`${this.urlServer}/congregacoes`);
-        if (response.data.length > 0) {
-          this.listaItens = response.data;
-          this.loader = false;
-        } else if (response.data.length == 0) {
-          alert("Nenhum Cargo Cadastrado!");
-        } else if (response.data.error == true) {
-          alert("Erro Interno no Servidor: " + response.data.msg);
-        }
-      } catch (e) {
-        alert("Houve Um erro ao Carrega os Cargos!! " + e.message);
-      }
-    },
-    async getCargos() {
-      this.loader = true;
-      try {
-        const response = await axios.get(`${this.urlServer}/cargos`);
-        if (response.data.length > 0) {
-          this.listaItens = response.data;
-          this.loader = false;
-        } else if (response.data.length == 0) {
-          alert("Nenhum Cargo Cadastrado!");
-        } else if (response.data.error == true) {
-          alert("Erro Interno no Servidor: " + response.data.msg);
-        }
-      } catch (e) {
-        alert("Houve Um erro ao Carrega os Cargos!! " + e.message);
       }
     },
   },
