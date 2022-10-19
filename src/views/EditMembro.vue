@@ -37,7 +37,6 @@ export default defineComponent({
         const response = await axios.get(`${this.urlServer}/membro/${idMembro}` );
         if(response.data.id >0){
         this.membro = response.data;
-        console.log(this.membro)
         }else if(response.data.id == 0){
           alert("Não Conseguimos Encontrar o Membro Selecionado para Editar!!")
         }else if(response.data.error ==true){

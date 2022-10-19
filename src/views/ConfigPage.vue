@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <ion-header mode="ios">
+    <ion-header mode="ios" @click="teste()">
       <ion-toolbar mode="ios">
         <ion-button
           fill="clear"
@@ -41,7 +41,6 @@
 
 <script>
 import { defineComponent } from "vue";
-import axios from "axios";
 import { arrowBackCircle, create, business, ribbon } from "ionicons/icons";
 import {
   IonPage,
@@ -75,72 +74,24 @@ export default defineComponent({
       arrowBackCircle,
       create,
       business,
-      ribbon,
-      listaObj: null,
-      labelInpConfig:null
+      ribbon
     };
   },
-  methods: {
-    //ABRIR O MODAL.. PARA EXIBIR OS DADOS DO MEMBRO SELECIONADO
-   /* async openModal(nomePg) {
-      var returnLista = null;
-      
-      if (nomePg == "CONGREGAÇÕES") {
-        returnLista = await this.getCongregacoes();
-        this.labelInpConfig = "Congregação:"
+  methods:{
+    teste(){
+      var tel = "00000000000"
+      var auxTel = "("+tel;
+      tel = auxTel.substring(0,3);
+      auxTel = auxTel.substring(3);
+      tel = tel+") ";
+      auxTel = auxTel.substring(0,6) +"-"+auxTel.substring(5)
+      tel = tel + auxTel
+      console.log(tel)
+      console.log(auxTel)
 
-      } else if (nomePg == "CARGOS") {
-        returnLista = await this.getCargos();
-        this.labelInpConfig = "Cargo:"
-      }
-      if (returnLista != null) {
-        const modal = await modalController.create({
-          component: ModalConfig,
-          componentProps: { nomePg: nomePg, listaObj: returnLista,labelInpConfig: this.labelInpConfig },
-          cssClass: "modalView",
-        });
-        modal.present();
-        const { role } = await modal.onWillDismiss();
-        if (role === "confirm") {
-          console.log("fechou");
-        }
-      }
-    },*/
 
-    async getCongregacoes() {
-      try {
-        const response = await axios.get(`${this.urlServer}/congregacoes`);
-        if (response.data.length > 0) {
-          return response.data;
-        } else if (response.data.length == 0) {
-          alert("Nenhum Cargo Cadastrado!");
-          return null;
-        } else if (response.data.error == true) {
-          alert("Erro Interno no Servidor: " + response.data.msg);
-          return null;
-        }
-      } catch (e) {
-        alert("Houve Um erro ao Carrega os Cargos!! " + e.message);
-      }
-    },
-    async getCargos() {
-        try{
-          const response = await axios.get(`${this.urlServer}/cargos`);
-            if(response.data.length > 0){
-              return response.data;
-            }else if(response.data.length == 0){
-              alert("Nenhum Cargo Cadastrado!")
-              return null
-            }else if(response.data.error == true){
-              alert("Erro Interno no Servidor: "+ response.data.msg)
-              return null
-            }
-            }
-          catch(e){
-              alert("Houve Um erro ao Carrega os Cargos!! "+ e.message)
-          }
     }
-  },
+  }
 });
 </script>
 

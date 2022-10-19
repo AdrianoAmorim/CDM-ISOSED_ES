@@ -41,16 +41,16 @@
           </ion-row>
 
           <ion-row class="ion-justify-content-start ion-align-items-center">
-            <ion-col size="6">
+            <ion-col size="7">
               <span>Telefone:</span>
             </ion-col>
-            <ion-col size="6">
+            <ion-col size="5">
               <span>Cargo:</span>
             </ion-col>
-            <ion-col size="6">
-              <ion-label id="lblTel">{{ membro.telefone }}</ion-label>
+            <ion-col size="7">
+              <ion-label id="lblTel">{{ membro.telefone}}</ion-label>
             </ion-col>
-            <ion-col size="6">
+            <ion-col size="5">
               <ion-label id="lblCargo">{{ membro.cargo.nome }}</ion-label>
             </ion-col>
           </ion-row>
@@ -170,6 +170,7 @@ export default defineComponent({
     IonLabel,
   },
   methods: {
+ 
     confirm() {
       return modalController.dismiss(null, "confirm");
     },

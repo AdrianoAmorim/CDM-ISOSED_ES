@@ -209,17 +209,27 @@ export default defineComponent({
     };
   },
   methods: {
+    //ADICIONA AA MASCARA DO TELEFONE PARA O MODALVIEWMEMBRO
+      maskTel(telefone){
+      var maskTel1 = "("+telefone;
+      var tel = null
+      tel= maskTel1.substring(0,3) +") " + maskTel1.substring(3);
+      tel = tel.substring(0,10) + "-" + tel.substring(10);
+      return tel
+    },
     //ABRIR O MODAL.. PARA EXIBIR OS DADOS DO MEMBRO SELECIONADO
     async openModal(id) {
       this.loader = true;
       const returnMembro = await this.getMembroSelecionado(id);
       if (returnMembro.id > 0) {
+        var maskTel = this.maskTel(returnMembro.telefone);
         var dtNascimento = moment(returnMembro.dtNascimento).format(
           "DD/MM/YYYY"
         );
         var dtBatismo = moment(returnMembro.dtBatismo).format("DD/MM/YYYY");
         returnMembro.dtNascimento = dtNascimento;
         returnMembro.dtBatismo = dtBatismo;
+        returnMembro.telefone = maskTel
 
         const modal = await modalController.create({
           component: ModalViewMembro,

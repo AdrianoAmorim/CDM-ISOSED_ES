@@ -198,6 +198,7 @@ export default defineComponent({
       });
       await alert.present();
     },
+
     //CONTROLE DE VALORES DOS INPUTS PARA EDITAR
     salvarVlAtualEditar(nomeObj) {
       this.auxValorEditar = nomeObj;
@@ -207,6 +208,7 @@ export default defineComponent({
         Obj.nome = this.auxValorEditar;
       }
     },
+
     //METODOS DE DIRECIONAMENTO DE REQUISIÇÃO
     direcionarCadastroItem(nomeItem) {
       if (nomeItem.nome != "") {
@@ -233,6 +235,7 @@ export default defineComponent({
         this.deletarCargo(id);
       }
     },
+
     //FAZ UMA BUSCA NO ITEM(CARGO OU CONGREGACAO)
     async buscarItem(resultBusca) {
       this.loader = true;
@@ -267,6 +270,7 @@ export default defineComponent({
         this.alertInfoSistema("AVISO", "Error", "Houve um Erro: " + e.message);
       }
     },
+
     //FAZ UMA BUSCA DE TODAS AS CONGREGACOES OU CARGO CADASTRADO
     async getCongregacoes() {
       this.loader = true;
@@ -308,6 +312,7 @@ export default defineComponent({
         this.alertInfoSistema("AVISO", "Error", "" + e.message);
       }
     },
+
     //ATUALIZA O NOME DO CARGO OU CONGREGACAO
     async atualizarCargo(obj) {
       this.loader = true;
@@ -318,8 +323,9 @@ export default defineComponent({
         );
         if (response.data.id > 0) {
           this.getCargos();
-          this.loader = false;
+          console.log("dentro do if atualizar cargo")
         } else {
+          console.log("dentro do else atualizar cargo")
           this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
           this.getCargos();
           this.loader = false;
@@ -347,6 +353,7 @@ export default defineComponent({
         this.alertInfoSistema("AVISO", "Error", "" + e);
       }
     },
+
     //DELETA O CARGO OU A CONGREGACAO
     async deletarCargo(id_cargo) {
       var id = {
@@ -398,6 +405,7 @@ export default defineComponent({
         this.loader = false;
       }
     },
+
     //CADASTRA UM CARGO OU CONGREGACAO NOVA
     async cadItemCongregacao(nomeItem) {
       try {
