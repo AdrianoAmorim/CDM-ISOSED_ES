@@ -171,8 +171,8 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer: "https://isosed-server.herokuapp.com",
-      //urlServer: "http://192.168.18.103:4041",
+      //urlServer: "https://isosed-server.herokuapp.com",
+      urlServer: "http://192.168.18.4:4041",
       arrowBackCircle,
       addCircle,
       save,
@@ -204,9 +204,10 @@ export default defineComponent({
       this.auxValorEditar = nomeObj;
     },
     resetValorInpEditar(Obj) {
-      if (Obj.nome !== this.auxValorEditar || Obj.nome == "") {
+      if (Obj.nome == "") {
         Obj.nome = this.auxValorEditar;
       }
+      console.log(Obj.nome);
     },
 
     //METODOS DE DIRECIONAMENTO DE REQUISIÇÃO
@@ -315,23 +316,27 @@ export default defineComponent({
 
     //ATUALIZA O NOME DO CARGO OU CONGREGACAO
     async atualizarCargo(obj) {
-      this.loader = true;
-      try {
-        const response = await axios.put(
-          `${this.urlServer}/atualizarCargo`,
-          obj
-        );
-        if (response.data.id > 0) {
-          this.getCargos();
-          console.log("dentro do if atualizar cargo")
-        } else {
-          console.log("dentro do else atualizar cargo")
-          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
-          this.getCargos();
-          this.loader = false;
+      if (obj.nome == "") {
+        this.alertInfoSistema("AVISO", "", "Favor Preencher o Campo!!");
+      } else {
+        this.loader = true;
+        try {
+          const response = await axios.put(
+            `${this.urlServer}/atualizarCargo`,
+            obj
+          );
+          if (response.data.id > 0) {
+            this.getCargos();
+            console.log("dentro do if atualizar cargo");
+          } else {
+            console.log("dentro do else atualizar cargo");
+            this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+            this.getCargos();
+            this.loader = false;
+          }
+        } catch (e) {
+          this.alertInfoSistema("AVISO", "Error", "" + e);
         }
-      } catch (e) {
-        this.alertInfoSistema("AVISO", "Error", "" + e);
       }
     },
     async atualizarCongregacao(obj) {
