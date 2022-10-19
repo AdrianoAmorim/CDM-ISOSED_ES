@@ -219,7 +219,8 @@ export default defineComponent({
           this.cadItemCargo(nomeItem);
         }
       } else {
-        alert("Campo vazio!!");
+        
+          this.alertInfoSistema("AVISO","","CAMPO VAZIO, FAVOR PREENCHER!!")
       }
     },
     direcionarPgAtualizar(Obj) {
@@ -327,9 +328,7 @@ export default defineComponent({
           );
           if (response.data.id > 0) {
             this.getCargos();
-            console.log("dentro do if atualizar cargo");
           } else {
-            console.log("dentro do else atualizar cargo");
             this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
             this.getCargos();
             this.loader = false;
@@ -340,6 +339,9 @@ export default defineComponent({
       }
     },
     async atualizarCongregacao(obj) {
+       if (obj.nome == "") {
+        this.alertInfoSistema("AVISO", "", "Favor Preencher o Campo!!");
+      } else {
       this.loader = true;
       try {
         const response = await axios.put(
@@ -356,6 +358,7 @@ export default defineComponent({
         }
       } catch (e) {
         this.alertInfoSistema("AVISO", "Error", "" + e);
+      }
       }
     },
 
@@ -419,9 +422,9 @@ export default defineComponent({
           nomeItem
         );
         if (response.data.id > 0) {
+          this.alertInfoSistema("AVISO","","CONGREGAÇÃO CADASTRADA !");
           nomeItem.nome = "";
           this.getCongregacoes();
-          alert("Cadastro realizado com Sucesso!!");
         } else {
           this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
         }
@@ -438,7 +441,7 @@ export default defineComponent({
         );
         if (response.data.id > 0) {
           nomeItem.nome = "";
-          alert("Cadastro realizado com Sucesso!!");
+          this.alertInfoSistema("AVISO","","CARGO CADASTRADO !")
           this.getCargos();
           this.loader = false;
         } else {
