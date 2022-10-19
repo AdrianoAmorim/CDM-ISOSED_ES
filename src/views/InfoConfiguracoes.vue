@@ -207,7 +207,6 @@ export default defineComponent({
       if (Obj.nome == "") {
         Obj.nome = this.auxValorEditar;
       }
-      console.log(Obj.nome);
     },
 
     //METODOS DE DIRECIONAMENTO DE REQUISIÇÃO
@@ -254,7 +253,6 @@ export default defineComponent({
             this.listaItens = null;
             this.loader = false;
           }
-          console.log(response);
         } else {
           const response = await axios.get(
             `${this.urlServer}/buscarCargos?nome=${resultBusca}`
@@ -277,7 +275,7 @@ export default defineComponent({
     async getCongregacoes() {
       this.loader = true;
       try {
-        const response = await axios.get(`${this.urlServer}/congregacoes`);
+        const response = await axios.get(`${this.urlServer}/configCongregacoes`);
         if (response.data.length > 0) {
           this.listaItens = response.data;
           this.loader = false;
@@ -301,7 +299,7 @@ export default defineComponent({
     async getCargos() {
       this.loader = true;
       try {
-        const response = await axios.get(`${this.urlServer}/cargos`);
+        const response = await axios.get(`${this.urlServer}/configCargos`);
         if (response.data.length > 0) {
           this.listaItens = response.data;
           this.loader = false;

@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <ion-header mode="ios" @click="teste()">
+    <ion-header mode="ios">
       <ion-toolbar mode="ios">
         <ion-button
           fill="clear"
@@ -77,21 +77,6 @@ export default defineComponent({
       ribbon
     };
   },
-  methods:{
-    teste(){
-      var tel = "00000000000"
-      var auxTel = "("+tel;
-      tel = auxTel.substring(0,3);
-      auxTel = auxTel.substring(3);
-      tel = tel+") ";
-      auxTel = auxTel.substring(0,6) +"-"+auxTel.substring(5)
-      tel = tel + auxTel
-      console.log(tel)
-      console.log(auxTel)
-
-
-    }
-  }
 });
 </script>
 

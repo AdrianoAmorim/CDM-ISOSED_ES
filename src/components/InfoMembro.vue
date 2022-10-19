@@ -723,14 +723,12 @@ export default defineComponent({
   watch: {
     cargosLs() {
       if (this.page == "cadastro") {
-        console.log("dentro do if do cadastro");
         this.desativarBtnVoltar = false;
         this.desativarBtnSalvar = false;
         this.loader = false;
       }
     },
     membroEd() {
-      console.log("dentro watch MembroEd");
       this.setDadosInp(this.membroEd);
       if (this.membroEd.nome != null) {
         this.desativarBtnVoltar = false;
