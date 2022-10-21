@@ -42,13 +42,13 @@ export default defineComponent({
             if(response.data.length > 0){
               this.congregacoes = response.data;
             }else if(response.data.length == 0){
-              alert("Nenhum Cargo Cadastrado!")
+            this.alertInfoSistema("AVISO",'',"Nenhuma Congregação Cadastrada!")
             }else if(response.data.error == true){
-              alert("Erro Interno no Servidor: "+ response.data.msg)
+              this.alertInfoSistema("ERROR",'',"Error Interno no Servidor: "+ response.data.msg)
             }
             }
           catch(e){
-              alert("Houve Um erro ao Carrega os Cargos!! "+ e.message)
+             this.alertInfoSistema("ERROR",'',"Houve Um erro ao Carrega as Congregações!! "+ e.message);
           }
     },
     async getCargos() {

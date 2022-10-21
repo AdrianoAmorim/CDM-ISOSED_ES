@@ -204,12 +204,11 @@ export default defineComponent({
       newspaper,
       listaMembros: null,
       resultBusca: "",
-     
       idMembro: null,
     };
   },
   methods: {
-    //ADICIONA AA MASCARA DO TELEFONE PARA O MODALVIEWMEMBRO
+    //ADICIONA A MASCARA DO TELEFONE PARA O MODALVIEWMEMBRO
       maskTel(telefone){
       var maskTel1 = "("+telefone;
       var tel = null
