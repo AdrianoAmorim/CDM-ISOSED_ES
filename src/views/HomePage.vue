@@ -39,10 +39,10 @@ a barra de Ferramentas e a lista de TODOS OS membros cadastrados -->
               /></ion-button>
 
                  <ion-button
-                 disabled="true"
                 fill="clear"
                 color="secondary"
                 size="small"
+                @click="this.$router.replace('/relatorios')"
                 ><ion-icon
                   slot="icon-only"
                   class="iconToolbar"
@@ -192,8 +192,8 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer: "http://177.71.138.179:4041",
-      //urlServer: "http://192.168.18.4:4041",
+      //urlServer: "http://177.71.138.179:4041",
+      urlServer: "http://192.168.18.4:4041",
       ativarBtnBuscar: true,
       loader: true,
       searchCircle,

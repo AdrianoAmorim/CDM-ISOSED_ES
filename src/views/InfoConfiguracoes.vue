@@ -171,8 +171,8 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer: "http://54.207.193.202:4041",
-      //urlServer: "http://192.168.18.4:4041",
+      //urlServer: "http://54.207.193.202:4041",
+      urlServer: "http://192.168.18.4:4041",
       arrowBackCircle,
       addCircle,
       save,

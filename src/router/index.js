@@ -3,6 +3,7 @@ import HomePage from '../views/HomePage.vue'
 import CadMembro from '../views/CadMembro.vue'
 import EditMembro from '../views/EditMembro.vue'
 import ConfigPage from '../views/ConfigPage.vue'
+import RelatoriosPage from '../views/RelatoriosPage.vue'
 import InfoConfiguracoes from '../views/InfoConfiguracoes.vue'
 const routes = [
 
@@ -21,18 +22,25 @@ const routes = [
     name:'Configuracoes',
     component: ConfigPage
   },
+    {
+    path:'/infoConfiguracoes/:nomePg',
+    name:'InfoConfiguracoes',
+    component: InfoConfiguracoes,
+    props: true //usado para dizer q tem prop (nao precisa usar $route.params)
+  },
+  {
+    path:'/relatorios',
+    name:'RelatoriosPage',
+    component: RelatoriosPage,
+    props: true //usado para dizer q tem prop (nao precisa usar $route.params)
+  },
   {
     path:'/editar/:id',
     name:'Editar',
     component: EditMembro,
     props: true //usado para dizer q tem prop (nao precisa usar $route.params)
   },
-  {
-    path:'/infoConfiguracoes/:nomePg',
-    name:'InfoConfiguracoes',
-    component: InfoConfiguracoes,
-    props: true //usado para dizer q tem prop (nao precisa usar $route.params)
-  }
+
 ]
 
 const router = createRouter({
