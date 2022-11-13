@@ -752,10 +752,7 @@ export default defineComponent({
   object-fit: fill;
 }
 
-.diferencaRadioBtn {
-  --padding-start: 2px;
-  --inner-padding-end: 2px;
-}
+
 ion-label {
   overflow: visible;
   font-weight: bold;
@@ -764,9 +761,7 @@ ion-radio {
   margin-left: 2px;
   margin-right: 1px;
 }
-ion-select {
-  color: #427aa1 !important;
-}
+
 .infoSistema {
   opacity: 0.8;
   border-radius: 15px;

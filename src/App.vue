@@ -135,4 +135,12 @@ ion-modal.modalView::part(content){
   font-size: 30px;
   object-fit: fill;
 }
+
+.diferencaRadioBtn {
+  --padding-start: 2px;
+  --inner-padding-end: 2px;
+}
+ion-select {
+  color: #427aa1 !important;
+}
 </style>
