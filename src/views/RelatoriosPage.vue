@@ -111,15 +111,16 @@
             <ion-col size="12">
               <ion-text color="success">
                 <h5>
-                  Total de <ion-text id="textResultQtd" color="danger">00</ion-text> Membros
-                  Cadastrados
+                  Total de
+                  <ion-text id="textResultQtd" color="danger">00</ion-text>
+                  Membros Cadastrados
                 </h5>
               </ion-text>
             </ion-col>
           </ion-row>
         </ion-row>
 
-         <ion-row class="ion-justify-content-start">
+        <ion-row class="ion-justify-content-start">
           <ion-col size="12">
             <ion-text color="secondary">
               <h5>Listagem de Membros Cadastrados:</h5>
@@ -160,15 +161,6 @@
                       color="secondary"
                     ></ion-radio>
                   </ion-item>
-
-                  <ion-item lines="none" class="diferencaRadioBtn">
-                    <ion-label>TODOS</ion-label>
-                    <ion-radio
-                      slot="start"
-                      value="todos"
-                      color="secondary"
-                    ></ion-radio>
-                  </ion-item>
                 </ion-col>
               </ion-row>
             </ion-radio-group>
@@ -205,9 +197,7 @@
               </ion-col>
             </ion-row>
           </ion-col>
-
         </ion-row>
-
       </ion-grid>
     </ion-content>
   </ion-page>
@@ -263,7 +253,6 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-
 ion-label {
   overflow: visible;
   font-weight: bold;
@@ -272,7 +261,7 @@ h5 {
   overflow: visible;
   font-weight: bold;
 }
-#textResultQtd{
+#textResultQtd {
   font-size: 24px;
 }
 ion-radio {
