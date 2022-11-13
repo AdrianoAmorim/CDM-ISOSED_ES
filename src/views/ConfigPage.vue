@@ -2,6 +2,7 @@
   <ion-page>
     <ion-header mode="ios">
       <ion-toolbar mode="ios">
+        <ion-label class="tituloPagina">Configurações</ion-label>
         <ion-button
           fill="clear"
           router-direction="back"

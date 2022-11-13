@@ -2,6 +2,7 @@
   <ion-page>
     <ion-header mode="ios">
       <ion-toolbar mode="ios">
+        <ion-label class="tituloPagina">Relatórios</ion-label>
         <ion-button
           fill="clear"
           router-direction="back"
@@ -42,7 +43,7 @@
                   </ion-item>
 
                   <ion-item lines="none" class="diferencaRadioBtn">
-                    <ion-label>CARGO+<br />CONGREGAÇÃO</ion-label>
+                    <ion-label>CARGO e<br />CONGREGAÇÃO</ion-label>
                     <ion-radio
                       slot="start"
                       value="qtdCompleta"
@@ -85,7 +86,7 @@
                     cancel-text="CANCELAR"
                     ok-text="OK"
                   >
-                    <ion-select-option>Rubem Braga</ion-select-option>
+                    <ion-select-option>Missionario</ion-select-option>
                   </ion-select>
                 </ion-item>
               </ion-col>
@@ -110,7 +111,7 @@
             <ion-col size="12">
               <ion-text color="success">
                 <h5>
-                  Total de <ion-text color="danger">00</ion-text> Membros
+                  Total de <ion-text id="textResultQtd" color="danger">00</ion-text> Membros
                   Cadastrados
                 </h5>
               </ion-text>
@@ -172,6 +173,7 @@ export default defineComponent({
 });
 </script>
 <style scoped>
+
 ion-label {
   overflow: visible;
   font-weight: bold;
@@ -179,6 +181,9 @@ ion-label {
 h5 {
   overflow: visible;
   font-weight: bold;
+}
+#textResultQtd{
+  font-size: 24px;
 }
 ion-radio {
   margin-left: 1px;

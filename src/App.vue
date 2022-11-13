@@ -143,4 +143,10 @@ ion-modal.modalView::part(content){
 ion-select {
   color: #427aa1 !important;
 }
+.tituloPagina{
+  font-size: 22px;
+  margin-left: 5px;
+  color: #064789;
+  font-weight: bold;
+}
 </style>

@@ -1,6 +1,8 @@
 <template>
   <ion-header mode="ios">
     <ion-toolbar mode="ios">
+      <ion-label class="tituloPagina" v-if="page == 'cadastro'">Cadastrar</ion-label>
+      <ion-label class="tituloPagina" v-else>Editar</ion-label>
       <ion-button
         v-if="page == 'editar'"
         :disabled="desativarBtnDelete"
@@ -400,7 +402,7 @@ export default defineComponent({
   data() {
     return {
       //urlServer: "http://54.207.193.202:4041",
-      urlServer: "http://192.168.18.4:4041",
+      urlServer: "http://192.168.18.103:4041",
       desativarBtnVoltar: true,
       desativarBtnDelete: true,
       desativarBtnSalvar: true,
