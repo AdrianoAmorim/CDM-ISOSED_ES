@@ -2,6 +2,8 @@
   <ion-page>
     <ion-header mode="ios">
       <ion-toolbar mode="ios">
+        <ion-label class="tituloPagina" v-if="nomePg == 'congregacoes'">Congregações</ion-label>
+      <ion-label class="tituloPagina" v-else>Cargos</ion-label>
         <ion-button
           fill="clear"
           router-direction="back"
