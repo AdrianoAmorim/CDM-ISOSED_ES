@@ -578,6 +578,8 @@ export default defineComponent({
       this.membro.bairro = membroEdit.logradouro.bairro;
       this.membro.cidade = membroEdit.logradouro.cidade;
       this.membro.numero = membroEdit.logradouro.numero;
+
+
     },
 
     async setMembro(membro) {
@@ -585,8 +587,6 @@ export default defineComponent({
       if (validar) {
         membro.telefone = this.retirarMascara(membro.telefone);
         membro.telefone = membro.telefone ?? "";
-        membro.telefone = membro.telefone.padStart(11, "0");
-
         this.desativarBtnSalvar = true;
         this.desativarBtnVoltar = true;
         this.loader = true;
@@ -636,7 +636,6 @@ export default defineComponent({
       if (validar) {
         membro.telefone = this.retirarMascara(membro.telefone);
         membro.telefone = membro.telefone ?? "";
-        membro.telefone = membro.telefone.padStart(11, "0");
         this.desativarBtnSalvar = true;
         this.desativarBtnVoltar = true;
         this.desativarBtnDelete = true;

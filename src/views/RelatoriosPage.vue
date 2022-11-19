@@ -31,12 +31,11 @@
 
         <ion-row class="ion-justify-content-start borderModalView">
           <ion-col size="12">
-            <ion-radio-group mode="md" v-model="opcSelecionada">
+            <ion-radio-group mode="md" v-model="opcSelecionada" @ionChange="ativarFiltros()">
               <ion-row class="ion-justify-content-between">
                 <ion-item lines="none" class="diferencaRadioBtn">
                   <ion-label class="lblOpcoes">QUANTIDADE</ion-label>
                   <ion-radio
-                    @click="ativarFiltros()"
                     slot="start"
                     value="opcQuantidade"
                     color="success"
@@ -46,7 +45,6 @@
                 <ion-item lines="none" class="diferencaRadioBtn">
                   <ion-label class="lblOpcoes">LISTAR</ion-label>
                   <ion-radio
-                    @click="ativarFiltros()"
                     slot="start"
                     value="opcListar"
                     color="success"
@@ -116,7 +114,8 @@
                     ></ion-radio>
                   </ion-item>
 
-                  <ion-item lines="none" class="diferencaRadioBtn">
+                  <ion-item lines="none" class="diferencaRadioBtn" 
+                      v-show="desativarFiltroTodos">
                     <ion-label>TODOS</ion-label>
                     <ion-radio
                       :disabled="ativarFiltro"
@@ -247,14 +246,25 @@ export default defineComponent({
       selectCgrValor: "",
       ativarSelectCgr: false,
       ativarFiltro: true,
+      desativarFiltroTodos: true,
       opcSelecionada: "",
       filtroSelecionado: "",
     };
   },
   methods: {
-    //FUNÇÃO PARA ATIVAR OS FILTROS APOS SELECIONAR A OPCAO DE RELATORIO
+    //FUNÇÃO PARA ATIVAR OS FILTROS APOS SELECIONAR A OPCAO DE RELATORIO e resetar campos select
     ativarFiltros() {
+       this.lblSelectGenerico = "";
+      this.selectGnValor = "";
+      this.selectCgrValor = "";
+      this.ativarSelectGn = false;
+      this.ativarSelectCgr = false;
       this.ativarFiltro = false;
+      this.desativarFiltroTodos = true;
+      this.filtroSelecionado = "";
+      if(this.opcSelecionada == "opcListar"){
+          this.desativarFiltroTodos = false;
+      }
     },
 
     //FAZ O DIRECIONAMENTO DAS ESCOLHAS DO USUARIO ATRAVES DAS OPCOES DE RELATORIO E FILTROS
@@ -271,11 +281,18 @@ export default defineComponent({
         }else if (this.filtroSelecionado == "todos") {
           console.log("filtro Qtd todos");
         }
-      } else if (this.opcSelecionada == "congregacao") {
-        console.log("dentro da Opc Congregacao");
-      } else if (this.opcSelecionadaQtd == "cargo_congregacaoQtd") {
-        this.getCargos();
-      }
+      } else if (this.opcSelecionada == "opcListar") {
+      
+         if (this.filtroSelecionado == "cargo") {
+          console.log("filtro lista cargo");
+          this.getCargos();
+        } else if (this.filtroSelecionado == "congregacao") {
+          console.log("filtro lista congregacao");
+          this.getCongregacoes();
+        }else if (this.filtroSelecionado == "cargo_congregacao") {
+          console.log("filtro lista cargo_congregacao");
+        }
+      } 
     },
 
     //BUSCA TODOS OS CARGOS CADASTRADOS 
@@ -324,7 +341,6 @@ export default defineComponent({
       }
     },
   },
-  watch: {},
 });
 </script>
 <style scoped>
