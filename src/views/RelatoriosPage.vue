@@ -31,7 +31,11 @@
 
         <ion-row class="ion-justify-content-start borderModalView">
           <ion-col size="12">
-            <ion-radio-group mode="md" v-model="opcSelecionada" @ionChange="ativarFiltros()">
+            <ion-radio-group
+              mode="md"
+              v-model="opcSelecionada"
+              @ionChange="ativarFiltros()"
+            >
               <ion-row class="ion-justify-content-between">
                 <ion-item lines="none" class="diferencaRadioBtn">
                   <ion-label class="lblOpcoes">QUANTIDADE</ion-label>
@@ -114,8 +118,11 @@
                     ></ion-radio>
                   </ion-item>
 
-                  <ion-item lines="none" class="diferencaRadioBtn" 
-                      v-show="desativarFiltroTodos">
+                  <ion-item
+                    lines="none"
+                    class="diferencaRadioBtn"
+                    v-show="desativarFiltroTodos"
+                  >
                     <ion-label>TODOS</ion-label>
                     <ion-radio
                       :disabled="ativarFiltro"
@@ -176,15 +183,13 @@
           </ion-col>
         </ion-row>
 
-        <ion-row class="ion-justify-content-center">
-          <ion-col size="12">
-            <ion-text color="success">
-              <h5>
-                Total de
-                <ion-text id="textResultQtd" color="danger">00</ion-text>
-                Membros Cadastrados
-              </h5>
-            </ion-text>
+        <ion-row class="bgGradiente barraResultQtd ion-justify-content-center ion-align-items-center">
+          <ion-col size="6" class="">
+            
+            <ion-icon class="iconBarraQtd" :icon="people"/>
+          </ion-col>
+          <ion-col size="6" class="ion-text-end">
+            <ion-text id="textResultQtd">00000</ion-text>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -195,7 +200,7 @@
 <script>
 import { defineComponent } from "vue";
 import axios from "axios";
-import { arrowBackCircle } from "ionicons/icons";
+import { arrowBackCircle,people } from "ionicons/icons";
 import {
   IonPage,
   IonHeader,
@@ -237,7 +242,7 @@ export default defineComponent({
   data() {
     return {
       urlServer: "http://192.168.18.4:4041",
-      arrowBackCircle,
+      arrowBackCircle,people,
       listaGenerica: null,
       listaCongregacoes: null,
       lblSelectGenerico: "",
@@ -254,7 +259,7 @@ export default defineComponent({
   methods: {
     //FUNÇÃO PARA ATIVAR OS FILTROS APOS SELECIONAR A OPCAO DE RELATORIO e resetar campos select
     ativarFiltros() {
-       this.lblSelectGenerico = "";
+      this.lblSelectGenerico = "";
       this.selectGnValor = "";
       this.selectCgrValor = "";
       this.ativarSelectGn = false;
@@ -262,8 +267,8 @@ export default defineComponent({
       this.ativarFiltro = false;
       this.desativarFiltroTodos = true;
       this.filtroSelecionado = "";
-      if(this.opcSelecionada == "opcListar"){
-          this.desativarFiltroTodos = false;
+      if (this.opcSelecionada == "opcListar") {
+        this.desativarFiltroTodos = false;
       }
     },
 
@@ -276,26 +281,25 @@ export default defineComponent({
         } else if (this.filtroSelecionado == "congregacao") {
           console.log("filtro Qtd congregacao");
           this.getCongregacoes();
-        }else if (this.filtroSelecionado == "cargo_congregacao") {
+        } else if (this.filtroSelecionado == "cargo_congregacao") {
           console.log("filtro Qtd cargo_congregacao");
-        }else if (this.filtroSelecionado == "todos") {
+        } else if (this.filtroSelecionado == "todos") {
           console.log("filtro Qtd todos");
         }
       } else if (this.opcSelecionada == "opcListar") {
-      
-         if (this.filtroSelecionado == "cargo") {
+        if (this.filtroSelecionado == "cargo") {
           console.log("filtro lista cargo");
           this.getCargos();
         } else if (this.filtroSelecionado == "congregacao") {
           console.log("filtro lista congregacao");
           this.getCongregacoes();
-        }else if (this.filtroSelecionado == "cargo_congregacao") {
+        } else if (this.filtroSelecionado == "cargo_congregacao") {
           console.log("filtro lista cargo_congregacao");
         }
-      } 
+      }
     },
 
-    //BUSCA TODOS OS CARGOS CADASTRADOS 
+    //BUSCA TODOS OS CARGOS CADASTRADOS
     async getCargos() {
       this.lblSelectGenerico = "";
       this.selectGnValor = "";
@@ -344,6 +348,10 @@ export default defineComponent({
 });
 </script>
 <style scoped>
+.bgGradiente{
+   background: linear-gradient(110deg, #3a6b8e 30%, #3289c7 45%);
+
+}
 .lblOpcoes {
   font-size: 17px;
 }
@@ -356,8 +364,20 @@ h5 {
   font-weight: bold;
   font-size: 17px;
 }
+
+.barraResultQtd{
+  margin-top: 10px;
+  border-radius: 10px;
+}
 #textResultQtd {
-  font-size: 24px;
+  font-size: 44px;
+  font-weight: bold;
+  color: #ffffff
+}
+.iconBarraQtd{
+  margin-left: 10px;
+  font-size: 38px;
+  color:#dde4ff;
 }
 ion-radio {
   margin-left: 1px;
