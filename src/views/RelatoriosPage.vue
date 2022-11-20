@@ -21,172 +21,179 @@
 
     <ion-content>
       <ion-grid>
-        <ion-row class="ion-justify-content-start">
-          <ion-col size="12">
-            <ion-text color="secondary">
-              <h5>Selecione o Tipo de Relatório Desejado:</h5>
-            </ion-text>
-          </ion-col>
-        </ion-row>
+        <ion-accordion-group :multiple="true">
+          <ion-accordion :toggle-icon="caretDown" value="1">
+            <ion-item slot="header">
+              <ion-text color="secondary">
+                <h5>Tipo de Relatório:</h5>
+              </ion-text>
+            </ion-item>
 
-        <ion-row class="ion-justify-content-start borderModalView">
-          <ion-col size="12">
-            <ion-radio-group
-              mode="md"
-              v-model="opcSelecionada"
-              @ionChange="ativarFiltros()"
-            >
-              <ion-row class="ion-justify-content-between">
-                <ion-item lines="none" class="diferencaRadioBtn">
-                  <ion-label class="lblOpcoes">QUANTIDADE</ion-label>
-                  <ion-radio
-                    slot="start"
-                    value="opcQuantidade"
-                    color="success"
-                  ></ion-radio>
-                </ion-item>
+            <ion-row class="ion-justify-content-start" slot="content">
+              <ion-col size="12">
+                <ion-radio-group
+                  mode="md"
+                  v-model="opcSelecionada"
+                  @ionChange="ativarFiltros()"
+                >
+                  <ion-row class="ion-justify-content-between">
+                    <ion-item lines="none" class="diferencaRadioBtn">
+                      <ion-label class="lblOpcoes">QUANTIDADE</ion-label>
+                      <ion-radio
+                        slot="start"
+                        value="opcQuantidade"
+                        color="success"
+                      ></ion-radio>
+                    </ion-item>
 
-                <ion-item lines="none" class="diferencaRadioBtn">
-                  <ion-label class="lblOpcoes">LISTAR</ion-label>
-                  <ion-radio
-                    slot="start"
-                    value="opcListar"
-                    color="success"
-                  ></ion-radio>
-                </ion-item>
+                    <ion-item lines="none" class="diferencaRadioBtn">
+                      <ion-label class="lblOpcoes">LISTAR</ion-label>
+                      <ion-radio
+                        slot="start"
+                        value="opcListar"
+                        color="success"
+                      ></ion-radio>
+                    </ion-item>
 
-                <ion-item lines="none" class="diferencaRadioBtn">
-                  <ion-label class="lblOpcoes">ANIVERSARIANTES</ion-label>
-                  <ion-radio
-                    @click="ativarFiltros()"
-                    slot="start"
-                    value="opcAniversariantes"
-                    color="success"
-                  ></ion-radio>
-                </ion-item>
-              </ion-row>
-            </ion-radio-group>
-          </ion-col>
-        </ion-row>
-
-        <ion-row class="ion-justify-content-start">
-          <ion-col size="12">
-            <ion-text color="secondary">
-              <h5>Filtrar Por:</h5>
-            </ion-text>
-          </ion-col>
-        </ion-row>
-
-        <ion-row class="ion-justify-content-start borderModalView">
-          <ion-col size="12">
-            <ion-radio-group
-              mode="md"
-              v-model="filtroSelecionado"
-              @ionChange="direcionarOpc()"
-            >
-              <ion-row class="ion-justify-content-center">
-                <ion-col size="6" class="ion-align-items-center">
-                  <ion-item lines="none" class="diferencaRadioBtn">
-                    <ion-label>CARGO</ion-label>
-                    <ion-radio
-                      :disabled="ativarFiltro"
-                      slot="start"
-                      value="cargo"
-                      color="secondary"
-                    ></ion-radio>
-                  </ion-item>
-
-                  <ion-item lines="none" class="diferencaRadioBtn">
-                    <ion-label>CARGO e<br />CONGREGAÇÃO</ion-label>
-                    <ion-radio
-                      :disabled="ativarFiltro"
-                      slot="start"
-                      value="cargo_congregacao"
-                      color="secondary"
-                    ></ion-radio>
-                  </ion-item>
-                </ion-col>
-
-                <ion-col size="6" class="ion-align-items-center">
-                  <ion-item lines="none" class="diferencaRadioBtn">
-                    <ion-label>CONGREGAÇÃO</ion-label>
-                    <ion-radio
-                      :disabled="ativarFiltro"
-                      slot="start"
-                      value="congregacao"
-                      color="secondary"
-                    ></ion-radio>
-                  </ion-item>
-
-                  <ion-item
-                    lines="none"
-                    class="diferencaRadioBtn"
-                    v-show="desativarFiltroTodos"
-                  >
-                    <ion-label>TODOS</ion-label>
-                    <ion-radio
-                      :disabled="ativarFiltro"
-                      slot="start"
-                      value="todos"
-                      color="secondary"
-                    ></ion-radio>
-                  </ion-item>
-                </ion-col>
-              </ion-row>
-            </ion-radio-group>
-          </ion-col>
-
-          <ion-col size="12">
-            <ion-row class="ion-justify-content-start">
-              <ion-col size="6">
-                <ion-item mode="md" v-show="ativarSelectGn">
-                  <ion-label position="stacked"
-                    >{{ lblSelectGenerico }}
-                  </ion-label>
-                  <ion-select
-                    v-model="selectGnValor"
-                    color="secondary"
-                    placeholder="Selecione"
-                    cancel-text="CANCELAR"
-                    ok-text="OK"
-                  >
-                    <ion-select-option
-                      v-for="Item in listaGenerica"
-                      :key="Item.id"
-                      :value="Item.id"
-                      >{{ Item.nome }}</ion-select-option
-                    >
-                  </ion-select>
-                </ion-item>
-              </ion-col>
-
-              <ion-col size="6">
-                <ion-item mode="md" v-show="ativarSelectCgr">
-                  <ion-label position="stacked">CONGREGAÇÕES</ion-label>
-                  <ion-select
-                    v-model="selectCgrValor"
-                    color="secondary"
-                    placeholder="Selecione"
-                    cancel-text="CANCELAR"
-                    ok-text="OK"
-                  >
-                    <ion-select-option
-                      v-for="Item in listaCongregacoes"
-                      :key="Item.id"
-                      :value="Item.id"
-                      >{{ Item.nome }}</ion-select-option
-                    >
-                  </ion-select>
-                </ion-item>
+                    <ion-item lines="none" class="diferencaRadioBtn">
+                      <ion-label class="lblOpcoes">ANIVERSARIANTES</ion-label>
+                      <ion-radio
+                        @click="ativarFiltros()"
+                        slot="start"
+                        value="opcAniversariantes"
+                        color="success"
+                      ></ion-radio>
+                    </ion-item>
+                  </ion-row>
+                </ion-radio-group>
               </ion-col>
             </ion-row>
-          </ion-col>
-        </ion-row>
+          </ion-accordion>
 
-        <ion-row class="bgGradiente barraResultQtd ion-justify-content-center ion-align-items-center">
-          <ion-col size="6" class="">
-            
-            <ion-icon class="iconBarraQtd" :icon="people"/>
+          <ion-accordion :toggle-icon="caretDown" value="2">
+            <ion-item slot="header">
+              <ion-text color="secondary">
+                <h5>Filtrar Por:</h5>
+              </ion-text>
+            </ion-item>
+
+            <ion-row class="ion-justify-content-start" slot="content">
+              <ion-col size="12">
+                <ion-radio-group
+                  mode="md"
+                  v-model="filtroSelecionado"
+                  @ionChange="direcionarOpc()"
+                >
+                  <ion-row class="ion-justify-content-center">
+                    <ion-col size="6" class="ion-align-items-center">
+                      <ion-item lines="none" class="diferencaRadioBtn">
+                        <ion-label>CARGO</ion-label>
+                        <ion-radio
+                          :disabled="ativarFiltro"
+                          slot="start"
+                          value="cargo"
+                          color="secondary"
+                        ></ion-radio>
+                      </ion-item>
+
+                      <ion-item lines="none" class="diferencaRadioBtn">
+                        <ion-label>CARGO e<br />CONGREGAÇÃO</ion-label>
+                        <ion-radio
+                          :disabled="ativarFiltro"
+                          slot="start"
+                          value="cargo_congregacao"
+                          color="secondary"
+                        ></ion-radio>
+                      </ion-item>
+                    </ion-col>
+
+                    <ion-col size="6" class="ion-align-items-center">
+                      <ion-item lines="none" class="diferencaRadioBtn">
+                        <ion-label>CONGREGAÇÃO</ion-label>
+                        <ion-radio
+                          :disabled="ativarFiltro"
+                          slot="start"
+                          value="congregacao"
+                          color="secondary"
+                        ></ion-radio>
+                      </ion-item>
+
+                      <ion-item
+                        lines="none"
+                        class="diferencaRadioBtn"
+                        v-show="desativarFiltroTodos"
+                      >
+                        <ion-label>TODOS</ion-label>
+                        <ion-radio
+                          :disabled="ativarFiltro"
+                          slot="start"
+                          value="todos"
+                          color="secondary"
+                        ></ion-radio>
+                      </ion-item>
+                    </ion-col>
+                  </ion-row>
+                </ion-radio-group>
+              </ion-col>
+
+              <ion-col size="12">
+                <ion-row class="ion-justify-content-start">
+                  <ion-col size="6">
+                    <ion-item mode="md" v-show="ativarSelectGn">
+                      <ion-label position="stacked"
+                        >{{ lblSelectGenerico }}
+                      </ion-label>
+                      <ion-select
+                        v-model="selectGnValor"
+                        color="secondary"
+                        placeholder="Selecione"
+                        cancel-text="CANCELAR"
+                        ok-text="OK"
+                      >
+                        <ion-select-option
+                          v-for="Item in listaGenerica"
+                          :key="Item.id"
+                          :value="Item.id"
+                          >{{ Item.nome }}</ion-select-option
+                        >
+                      </ion-select>
+                    </ion-item>
+                  </ion-col>
+
+                  <ion-col size="6">
+                    <ion-item mode="md" v-show="ativarSelectCgr">
+                      <ion-label position="stacked">CONGREGAÇÕES</ion-label>
+                      <ion-select
+                        v-model="selectCgrValor"
+                        color="secondary"
+                        placeholder="Selecione"
+                        cancel-text="CANCELAR"
+                        ok-text="OK"
+                      >
+                        <ion-select-option
+                          v-for="Item in listaCongregacoes"
+                          :key="Item.id"
+                          :value="Item.id"
+                          >{{ Item.nome }}</ion-select-option
+                        >
+                      </ion-select>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-col>
+            </ion-row>
+          </ion-accordion>
+        </ion-accordion-group>
+
+        <ion-row
+          class="
+            bgGradiente
+            barraResultQtd
+            ion-justify-content-center ion-align-items-center
+          "
+        >
+          <ion-col size="6">
+            <ion-icon class="iconBarraQtd" :icon="people" />
           </ion-col>
           <ion-col size="6" class="ion-text-end">
             <ion-text id="textResultQtd">00000</ion-text>
@@ -200,7 +207,7 @@
 <script>
 import { defineComponent } from "vue";
 import axios from "axios";
-import { arrowBackCircle,people } from "ionicons/icons";
+import { arrowBackCircle, people, caretDown } from "ionicons/icons";
 import {
   IonPage,
   IonHeader,
@@ -218,6 +225,8 @@ import {
   IonSelect,
   IonSelectOption,
   IonText,
+  IonAccordionGroup,
+  IonAccordion,
 } from "@ionic/vue";
 export default defineComponent({
   name: "relatoriosPage",
@@ -238,11 +247,15 @@ export default defineComponent({
     IonSelect,
     IonSelectOption,
     IonText,
+    IonAccordionGroup,
+    IonAccordion,
   },
   data() {
     return {
-      urlServer: "http://192.168.18.4:4041",
-      arrowBackCircle,people,
+      urlServer: "http://192.168.18.103:4041",
+      arrowBackCircle,
+      people,
+      caretDown,
       listaGenerica: null,
       listaCongregacoes: null,
       lblSelectGenerico: "",
@@ -257,6 +270,7 @@ export default defineComponent({
     };
   },
   methods: {
+    
     //FUNÇÃO PARA ATIVAR OS FILTROS APOS SELECIONAR A OPCAO DE RELATORIO e resetar campos select
     ativarFiltros() {
       this.lblSelectGenerico = "";
@@ -348,9 +362,8 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-.bgGradiente{
-   background: linear-gradient(110deg, #3a6b8e 30%, #3289c7 45%);
-
+.bgGradiente {
+  background: linear-gradient(110deg, #3a6b8e 30%, #3289c7 45%);
 }
 .lblOpcoes {
   font-size: 17px;
@@ -365,19 +378,20 @@ h5 {
   font-size: 17px;
 }
 
-.barraResultQtd{
+.barraResultQtd {
   margin-top: 10px;
   border-radius: 10px;
 }
 #textResultQtd {
+  margin-right: 10px;
   font-size: 44px;
   font-weight: bold;
-  color: #ffffff
+  color: #ffffff;
 }
-.iconBarraQtd{
+.iconBarraQtd {
   margin-left: 10px;
   font-size: 38px;
-  color:#dde4ff;
+  color: #dde4ff;
 }
 ion-radio {
   margin-left: 1px;
