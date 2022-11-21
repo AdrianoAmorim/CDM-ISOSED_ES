@@ -21,8 +21,12 @@
 
     <ion-content>
       <ion-grid>
-        <ion-accordion-group :multiple="true">
-          <ion-accordion :toggle-icon="caretDown" value="1">
+        <ion-accordion-group
+          :multiple="true"
+          ref="accordionOpcao"
+          :value="toogleAccordion"
+        >
+          <ion-accordion :toggle-icon="caretDown" value="opcao">
             <ion-item slot="header">
               <ion-text color="secondary">
                 <h5>Tipo de Relatório:</h5>
@@ -58,7 +62,6 @@
                     <ion-item lines="none" class="diferencaRadioBtn">
                       <ion-label class="lblOpcoes">ANIVERSARIANTES</ion-label>
                       <ion-radio
-                        @click="ativarFiltros()"
                         slot="start"
                         value="opcAniversariantes"
                         color="success"
@@ -70,7 +73,7 @@
             </ion-row>
           </ion-accordion>
 
-          <ion-accordion :toggle-icon="caretDown" value="2">
+          <ion-accordion :toggle-icon="caretDown" value="filtros">
             <ion-item slot="header">
               <ion-text color="secondary">
                 <h5>Filtrar Por:</h5>
@@ -193,10 +196,14 @@
           "
         >
           <ion-col size="6">
-            <ion-icon class="iconBarraQtd" :icon="people" />
+            <ion-icon
+              @click="openAccordion()"
+              class="iconBarraQtd"
+              :icon="people"
+            />
           </ion-col>
           <ion-col size="6" class="ion-text-end">
-            <ion-text id="textResultQtd">00000</ion-text>
+            <ion-text id="textResultQtd">---</ion-text>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -252,7 +259,7 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer: "http://192.168.18.103:4041",
+      urlServer: "http://192.168.18.4:4041",
       arrowBackCircle,
       people,
       caretDown,
@@ -267,10 +274,18 @@ export default defineComponent({
       desativarFiltroTodos: true,
       opcSelecionada: "",
       filtroSelecionado: "",
+      toogleAccordion: ["opcao", "filtros"],
     };
   },
   methods: {
-    
+    //CONTROLAR AS ESCOLHAS DO ACCORDION PELO CLICK
+    openAccordion() {
+      if (this.$refs.accordionOpcao.value == "opcao") {
+        this.toogleAccordion = "filtros";
+      } else {
+        this.toogleAccordion = "opcao";
+      }
+    },
     //FUNÇÃO PARA ATIVAR OS FILTROS APOS SELECIONAR A OPCAO DE RELATORIO e resetar campos select
     ativarFiltros() {
       this.lblSelectGenerico = "";
