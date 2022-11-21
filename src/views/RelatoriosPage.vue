@@ -38,7 +38,7 @@
                 <ion-radio-group
                   mode="md"
                   v-model="opcSelecionada"
-                  @ionChange="ativarFiltros()"
+                  @ionChange="configFiltros()"
                 >
                   <ion-row class="ion-justify-content-between">
                     <ion-item lines="none" class="diferencaRadioBtn">
@@ -92,7 +92,7 @@
                       <ion-item lines="none" class="diferencaRadioBtn">
                         <ion-label>CARGO</ion-label>
                         <ion-radio
-                          :disabled="ativarFiltro"
+                          :disabled="ativarFiltros"
                           slot="start"
                           value="cargo"
                           color="secondary"
@@ -102,7 +102,7 @@
                       <ion-item lines="none" class="diferencaRadioBtn">
                         <ion-label>CARGO e<br />CONGREGAÇÃO</ion-label>
                         <ion-radio
-                          :disabled="ativarFiltro"
+                          :disabled="ativarFiltros"
                           slot="start"
                           value="cargo_congregacao"
                           color="secondary"
@@ -114,7 +114,7 @@
                       <ion-item lines="none" class="diferencaRadioBtn">
                         <ion-label>CONGREGAÇÃO</ion-label>
                         <ion-radio
-                          :disabled="ativarFiltro"
+                          :disabled="ativarFiltros"
                           slot="start"
                           value="congregacao"
                           color="secondary"
@@ -124,11 +124,11 @@
                       <ion-item
                         lines="none"
                         class="diferencaRadioBtn"
-                        v-show="desativarFiltroTodos"
+                        v-show="ativarFiltroTodos"
                       >
                         <ion-label>TODOS</ion-label>
                         <ion-radio
-                          :disabled="ativarFiltro"
+                          :disabled="ativarFiltros"
                           slot="start"
                           value="todos"
                           color="secondary"
@@ -148,6 +148,7 @@
                       </ion-label>
                       <ion-select
                         v-model="selectGnValor"
+                        @ionChange="getQuantidade()"
                         color="secondary"
                         placeholder="Selecione"
                         cancel-text="CANCELAR"
@@ -189,6 +190,7 @@
         </ion-accordion-group>
 
         <ion-row
+        v-show="showResultQtd"
           class="
             bgGradiente
             barraResultQtd
@@ -197,7 +199,6 @@
         >
           <ion-col size="6">
             <ion-icon
-              @click="openAccordion()"
               class="iconBarraQtd"
               :icon="people"
             />
@@ -267,17 +268,29 @@ export default defineComponent({
       listaCongregacoes: null,
       lblSelectGenerico: "",
       ativarSelectGn: false,
+      ativarSelectCgr: false,
       selectGnValor: "",
       selectCgrValor: "",
-      ativarSelectCgr: false,
-      ativarFiltro: true,
-      desativarFiltroTodos: true,
+      ativarFiltros: true,
+      ativarFiltroTodos: true,
       opcSelecionada: "",
       filtroSelecionado: "",
       toogleAccordion: ["opcao", "filtros"],
+      showResultQtd: false
     };
   },
   methods: {
+    getQuantidade(){
+      if(this.filtroSelecionado == "cargo"){
+        console.log(this.filtroSelecionado)
+      }else if(this.filtroSelecionado =="congregacao"){
+          console.log(this.filtroSelecionado )
+      }else if(this.filtroSelecionado == "cargo_congregacao"){
+        console.log(this.filtroSelecionado )
+      }else{
+        console.log(this.filtroSelecionado)
+      }
+    },
     //CONTROLAR AS ESCOLHAS DO ACCORDION PELO CLICK
     openAccordion() {
       if (this.$refs.accordionOpcao.value == "opcao") {
@@ -287,43 +300,42 @@ export default defineComponent({
       }
     },
     //FUNÇÃO PARA ATIVAR OS FILTROS APOS SELECIONAR A OPCAO DE RELATORIO e resetar campos select
-    ativarFiltros() {
+    configFiltros() {
       this.lblSelectGenerico = "";
       this.selectGnValor = "";
       this.selectCgrValor = "";
       this.ativarSelectGn = false;
       this.ativarSelectCgr = false;
-      this.ativarFiltro = false;
-      this.desativarFiltroTodos = true;
+      this.ativarFiltros = false;
+      this.ativarFiltroTodos = true;
       this.filtroSelecionado = "";
       if (this.opcSelecionada == "opcListar") {
-        this.desativarFiltroTodos = false;
+        this.ativarFiltroTodos = false;
       }
+  
     },
 
     //FAZ O DIRECIONAMENTO DAS ESCOLHAS DO USUARIO ATRAVES DAS OPCOES DE RELATORIO E FILTROS
     direcionarOpc() {
       if (this.opcSelecionada == "opcQuantidade") {
         if (this.filtroSelecionado == "cargo") {
-          console.log("filtro Qtd cargo");
           this.getCargos();
         } else if (this.filtroSelecionado == "congregacao") {
-          console.log("filtro Qtd congregacao");
           this.getCongregacoes();
         } else if (this.filtroSelecionado == "cargo_congregacao") {
-          console.log("filtro Qtd cargo_congregacao");
+          this.getCargos();
+          this.getCongregacoes();
         } else if (this.filtroSelecionado == "todos") {
           console.log("filtro Qtd todos");
         }
       } else if (this.opcSelecionada == "opcListar") {
         if (this.filtroSelecionado == "cargo") {
-          console.log("filtro lista cargo");
           this.getCargos();
         } else if (this.filtroSelecionado == "congregacao") {
-          console.log("filtro lista congregacao");
           this.getCongregacoes();
         } else if (this.filtroSelecionado == "cargo_congregacao") {
-          console.log("filtro lista cargo_congregacao");
+          this.getCargos();
+          this.getCongregacoes();
         }
       }
     },
@@ -361,9 +373,15 @@ export default defineComponent({
       try {
         const response = await axios.get(`${this.urlServer}/congregacoes`);
         if (response.data.length > 0) {
-          this.listaGenerica = response.data;
-          this.lblSelectGenerico = "CONGREGAÇÕES";
-          this.ativarSelectGn = true;
+          if (this.filtroSelecionado == "cargo_congregacao"){
+            console.log("entro na opcao certa")
+            this.listaCongregacoes = response.data;
+            this.ativarSelectCgr = true;
+          }else{
+            this.listaGenerica = response.data;
+            this.lblSelectGenerico = "CONGREGAÇÕES";
+            this.ativarSelectGn = true;
+          }
         } else if (response.data.length == 0) {
           this.alertInfoSistema("AVISO", "", "Nenhuma Congregação Cadastrado!");
         } else if (response.data.error == true) {
