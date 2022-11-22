@@ -46,7 +46,7 @@
                       <ion-radio
                         slot="start"
                         value="opcQuantidade"
-                        color="success"
+                        color="secondary"
                       ></ion-radio>
                     </ion-item>
 
@@ -55,7 +55,7 @@
                       <ion-radio
                         slot="start"
                         value="opcListar"
-                        color="success"
+                        color="secondary"
                       ></ion-radio>
                     </ion-item>
 
@@ -64,7 +64,7 @@
                       <ion-radio
                         slot="start"
                         value="opcAniversariantes"
-                        color="success"
+                        color="secondary"
                       ></ion-radio>
                     </ion-item>
                   </ion-row>
@@ -124,13 +124,13 @@
                       <ion-item
                         lines="none"
                         class="diferencaRadioBtn"
-                        v-show="ativarFiltroTodos"
+                        v-show="ativarSemFiltro"
                       >
-                        <ion-label>TODOS</ion-label>
+                        <ion-label>S/ FILTRO</ion-label>
                         <ion-radio
                           :disabled="ativarFiltros"
                           slot="start"
-                          value="todos"
+                          value="semFiltro"
                           color="secondary"
                         ></ion-radio>
                       </ion-item>
@@ -168,7 +168,7 @@
                     <ion-item mode="md" v-show="ativarSelectCgr">
                       <ion-label position="stacked">CONGREGAÇÕES</ion-label>
                       <ion-select
-                       @ionChange="direcionarRequisicoes()"
+                        @ionChange="direcionarRequisicoes()"
                         v-model="selectCgrValor"
                         color="secondary"
                         placeholder="Selecione"
@@ -202,7 +202,7 @@
             <ion-icon class="iconBarraQtd" :icon="people" />
           </ion-col>
           <ion-col size="6" class="ion-text-end">
-            <ion-text id="textResultQtd">---</ion-text>
+            <ion-text id="textResultQtd">{{resultQtd}}</ion-text>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -215,6 +215,7 @@ import { defineComponent } from "vue";
 import axios from "axios";
 import { arrowBackCircle, people, caretDown } from "ionicons/icons";
 import {
+  alertController,
   IonPage,
   IonHeader,
   IonToolbar,
@@ -270,31 +271,60 @@ export default defineComponent({
       selectGnValor: "",
       selectCgrValor: "",
       ativarFiltros: true,
-      ativarFiltroTodos: true,
+      ativarSemFiltro: true,
       opcSelecionada: "",
       filtroSelecionado: "",
       toogleAccordion: ["opcao", "filtros"],
       showResultQtd: false,
+      resultQtd: 0
     };
   },
   methods: {
+     //CRIA UMA JANELA DE AVISO COM PARAMETROS ...
+    async alertInfoSistema(header, subHeader, message) {
+      const alert = await alertController.create({
+        cssClass: "alert-info",
+        header: header,
+        subHeader: subHeader,
+        message: message,
+        buttons: ["OK"],
+      });
+      await alert.present();
+    },
+    //FAZ O DIRECIONAMENTO DAS REQUIZICOES AO SERVIDOR, DE ACORDO COM AS OPCOES E FILTROS SELECIONADOS
     direcionarRequisicoes() {
-      if(this.selectGnValor == "" && this.selectCgrValor == ""){
-          this.showResultQtd =false
+      if (this.filtroSelecionado == "semFiltro") {
+        this.getQtdMembros()
+        this.showResultQtd = true;
       }else
-      if (this.opcSelecionada == "opcQuantidade") {
+      if (this.selectGnValor == "" && this.selectCgrValor == "") {
+          this.showResultQtd = false;
+      } else if (this.opcSelecionada == "opcQuantidade") {
         if (this.filtroSelecionado == "cargo") {
-          this.showResultQtd =true
+          this.getQtdMembrosCargo()
+          console.log("dentro filtro cargo")
+          this.showResultQtd = true;
         } else if (this.filtroSelecionado == "congregacao") {
-          this.showResultQtd =true
+          this.getQtdMembrosCongregacao()
+          this.showResultQtd = true;
         } else if (this.filtroSelecionado == "cargo_congregacao") {
-          if(this.selectGnValor == "" || this.selectCgrValor == ""){
-            alert("Escolha o Cargo e a Congregação para a consulta!!")
-          }else{
-          this.showResultQtd =true
+          if (this.selectGnValor == "" || this.selectCgrValor == "") {
+            alert("Escolha o Cargo e a Congregação para a consulta!!");
+          } else {
+            this.showResultQtd = true;
           }
-        } else {
-          console.log(this.filtroSelecionado);
+        }
+      } else if (this.opcSelecionada == "opcListar") {
+        if (this.filtroSelecionado == "cargo") {
+          console.log("listar membro cargo");
+        } else if (this.filtroSelecionado == "congregacao") {
+          console.log("listar membro congregacao");
+        } else if (this.filtroSelecionado == "cargo_congregacao") {
+          if (this.selectGnValor == "" || this.selectCgrValor == "") {
+            alert("Escolha o Cargo e a Congregação para a consulta!!");
+          } else {
+            console.log("listar membro cargo + congregacao");
+          }
         }
       }
     },
@@ -314,38 +344,38 @@ export default defineComponent({
       this.ativarSelectGn = false;
       this.ativarSelectCgr = false;
       this.ativarFiltros = false;
-      this.ativarFiltroTodos = true;
+      this.ativarSemFiltro = true;
       this.filtroSelecionado = "";
+      this.showResultQtd = false;
       if (this.opcSelecionada == "opcListar") {
-        this.ativarFiltroTodos = false;
+        this.ativarSemFiltro = false;
       }
     },
 
-    /*FAZ O DIRECIONAMENTO DAS ESCOLHAS DO USUARIO ATRAVES DAS OPCOES DE RELATORIO E FILTROS
+    /*FAZ O DIRECIONAMENTO DAS ESCOLHAS DO USUARIO ATRAVES dos FILTROS
           para carregar os selects de opcoes de cargo e congregacoes*/
     direcionarOpc() {
-      if (this.opcSelecionada == "opcQuantidade") {
-        if (this.filtroSelecionado == "cargo") {
-          this.getCargos();
-        } else if (this.filtroSelecionado == "congregacao") {
-          this.getCongregacoes();
-        } else if (this.filtroSelecionado == "cargo_congregacao") {
-          this.getCargos();
-          this.getCongregacoes();
-        } else if (this.filtroSelecionado == "todos") {
-          console.log("filtro Qtd todos");
-        }
-      } else if (this.opcSelecionada == "opcListar") {
-        if (this.filtroSelecionado == "cargo") {
-          this.getCargos();
-        } else if (this.filtroSelecionado == "congregacao") {
-          this.getCongregacoes();
-        } else if (this.filtroSelecionado == "cargo_congregacao") {
-          this.getCargos();
-          this.getCongregacoes();
-        }
+      this.showResultQtd = false;
+      if (this.filtroSelecionado == "cargo") {
+        this.getCargos();
+      } else if (this.filtroSelecionado == "congregacao") {
+        this.getCongregacoes();
+      } else if (this.filtroSelecionado == "cargo_congregacao") {
+        this.getCargos();
+        this.getCongregacoes();
+      } else if (this.filtroSelecionado == "semFiltro") {
+        console.log("dentro do filtro");
+        this.lblSelectGenerico = null;
+        this.selectGnValor = "";
+        this.selectCgrValor = "";
+        this.ativarSelectGn = false;
+        this.ativarSelectCgr = false;
+        this.direcionarRequisicoes();
       }
     },
+
+    //------------------------------------------------------------------------------------
+    //METODOS DE REQUIZICÕES
 
     //BUSCA TODOS OS CARGOS CADASTRADOS
     async getCargos() {
@@ -398,6 +428,58 @@ export default defineComponent({
         this.alertInfoSistema("AVISO", "Error", "" + e.message);
       }
     },
+
+    async getQtdMembros(){
+      try {
+        const response = await axios.get(`${this.urlServer}/relatorio_qtdMembros`);
+          console.log(response)
+          if(response.data._all > 0){
+            this.resultQtd = response.data._all
+          }else if (response.data.length == 0) {
+          this.alertInfoSistema("AVISO", "", "Nenhum Membro Cadastrado!");
+        } else if (response.data.error == true) {
+          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+        }
+
+      } catch (e) {
+      this.alertInfoSistema("AVISO", "Error", "" + e);
+      }
+    },
+     async getQtdMembrosCargo(){
+      var idCargo = this.selectGnValor.toString()
+      try {
+        const response = await axios.get(`${this.urlServer}/relatorio_qtdMembros_cargo?id=${idCargo}`);
+         
+          if(response.data._all > 0){
+            this.resultQtd = response.data._all
+          }else if (response.data.length == 0) {
+          this.alertInfoSistema("AVISO", "", "Nenhum Membro com Este Cargo Cadastrado!");
+        } else if (response.data.error == true) {
+          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+        }
+
+      } catch (e) {
+        this.alertInfoSistema("AVISO", "Error", "" + e);
+      }
+    },
+    async getQtdMembrosCongregacao(){
+      var idCongregacao = this.selectGnValor.toString()
+      try {
+        const response = await axios.get(`${this.urlServer}/relatorio_qtdMembros_congregacao?id=${idCongregacao}`);
+         
+          if(response.data._all > 0){
+            this.resultQtd = response.data._all
+          }else if (response.data.length == 0) {
+          this.alertInfoSistema("AVISO", "", "Nenhum Membro com Esta Congregação Cadastrado!");
+        } else if (response.data.error == true) {
+          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+        }
+
+      } catch (e) {
+       this.alertInfoSistema("AVISO", "Error", "" + e);
+      }
+    },
+    
   },
 });
 </script>
