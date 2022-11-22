@@ -148,7 +148,7 @@
                       </ion-label>
                       <ion-select
                         v-model="selectGnValor"
-                        @ionChange="getQuantidade()"
+                        @ionChange="direcionarRequisicoes()"
                         color="secondary"
                         placeholder="Selecione"
                         cancel-text="CANCELAR"
@@ -168,6 +168,7 @@
                     <ion-item mode="md" v-show="ativarSelectCgr">
                       <ion-label position="stacked">CONGREGAÇÕES</ion-label>
                       <ion-select
+                       @ionChange="direcionarRequisicoes()"
                         v-model="selectCgrValor"
                         color="secondary"
                         placeholder="Selecione"
@@ -190,7 +191,7 @@
         </ion-accordion-group>
 
         <ion-row
-        v-show="showResultQtd"
+          v-show="showResultQtd"
           class="
             bgGradiente
             barraResultQtd
@@ -198,10 +199,7 @@
           "
         >
           <ion-col size="6">
-            <ion-icon
-              class="iconBarraQtd"
-              :icon="people"
-            />
+            <ion-icon class="iconBarraQtd" :icon="people" />
           </ion-col>
           <ion-col size="6" class="ion-text-end">
             <ion-text id="textResultQtd">---</ion-text>
@@ -266,7 +264,7 @@ export default defineComponent({
       caretDown,
       listaGenerica: null,
       listaCongregacoes: null,
-      lblSelectGenerico: "",
+      lblSelectGenerico: null,
       ativarSelectGn: false,
       ativarSelectCgr: false,
       selectGnValor: "",
@@ -276,19 +274,28 @@ export default defineComponent({
       opcSelecionada: "",
       filtroSelecionado: "",
       toogleAccordion: ["opcao", "filtros"],
-      showResultQtd: false
+      showResultQtd: false,
     };
   },
   methods: {
-    getQuantidade(){
-      if(this.filtroSelecionado == "cargo"){
-        console.log(this.filtroSelecionado)
-      }else if(this.filtroSelecionado =="congregacao"){
-          console.log(this.filtroSelecionado )
-      }else if(this.filtroSelecionado == "cargo_congregacao"){
-        console.log(this.filtroSelecionado )
-      }else{
-        console.log(this.filtroSelecionado)
+    direcionarRequisicoes() {
+      if(this.selectGnValor == "" && this.selectCgrValor == ""){
+          this.showResultQtd =false
+      }else
+      if (this.opcSelecionada == "opcQuantidade") {
+        if (this.filtroSelecionado == "cargo") {
+          this.showResultQtd =true
+        } else if (this.filtroSelecionado == "congregacao") {
+          this.showResultQtd =true
+        } else if (this.filtroSelecionado == "cargo_congregacao") {
+          if(this.selectGnValor == "" || this.selectCgrValor == ""){
+            alert("Escolha o Cargo e a Congregação para a consulta!!")
+          }else{
+          this.showResultQtd =true
+          }
+        } else {
+          console.log(this.filtroSelecionado);
+        }
       }
     },
     //CONTROLAR AS ESCOLHAS DO ACCORDION PELO CLICK
@@ -299,9 +306,9 @@ export default defineComponent({
         this.toogleAccordion = "opcao";
       }
     },
-    //FUNÇÃO PARA ATIVAR OS FILTROS APOS SELECIONAR A OPCAO DE RELATORIO e resetar campos select
+    //FUNÇÃO PARA ATIVAR OS FILTROS APOS SELECIONAR A OPCAO DE RELATORIO e reseta os campos select
     configFiltros() {
-      this.lblSelectGenerico = "";
+      this.lblSelectGenerico = null;
       this.selectGnValor = "";
       this.selectCgrValor = "";
       this.ativarSelectGn = false;
@@ -312,10 +319,10 @@ export default defineComponent({
       if (this.opcSelecionada == "opcListar") {
         this.ativarFiltroTodos = false;
       }
-  
     },
 
-    //FAZ O DIRECIONAMENTO DAS ESCOLHAS DO USUARIO ATRAVES DAS OPCOES DE RELATORIO E FILTROS
+    /*FAZ O DIRECIONAMENTO DAS ESCOLHAS DO USUARIO ATRAVES DAS OPCOES DE RELATORIO E FILTROS
+          para carregar os selects de opcoes de cargo e congregacoes*/
     direcionarOpc() {
       if (this.opcSelecionada == "opcQuantidade") {
         if (this.filtroSelecionado == "cargo") {
@@ -342,7 +349,7 @@ export default defineComponent({
 
     //BUSCA TODOS OS CARGOS CADASTRADOS
     async getCargos() {
-      this.lblSelectGenerico = "";
+      this.lblSelectGenerico = null;
       this.selectGnValor = "";
       this.selectCgrValor = "";
       this.ativarSelectGn = false;
@@ -365,7 +372,7 @@ export default defineComponent({
 
     //BUSCA TODAS AS CONGREGAÇÕES CADASTRADAS
     async getCongregacoes() {
-      this.lblSelectGenerico = "";
+      this.lblSelectGenerico = null;
       this.selectGnValor = "";
       this.selectCgrValor = "";
       this.ativarSelectGn = false;
@@ -373,11 +380,11 @@ export default defineComponent({
       try {
         const response = await axios.get(`${this.urlServer}/congregacoes`);
         if (response.data.length > 0) {
-          if (this.filtroSelecionado == "cargo_congregacao"){
-            console.log("entro na opcao certa")
+          if (this.filtroSelecionado == "cargo_congregacao") {
+            console.log("entro na opcao certa");
             this.listaCongregacoes = response.data;
             this.ativarSelectCgr = true;
-          }else{
+          } else {
             this.listaGenerica = response.data;
             this.lblSelectGenerico = "CONGREGAÇÕES";
             this.ativarSelectGn = true;
