@@ -269,7 +269,7 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer: "http://192.168.18.103:4041",
+      urlServer: "http://192.168.18.4:4041",
       arrowBackCircle,
       people,
       caretDown,
@@ -288,7 +288,7 @@ export default defineComponent({
       toogleAccordion: ["opcao", "filtros"],
       showResultQtd: false,
       resultQtd: 0,
-      textAvisoError: "TEStando aviso de Error",
+      textAvisoError: null,
       showAvisoError:false
     };
   },
@@ -310,7 +310,7 @@ export default defineComponent({
         this.getQtdMembros();
         this.showResultQtd = true;
       } else if (this.selectGnValor == "" && this.selectCgrValor == "") {
-        this.showResultQtd = false;
+        void(0)
       } else if (this.opcSelecionada == "opcQuantidade") {
         if (this.filtroSelecionado == "cargo") {
           this.getQtdMembrosCargo();
@@ -320,11 +320,12 @@ export default defineComponent({
           this.getQtdMembrosCongregacao();
           this.showResultQtd = true;
         } else if (this.filtroSelecionado == "cargo_congregacao") {
-          console.log("dentro do cargo e congregacao");
           if (this.selectGnValor == "" || this.selectCgrValor == "") {
-            alert("Escolha o Cargo e a Congregação para a consulta!!");
+            this.textAvisoError = "Selecione o Cargo e a Congregação para a consulta!!"
+            this.showAvisoError = true
           } else {
             this.getQtdMembrosCongregacaoCargo();
+            this.showAvisoError = false
             this.showResultQtd = true;
           }
         }
@@ -426,7 +427,6 @@ export default defineComponent({
         const response = await axios.get(`${this.urlServer}/congregacoes`);
         if (response.data.length > 0) {
           if (this.filtroSelecionado == "cargo_congregacao") {
-            console.log("entro na opcao certa");
             this.listaCongregacoes = response.data;
             this.ativarSelectCgr = true;
           } else {
@@ -493,8 +493,7 @@ export default defineComponent({
         if (response.data._all > 0) {
           this.resultQtd = response.data._all;
         } else if (response.data._all == 0) {
-         this.textAvisoError = "Nenhum Membro com Esta Congregação Cadastrado!"
-         this.showAvisoError = true
+       
          this.resultQtd = 0;
         } else if (response.data.error == true) {
           this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
@@ -515,8 +514,6 @@ export default defineComponent({
         if (response.data._all > 0) {
           this.resultQtd = response.data._all;
         } else if (response.data._all == 0) {
-          this.textAvisoError = "Nenhum Membro Cadastrado!"
-         this.showAvisoError = true
          this.resultQtd = 0;
         } else if (response.data.error == true) {
           this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
