@@ -184,6 +184,16 @@
                       </ion-select>
                     </ion-item>
                   </ion-col>
+                  <ion-col size="12" v-show="showAvisoError">
+                    <ion-row class="ion-justify-content-start ion-align-items-center">
+                      <ion-col size="12" >
+                        <ion-icon id="iconAvisoError" :icon="warning" />
+                        <ion-text id="avisoError"
+                          >{{ textAvisoError }}
+                        </ion-text>
+                      </ion-col>
+                    </ion-row>
+                  </ion-col>
                 </ion-row>
               </ion-col>
             </ion-row>
@@ -202,7 +212,7 @@
             <ion-icon class="iconBarraQtd" :icon="people" />
           </ion-col>
           <ion-col size="6" class="ion-text-end">
-            <ion-text id="textResultQtd">{{resultQtd}}</ion-text>
+            <ion-text id="textResultQtd">{{ resultQtd }}</ion-text>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -213,7 +223,7 @@
 <script>
 import { defineComponent } from "vue";
 import axios from "axios";
-import { arrowBackCircle, people, caretDown } from "ionicons/icons";
+import { arrowBackCircle, people, caretDown,warning } from "ionicons/icons";
 import {
   alertController,
   IonPage,
@@ -263,6 +273,7 @@ export default defineComponent({
       arrowBackCircle,
       people,
       caretDown,
+      warning,
       listaGenerica: null,
       listaCongregacoes: null,
       lblSelectGenerico: null,
@@ -276,11 +287,13 @@ export default defineComponent({
       filtroSelecionado: "",
       toogleAccordion: ["opcao", "filtros"],
       showResultQtd: false,
-      resultQtd: 0
+      resultQtd: 0,
+      textAvisoError: "TEStando aviso de Error",
+      showAvisoError:false
     };
   },
   methods: {
-     //CRIA UMA JANELA DE AVISO COM PARAMETROS ...
+    //CRIA UMA JANELA DE AVISO COM PARAMETROS ...
     async alertInfoSistema(header, subHeader, message) {
       const alert = await alertController.create({
         cssClass: "alert-info",
@@ -294,25 +307,24 @@ export default defineComponent({
     //FAZ O DIRECIONAMENTO DAS REQUIZICOES AO SERVIDOR, DE ACORDO COM AS OPCOES E FILTROS SELECIONADOS
     direcionarRequisicoes() {
       if (this.filtroSelecionado == "semFiltro") {
-        this.getQtdMembros()
+        this.getQtdMembros();
         this.showResultQtd = true;
-      }else
-      if (this.selectGnValor == "" && this.selectCgrValor == "") {
-          this.showResultQtd = false;
+      } else if (this.selectGnValor == "" && this.selectCgrValor == "") {
+        this.showResultQtd = false;
       } else if (this.opcSelecionada == "opcQuantidade") {
         if (this.filtroSelecionado == "cargo") {
-          this.getQtdMembrosCargo()
-          console.log("dentro filtro cargo")
+          this.getQtdMembrosCargo();
+          console.log("dentro filtro cargo");
           this.showResultQtd = true;
         } else if (this.filtroSelecionado == "congregacao") {
-          this.getQtdMembrosCongregacao()
+          this.getQtdMembrosCongregacao();
           this.showResultQtd = true;
         } else if (this.filtroSelecionado == "cargo_congregacao") {
-          console.log("dentro do cargo e congregacao")
+          console.log("dentro do cargo e congregacao");
           if (this.selectGnValor == "" || this.selectCgrValor == "") {
             alert("Escolha o Cargo e a Congregação para a consulta!!");
           } else {
-            this.getQtdMembrosCongregacaoCargo()
+            this.getQtdMembrosCongregacaoCargo();
             this.showResultQtd = true;
           }
         }
@@ -349,6 +361,7 @@ export default defineComponent({
       this.ativarSemFiltro = true;
       this.filtroSelecionado = "";
       this.showResultQtd = false;
+      this.showAvisoError = false
       if (this.opcSelecionada == "opcListar") {
         this.ativarSemFiltro = false;
       }
@@ -358,6 +371,7 @@ export default defineComponent({
           para carregar os selects de opcoes de cargo e congregacoes*/
     direcionarOpc() {
       this.showResultQtd = false;
+      this.showAvisoError = false;
       if (this.filtroSelecionado == "cargo") {
         this.getCargos();
       } else if (this.filtroSelecionado == "congregacao") {
@@ -366,7 +380,6 @@ export default defineComponent({
         this.getCargos();
         this.getCongregacoes();
       } else if (this.filtroSelecionado == "semFiltro") {
-        console.log("dentro do filtro");
         this.lblSelectGenerico = null;
         this.selectGnValor = "";
         this.selectCgrValor = "";
@@ -431,78 +444,88 @@ export default defineComponent({
       }
     },
 
-    async getQtdMembros(){
+    async getQtdMembros() {
       try {
-        const response = await axios.get(`${this.urlServer}/relatorio_qtdMembros`);
-          console.log(response)
-          if(response.data._all > 0){
-            this.resultQtd = response.data._all
-          }else if (response.data.length == 0) {
+        const response = await axios.get(
+          `${this.urlServer}/relatorio_qtdMembros`
+        );
+        console.log(response);
+        if (response.data._all > 0) {
+          this.resultQtd = response.data._all;
+        } else if (response.data.length == 0) {
           this.alertInfoSistema("AVISO", "", "Nenhum Membro Cadastrado!");
         } else if (response.data.error == true) {
           this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
         }
-
-      } catch (e) {
-      this.alertInfoSistema("AVISO", "Error", "" + e);
-      }
-    },
-     async getQtdMembrosCargo(){
-      var idCargo = this.selectGnValor.toString()
-      try {
-        const response = await axios.get(`${this.urlServer}/relatorio_qtdMembros_cargo?id=${idCargo}`);
-         
-          if(response.data._all > 0){
-            this.resultQtd = response.data._all
-          }else if (response.data.length == 0) {
-          this.alertInfoSistema("AVISO", "", "Nenhum Membro com Este Cargo Cadastrado!");
-        } else if (response.data.error == true) {
-          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
-        }
-
       } catch (e) {
         this.alertInfoSistema("AVISO", "Error", "" + e);
       }
     },
-    async getQtdMembrosCongregacao(){
-      var idCongregacao = this.selectGnValor.toString()
+    async getQtdMembrosCargo() {
+      var idCargo = this.selectGnValor.toString();
       try {
-        const response = await axios.get(`${this.urlServer}/relatorio_qtdMembros_congregacao?id=${idCongregacao}`);
-         
-          if(response.data._all > 0){
-            this.resultQtd = response.data._all
-          }else if (response.data.length == 0) {
-          this.alertInfoSistema("AVISO", "", "Nenhum Membro com Esta Congregação Cadastrado!");
+        const response = await axios.get(
+          `${this.urlServer}/relatorio_qtdMembros_cargo?id=${idCargo}`
+        );
+
+        if (response.data._all > 0) {
+          this.resultQtd = response.data._all;
+        } else if (response.data.length == 0) {
+          this.alertInfoSistema(
+            "AVISO",
+            "",
+            "Nenhum Membro com Este Cargo Cadastrado!"
+          );
         } else if (response.data.error == true) {
           this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
         }
-
       } catch (e) {
-       this.alertInfoSistema("AVISO", "Error", "" + e);
+        this.alertInfoSistema("AVISO", "Error", "" + e);
       }
     },
-     async getQtdMembrosCongregacaoCargo(){
+    async getQtdMembrosCongregacao() {
+      var idCongregacao = this.selectGnValor.toString();
+      try {
+        const response = await axios.get(
+          `${this.urlServer}/relatorio_qtdMembros_congregacao?id=${idCongregacao}`
+        );
+
+        if (response.data._all > 0) {
+          this.resultQtd = response.data._all;
+        } else if (response.data._all == 0) {
+         this.textAvisoError = "Nenhum Membro com Esta Congregação Cadastrado!"
+         this.showAvisoError = true
+         this.resultQtd = 0;
+        } else if (response.data.error == true) {
+          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+        }
+      } catch (e) {
+        this.alertInfoSistema("AVISO", "Error", "" + e);
+      }
+    },
+    async getQtdMembrosCongregacaoCargo() {
       var idCargo = this.selectGnValor.toString();
       var idCongregacao = this.selectCgrValor.toString();
-          
+
       try {
-        const response = await axios.get(`${this.urlServer}/relatorio_qtdMembros_cargo_congregacao?idCargo=${idCargo}&idCongregacao=${idCongregacao}`);
-         
-          if(response.data._all > 0){
-            this.resultQtd = response.data._all
-          }else if (response.data._all == 0) {
-          this.alertInfoSistema("AVISO", "", "Nenhum Membro Cadastrado!");
-          this.resultQtd = 0;
+        const response = await axios.get(
+          `${this.urlServer}/relatorio_qtdMembros_cargo_congregacao?idCargo=${idCargo}&idCongregacao=${idCongregacao}`
+        );
+
+        if (response.data._all > 0) {
+          this.resultQtd = response.data._all;
+        } else if (response.data._all == 0) {
+          this.textAvisoError = "Nenhum Membro Cadastrado!"
+         this.showAvisoError = true
+         this.resultQtd = 0;
         } else if (response.data.error == true) {
           this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
           this.resultQtd = 0;
         }
-
       } catch (e) {
-       this.alertInfoSistema("AVISO", "Error", "" + e);
+        this.alertInfoSistema("AVISO", "Error", "" + e);
       }
     },
-    
   },
 });
 </script>
@@ -532,6 +555,15 @@ h5 {
   font-size: 44px;
   font-weight: bold;
   color: #ffffff;
+}
+#avisoError {
+  color: #eb445a;
+  font-weight: bold;
+  font-size: 18px;
+}
+#iconAvisoError{
+  font-size:24px;
+  color: #c8e00d;
 }
 .iconBarraQtd {
   margin-left: 10px;
