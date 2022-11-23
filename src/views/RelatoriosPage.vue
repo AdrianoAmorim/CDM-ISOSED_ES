@@ -259,7 +259,7 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer: "http://192.168.18.4:4041",
+      urlServer: "http://192.168.18.103:4041",
       arrowBackCircle,
       people,
       caretDown,
@@ -308,9 +308,11 @@ export default defineComponent({
           this.getQtdMembrosCongregacao()
           this.showResultQtd = true;
         } else if (this.filtroSelecionado == "cargo_congregacao") {
+          console.log("dentro do cargo e congregacao")
           if (this.selectGnValor == "" || this.selectCgrValor == "") {
             alert("Escolha o Cargo e a Congregação para a consulta!!");
           } else {
+            this.getQtdMembrosCongregacaoCargo()
             this.showResultQtd = true;
           }
         }
@@ -473,6 +475,27 @@ export default defineComponent({
           this.alertInfoSistema("AVISO", "", "Nenhum Membro com Esta Congregação Cadastrado!");
         } else if (response.data.error == true) {
           this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+        }
+
+      } catch (e) {
+       this.alertInfoSistema("AVISO", "Error", "" + e);
+      }
+    },
+     async getQtdMembrosCongregacaoCargo(){
+      var idCargo = this.selectGnValor.toString();
+      var idCongregacao = this.selectCgrValor.toString();
+          
+      try {
+        const response = await axios.get(`${this.urlServer}/relatorio_qtdMembros_cargo_congregacao?idCargo=${idCargo}&idCongregacao=${idCongregacao}`);
+         
+          if(response.data._all > 0){
+            this.resultQtd = response.data._all
+          }else if (response.data._all == 0) {
+          this.alertInfoSistema("AVISO", "", "Nenhum Membro Cadastrado!");
+          this.resultQtd = 0;
+        } else if (response.data.error == true) {
+          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+          this.resultQtd = 0;
         }
 
       } catch (e) {
