@@ -185,9 +185,13 @@
                     </ion-item>
                   </ion-col>
                   <ion-col size="12" v-show="showAvisoError">
-                    <ion-row class="ion-justify-content-start ion-align-items-center">
-                      <ion-col size="12" >
+                    <ion-row
+                      class="ion-justify-content-start ion-align-items-center"
+                    >
+                      <ion-col size="1" class="">
                         <ion-icon id="iconAvisoError" :icon="warning" />
+                      </ion-col>
+                      <ion-col size="11">
                         <ion-text id="avisoError"
                           >{{ textAvisoError }}
                         </ion-text>
@@ -223,7 +227,7 @@
 <script>
 import { defineComponent } from "vue";
 import axios from "axios";
-import { arrowBackCircle, people, caretDown,warning } from "ionicons/icons";
+import { arrowBackCircle, people, caretDown, warning } from "ionicons/icons";
 import {
   alertController,
   IonPage,
@@ -289,7 +293,7 @@ export default defineComponent({
       showResultQtd: false,
       resultQtd: 0,
       textAvisoError: null,
-      showAvisoError:false
+      showAvisoError: false,
     };
   },
   methods: {
@@ -308,25 +312,22 @@ export default defineComponent({
     direcionarRequisicoes() {
       if (this.filtroSelecionado == "semFiltro") {
         this.getQtdMembros();
-        this.showResultQtd = true;
       } else if (this.selectGnValor == "" && this.selectCgrValor == "") {
-        void(0)
+        void (0);
       } else if (this.opcSelecionada == "opcQuantidade") {
         if (this.filtroSelecionado == "cargo") {
-          this.getQtdMembrosCargo();
-          console.log("dentro filtro cargo");
-          this.showResultQtd = true;
+            this.getQtdMembrosCargo();
+         
         } else if (this.filtroSelecionado == "congregacao") {
-          this.getQtdMembrosCongregacao();
-          this.showResultQtd = true;
+        
+            this.getQtdMembrosCongregacao();
+       
         } else if (this.filtroSelecionado == "cargo_congregacao") {
           if (this.selectGnValor == "" || this.selectCgrValor == "") {
-            this.textAvisoError = "Selecione o Cargo e a Congregação para a consulta!!"
-            this.showAvisoError = true
+            this.textAvisoError ="Selecione o Cargo e a Congregação para a consulta!!";
+            this.showAvisoError = true;
           } else {
             this.getQtdMembrosCongregacaoCargo();
-            this.showAvisoError = false
-            this.showResultQtd = true;
           }
         }
       } else if (this.opcSelecionada == "opcListar") {
@@ -362,7 +363,7 @@ export default defineComponent({
       this.ativarSemFiltro = true;
       this.filtroSelecionado = "";
       this.showResultQtd = false;
-      this.showAvisoError = false
+      this.showAvisoError = false;
       if (this.opcSelecionada == "opcListar") {
         this.ativarSemFiltro = false;
       }
@@ -452,10 +453,14 @@ export default defineComponent({
         console.log(response);
         if (response.data._all > 0) {
           this.resultQtd = response.data._all;
-        } else if (response.data.length == 0) {
+        this.showResultQtd = true;
+        } else if (response.data._all == 0) {
+          this.resultQtd =0;
+        this.showResultQtd = false;
           this.alertInfoSistema("AVISO", "", "Nenhum Membro Cadastrado!");
         } else if (response.data.error == true) {
           this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+          this.resultQtd = 0;
         }
       } catch (e) {
         this.alertInfoSistema("AVISO", "Error", "" + e);
@@ -470,7 +475,10 @@ export default defineComponent({
 
         if (response.data._all > 0) {
           this.resultQtd = response.data._all;
-        } else if (response.data.length == 0) {
+          this.showResultQtd = true
+        } else if (response.data._all == 0) {
+          this.resultQtd = 0;
+          this.showResultQtd = false;
           this.alertInfoSistema(
             "AVISO",
             "",
@@ -478,6 +486,7 @@ export default defineComponent({
           );
         } else if (response.data.error == true) {
           this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+          this.resultQtd = 0;
         }
       } catch (e) {
         this.alertInfoSistema("AVISO", "Error", "" + e);
@@ -492,11 +501,18 @@ export default defineComponent({
 
         if (response.data._all > 0) {
           this.resultQtd = response.data._all;
+          this.showResultQtd = true;
         } else if (response.data._all == 0) {
-       
-         this.resultQtd = 0;
+            this.resultQtd = 0;
+          this.showResultQtd = false;
+          this.alertInfoSistema(
+            "AVISO",
+            "",
+            "Nenhum Membro com Esta Congregação Cadastrada!"
+          );
         } else if (response.data.error == true) {
           this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+          this.resultQtd = 0;
         }
       } catch (e) {
         this.alertInfoSistema("AVISO", "Error", "" + e);
@@ -513,8 +529,18 @@ export default defineComponent({
 
         if (response.data._all > 0) {
           this.resultQtd = response.data._all;
+             this.showAvisoError = false;
+            this.showResultQtd = true;
         } else if (response.data._all == 0) {
-         this.resultQtd = 0;
+          this.resultQtd = 0;
+          this.showAvisoError = false
+            this.showResultQtd = false;
+             this.alertInfoSistema(
+            "AVISO",
+            "",
+            "Nenhum Membro Cadastrada!"
+          );
+
         } else if (response.data.error == true) {
           this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
           this.resultQtd = 0;
@@ -558,8 +584,8 @@ h5 {
   font-weight: bold;
   font-size: 18px;
 }
-#iconAvisoError{
-  font-size:24px;
+#iconAvisoError {
+  font-size: 20px;
   color: #c8e00d;
 }
 .iconBarraQtd {
