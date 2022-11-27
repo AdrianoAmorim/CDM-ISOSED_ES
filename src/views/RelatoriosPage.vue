@@ -345,9 +345,10 @@ export default defineComponent({
           this.getMembrosCongregacao();
         } else if (this.filtroSelecionado == "cargo_congregacao") {
           if (this.selectGnValor == "" || this.selectCgrValor == "") {
-            alert("Escolha o Cargo e a Congregação para a consulta!!");
+             this.textAvisoError ="Selecione o Cargo e a Congregação para a consulta!!";
+            this.showAvisoError = true;
           } else {
-            console.log("listar membro cargo + congregacao");
+            this.getMembrosCargoCongregacao()
           }
         }
       }
@@ -595,7 +596,30 @@ async getMembrosCongregacao(){
           this.alertInfoSistema("AVISO","","Nenhum membro cadastrado Nesta Congregação!!")
         }else if (response.data.error == true) {
           this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
-          this.resultQtd = 0;
+          
+        }
+      } catch (e) {
+        console.log(e)
+      }
+    },
+
+    async getMembrosCargoCongregacao(){
+      const idCargo = this.selectGnValor.toString()
+      const idCongregacao = this.selectCgrValor.toString()
+      try {
+        const response = await axios.get(`${this.urlServer}/relatorio_membros_congregacao_cargo?idCargo=${idCargo}&idCongregacao=${idCongregacao}`);
+        if(response.data.length > 0){
+          this.listaMembros = response.data
+          this.tituloListar = "Por Cargo e Congregação"
+          this.toogleAccordion = ""
+          this.showAvisoError = false;
+          this.showListar = true;
+        }else if(response.data.length == 0 ){
+          this.toogleAccordion ="filtros";
+          this.showAvisoError = false;
+          this.showListar = false;
+          this.alertInfoSistema("AVISO","","Nenhum Membro Cadastrado com essas Informações!!")
+
         }
       } catch (e) {
         console.log(e)
