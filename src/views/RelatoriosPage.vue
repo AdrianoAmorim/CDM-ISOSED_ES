@@ -576,7 +576,7 @@ export default defineComponent({
         }
 
       } catch (e) {
-        this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+        this.alertInfoSistema("AVISO", "Error", "" + e);
       }
     },
 
@@ -599,7 +599,7 @@ async getMembrosCongregacao(){
           
         }
       } catch (e) {
-        this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+        this.alertInfoSistema("AVISO", "Error", "" + e);
       }
     },
 
