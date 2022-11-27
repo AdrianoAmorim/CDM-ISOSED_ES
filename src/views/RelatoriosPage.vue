@@ -576,7 +576,7 @@ export default defineComponent({
         }
 
       } catch (e) {
-        console.log(e)
+        this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
       }
     },
 
@@ -599,7 +599,7 @@ async getMembrosCongregacao(){
           
         }
       } catch (e) {
-        console.log(e)
+        this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
       }
     },
 
@@ -620,9 +620,12 @@ async getMembrosCongregacao(){
           this.showListar = false;
           this.alertInfoSistema("AVISO","","Nenhum Membro Cadastrado com essas Informações!!")
 
+        }else if (response.data.error == true) {
+          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+          
         }
       } catch (e) {
-        console.log(e)
+        this.alertInfoSistema("AVISO", "Error", "" + e);
       }
     }
 
