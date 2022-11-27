@@ -220,6 +220,7 @@
           </ion-col>
         </ion-row>
       </ion-grid>
+      <RelatorioListarMembros :showList="showListar" :listaMembros="listaMembros" :tituloListar="tituloListar" />
     </ion-content>
   </ion-page>
 </template>
@@ -227,6 +228,7 @@
 <script>
 import { defineComponent } from "vue";
 import axios from "axios";
+import RelatorioListarMembros from "@/components/RelatorioListarMembros.vue"
 import { arrowBackCircle, people, caretDown, warning } from "ionicons/icons";
 import {
   alertController,
@@ -252,6 +254,7 @@ import {
 export default defineComponent({
   name: "relatoriosPage",
   components: {
+    RelatorioListarMembros,
     IonPage,
     IonHeader,
     IonToolbar,
@@ -273,13 +276,14 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer: "http://192.168.18.4:4041",
+      urlServer: "http://192.168.18.103:4041",
       arrowBackCircle,
       people,
       caretDown,
       warning,
       listaGenerica: null,
       listaCongregacoes: null,
+      listaMembros:null,
       lblSelectGenerico: null,
       ativarSelectGn: false,
       ativarSelectCgr: false,
@@ -294,6 +298,8 @@ export default defineComponent({
       resultQtd: 0,
       textAvisoError: null,
       showAvisoError: false,
+      showListar:false,
+      tituloListar: "-"
     };
   },
   methods: {
@@ -310,10 +316,12 @@ export default defineComponent({
     },
     //FAZ O DIRECIONAMENTO DAS REQUIZICOES AO SERVIDOR, DE ACORDO COM AS OPCOES E FILTROS SELECIONADOS
     direcionarRequisicoes() {
+      console.log("dentro do direcionar requisicao");
       if (this.filtroSelecionado == "semFiltro") {
         this.getQtdMembros();
       } else if (this.selectGnValor == "" && this.selectCgrValor == "") {
         void (0);
+        console.log("dentro do if de select vazios")
       } else if (this.opcSelecionada == "opcQuantidade") {
         if (this.filtroSelecionado == "cargo") {
             this.getQtdMembrosCargo();
@@ -332,9 +340,9 @@ export default defineComponent({
         }
       } else if (this.opcSelecionada == "opcListar") {
         if (this.filtroSelecionado == "cargo") {
-          console.log("listar membro cargo");
+          this.getMembrosCargo();
         } else if (this.filtroSelecionado == "congregacao") {
-          console.log("listar membro congregacao");
+          this.getMembrosCongregacao();
         } else if (this.filtroSelecionado == "cargo_congregacao") {
           if (this.selectGnValor == "" || this.selectCgrValor == "") {
             alert("Escolha o Cargo e a Congregação para a consulta!!");
@@ -344,16 +352,10 @@ export default defineComponent({
         }
       }
     },
-    //CONTROLAR AS ESCOLHAS DO ACCORDION PELO CLICK
-    openAccordion() {
-      if (this.$refs.accordionOpcao.value == "opcao") {
-        this.toogleAccordion = "filtros";
-      } else {
-        this.toogleAccordion = "opcao";
-      }
-    },
+
     //FUNÇÃO PARA ATIVAR OS FILTROS APOS SELECIONAR A OPCAO DE RELATORIO e reseta os campos select
     configFiltros() {
+      this.toogleAccordion = ""
       this.lblSelectGenerico = null;
       this.selectGnValor = "";
       this.selectCgrValor = "";
@@ -364,6 +366,8 @@ export default defineComponent({
       this.filtroSelecionado = "";
       this.showResultQtd = false;
       this.showAvisoError = false;
+      this.toogleAccordion ="filtros";
+      console.log(this.toogleAccordion)
       if (this.opcSelecionada == "opcListar") {
         this.ativarSemFiltro = false;
       }
@@ -374,6 +378,8 @@ export default defineComponent({
     direcionarOpc() {
       this.showResultQtd = false;
       this.showAvisoError = false;
+      this.showListar = false;
+      this.toogleAccordion = "filtros"
       if (this.filtroSelecionado == "cargo") {
         this.getCargos();
       } else if (this.filtroSelecionado == "congregacao") {
@@ -450,7 +456,6 @@ export default defineComponent({
         const response = await axios.get(
           `${this.urlServer}/relatorio_qtdMembros`
         );
-        console.log(response);
         if (response.data._all > 0) {
           this.resultQtd = response.data._all;
         this.showResultQtd = true;
@@ -549,6 +554,54 @@ export default defineComponent({
         this.alertInfoSistema("AVISO", "Error", "" + e);
       }
     },
+
+    async getMembrosCargo(){
+      const idCargo = this.selectGnValor.toString()
+      try {
+        const response = await axios.get(`${this.urlServer}/relatorio_membros_cargo?idCargo=${idCargo}`)
+        
+        if(response.data.length > 0){
+          this.listaMembros = response.data;
+          this.toogleAccordion = ""
+          this.tituloListar = "- Por Cargo -"
+          this.showListar = true
+        }else if(response.data.length == 0){
+          this.showListar = false
+          this.toogleAccordion = "filtros"
+          this.alertInfoSistema("AVISO","","Nenhum membro cadastrado com este cargo!!")
+        }else if (response.data.error == true) {
+          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+          this.resultQtd = 0;
+        }
+
+      } catch (e) {
+        console.log(e)
+      }
+    },
+
+async getMembrosCongregacao(){
+      const idCongregacao = this.selectGnValor.toString()
+      try {
+        const response = await axios.get(`${this.urlServer}/relatorio_membros_congregacao?idCongregacao=${idCongregacao}`)
+        
+        if(response.data.length > 0){
+          this.listaMembros = response.data;
+          this.toogleAccordion = ""
+          this.tituloListar = "- Por Congregação -"
+          this.showListar = true
+        }else if(response.data.length == 0){
+          this.showListar = false
+          this.toogleAccordion = "filtros"
+          this.alertInfoSistema("AVISO","","Nenhum membro cadastrado Nesta Congregação!!")
+        }else if (response.data.error == true) {
+          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+          this.resultQtd = 0;
+        }
+      } catch (e) {
+        console.log(e)
+      }
+    }
+
   },
 });
 </script>
