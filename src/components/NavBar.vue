@@ -1,5 +1,5 @@
 <template>
-  <ion-toolbar color="primary">
+  <ion-toolbar>
     <ion-thumbnail slot="start">
       <ion-img  :src="imgLogo" alt="logomarca" />
     </ion-thumbnail>
@@ -29,6 +29,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
+ion-toolbar{
+  --background: linear-gradient(90deg, #064789 0%, #276db4 50%, #2174c7 100%) ;
+  color: #ffffff;
+  font-family:CrispyFood;
+}
 ion-thumbnail {
   --size: 50px;
   margin: 10px;
@@ -38,6 +43,8 @@ ion-thumbnail ion-img{
 }
 ion-title {
   overflow:visible;
-  padding: 5px;
+  font-size: 28px;
+  letter-spacing:2px;
+  font-weight: 400;
 }
 </style>

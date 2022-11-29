@@ -73,7 +73,11 @@
             </ion-row>
           </ion-accordion>
 
-          <ion-accordion :toggle-icon="caretDown" value="filtros">
+          <ion-accordion
+            :toggle-icon="caretDown"
+            value="filtros"
+            v-if="opcSelecionada != 'opcAniversariantes'"
+          >
             <ion-item slot="header">
               <ion-text color="secondary">
                 <h5>Filtrar Por:</h5>
@@ -184,20 +188,12 @@
                       </ion-select>
                     </ion-item>
                   </ion-col>
-                  <ion-col size="12" v-show="showAvisoError">
-                    <ion-row
-                      class="ion-justify-content-start ion-align-items-center"
-                    >
-                      <ion-col size="1" class="">
+                  <ion-row class="ion-align-items-center">
+                    <ion-col size="12" v-show="showAvisoError">
                         <ion-icon id="iconAvisoError" :icon="warning" />
-                      </ion-col>
-                      <ion-col size="11">
-                        <ion-text id="avisoError"
-                          >{{ textAvisoError }}
-                        </ion-text>
-                      </ion-col>
-                    </ion-row>
-                  </ion-col>
+                      <ion-text id="avisoError">{{ textAvisoError }} </ion-text>
+                    </ion-col>
+                  </ion-row>
                 </ion-row>
               </ion-col>
             </ion-row>
@@ -220,7 +216,11 @@
           </ion-col>
         </ion-row>
       </ion-grid>
-      <RelatorioListarMembros :showList="showListar" :listaMembros="listaMembros" :tituloListar="tituloListar" />
+      <RelatorioListarMembros
+        :showList="showListar"
+        :listaMembros="listaMembros"
+        :tituloListar="tituloListar"
+      />
     </ion-content>
   </ion-page>
 </template>
@@ -228,7 +228,7 @@
 <script>
 import { defineComponent } from "vue";
 import axios from "axios";
-import RelatorioListarMembros from "@/components/RelatorioListarMembros.vue"
+import RelatorioListarMembros from "@/components/RelatorioListarMembros.vue";
 import { arrowBackCircle, people, caretDown, warning } from "ionicons/icons";
 import {
   alertController,
@@ -276,14 +276,14 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer: "http://192.168.18.103:4041",
+      urlServer: "http://192.168.18.4:4041",
       arrowBackCircle,
       people,
       caretDown,
       warning,
       listaGenerica: null,
       listaCongregacoes: null,
-      listaMembros:null,
+      listaMembros: null,
       lblSelectGenerico: null,
       ativarSelectGn: false,
       ativarSelectCgr: false,
@@ -298,8 +298,22 @@ export default defineComponent({
       resultQtd: 0,
       textAvisoError: null,
       showAvisoError: false,
-      showListar:false,
-      tituloListar: "-"
+      showListar: false,
+      tituloListar: "-",
+      listaMes: [
+        { id: 1, nome: "Janeiro" },
+        { id: 2, nome: "Fevereiro" },
+        { id: 3, nome: "Março" },
+        { id: 4, nome: "Abril" },
+        { id: 5, nome: "Maio" },
+        { id: 6, nome: "Junho" },
+        { id: 7, nome: "Julho" },
+        { id: 8, nome: "Agosto" },
+        { id: 9, nome: "Setembro" },
+        { id: 10, nome: "Outubro" },
+        { id: 11, nome: "Novembro" },
+        { id: 12, nome: "Dezembro" },
+      ],
     };
   },
   methods: {
@@ -320,19 +334,15 @@ export default defineComponent({
       if (this.filtroSelecionado == "semFiltro") {
         this.getQtdMembros();
       } else if (this.selectGnValor == "" && this.selectCgrValor == "") {
-        void (0);
-        console.log("dentro do if de select vazios")
+        void 0;
       } else if (this.opcSelecionada == "opcQuantidade") {
         if (this.filtroSelecionado == "cargo") {
-            this.getQtdMembrosCargo();
-         
+          this.getQtdMembrosCargo();
         } else if (this.filtroSelecionado == "congregacao") {
-        
-            this.getQtdMembrosCongregacao();
-       
+          this.getQtdMembrosCongregacao();
         } else if (this.filtroSelecionado == "cargo_congregacao") {
           if (this.selectGnValor == "" || this.selectCgrValor == "") {
-            this.textAvisoError ="Selecione o Cargo e a Congregação para a consulta!!";
+            this.textAvisoError = "Selecione Cargo e Congregação para consultar!";
             this.showAvisoError = true;
           } else {
             this.getQtdMembrosCongregacaoCargo();
@@ -345,18 +355,21 @@ export default defineComponent({
           this.getMembrosCongregacao();
         } else if (this.filtroSelecionado == "cargo_congregacao") {
           if (this.selectGnValor == "" || this.selectCgrValor == "") {
-             this.textAvisoError ="Selecione o Cargo e a Congregação para a consulta!!";
+            this.textAvisoError =
+              "Selecione Cargo e Congregação para consultar!";
             this.showAvisoError = true;
           } else {
-            this.getMembrosCargoCongregacao()
+            this.getMembrosCargoCongregacao();
           }
         }
+      } else if (this.opcSelecionada == "opcAniversariantes") {
+        console.log("dentro do aniversariante");
       }
     },
 
     //FUNÇÃO PARA ATIVAR OS FILTROS APOS SELECIONAR A OPCAO DE RELATORIO e reseta os campos select
     configFiltros() {
-      this.toogleAccordion = ""
+      this.toogleAccordion = "";
       this.lblSelectGenerico = null;
       this.selectGnValor = "";
       this.selectCgrValor = "";
@@ -367,8 +380,8 @@ export default defineComponent({
       this.filtroSelecionado = "";
       this.showResultQtd = false;
       this.showAvisoError = false;
-      this.toogleAccordion ="filtros";
-      console.log(this.toogleAccordion)
+      this.toogleAccordion = "filtros";
+      console.log(this.toogleAccordion);
       if (this.opcSelecionada == "opcListar") {
         this.ativarSemFiltro = false;
       }
@@ -380,7 +393,7 @@ export default defineComponent({
       this.showResultQtd = false;
       this.showAvisoError = false;
       this.showListar = false;
-      this.toogleAccordion = "filtros"
+      this.toogleAccordion = "filtros";
       if (this.filtroSelecionado == "cargo") {
         this.getCargos();
       } else if (this.filtroSelecionado == "congregacao") {
@@ -459,10 +472,10 @@ export default defineComponent({
         );
         if (response.data._all > 0) {
           this.resultQtd = response.data._all;
-        this.showResultQtd = true;
+          this.showResultQtd = true;
         } else if (response.data._all == 0) {
-          this.resultQtd =0;
-        this.showResultQtd = false;
+          this.resultQtd = 0;
+          this.showResultQtd = false;
           this.alertInfoSistema("AVISO", "", "Nenhum Membro Cadastrado!");
         } else if (response.data.error == true) {
           this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
@@ -481,7 +494,7 @@ export default defineComponent({
 
         if (response.data._all > 0) {
           this.resultQtd = response.data._all;
-          this.showResultQtd = true
+          this.showResultQtd = true;
         } else if (response.data._all == 0) {
           this.resultQtd = 0;
           this.showResultQtd = false;
@@ -509,7 +522,7 @@ export default defineComponent({
           this.resultQtd = response.data._all;
           this.showResultQtd = true;
         } else if (response.data._all == 0) {
-            this.resultQtd = 0;
+          this.resultQtd = 0;
           this.showResultQtd = false;
           this.alertInfoSistema(
             "AVISO",
@@ -535,18 +548,13 @@ export default defineComponent({
 
         if (response.data._all > 0) {
           this.resultQtd = response.data._all;
-             this.showAvisoError = false;
-            this.showResultQtd = true;
+          this.showAvisoError = false;
+          this.showResultQtd = true;
         } else if (response.data._all == 0) {
           this.resultQtd = 0;
-          this.showAvisoError = false
-            this.showResultQtd = false;
-             this.alertInfoSistema(
-            "AVISO",
-            "",
-            "Nenhum Membro Cadastrada!"
-          );
-
+          this.showAvisoError = false;
+          this.showResultQtd = false;
+          this.alertInfoSistema("AVISO", "", "Nenhum Membro Cadastrada!");
         } else if (response.data.error == true) {
           this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
           this.resultQtd = 0;
@@ -556,79 +564,92 @@ export default defineComponent({
       }
     },
 
-    async getMembrosCargo(){
-      const idCargo = this.selectGnValor.toString()
+    async getMembrosCargo() {
+      const idCargo = this.selectGnValor.toString();
       try {
-        const response = await axios.get(`${this.urlServer}/relatorio_membros_cargo?idCargo=${idCargo}`)
-        
-        if(response.data.length > 0){
+        const response = await axios.get(
+          `${this.urlServer}/relatorio_membros_cargo?idCargo=${idCargo}`
+        );
+
+        if (response.data.length > 0) {
           this.listaMembros = response.data;
-          this.toogleAccordion = ""
-          this.tituloListar = "- Por Cargo -"
-          this.showListar = true
-        }else if(response.data.length == 0){
-          this.showListar = false
-          this.toogleAccordion = "filtros"
-          this.alertInfoSistema("AVISO","","Nenhum membro cadastrado com este cargo!!")
-        }else if (response.data.error == true) {
+          this.toogleAccordion = "";
+          this.tituloListar = "- Por Cargo -";
+          this.showListar = true;
+        } else if (response.data.length == 0) {
+          this.showListar = false;
+          this.toogleAccordion = "filtros";
+          this.alertInfoSistema(
+            "AVISO",
+            "",
+            "Nenhum membro cadastrado com este cargo!!"
+          );
+        } else if (response.data.error == true) {
           this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
           this.resultQtd = 0;
         }
-
       } catch (e) {
         this.alertInfoSistema("AVISO", "Error", "" + e);
       }
     },
 
-async getMembrosCongregacao(){
-      const idCongregacao = this.selectGnValor.toString()
+    async getMembrosCongregacao() {
+      const idCongregacao = this.selectGnValor.toString();
       try {
-        const response = await axios.get(`${this.urlServer}/relatorio_membros_congregacao?idCongregacao=${idCongregacao}`)
-        
-        if(response.data.length > 0){
+        const response = await axios.get(
+          `${this.urlServer}/relatorio_membros_congregacao?idCongregacao=${idCongregacao}`
+        );
+
+        if (response.data.length > 0) {
           this.listaMembros = response.data;
-          this.toogleAccordion = ""
-          this.tituloListar = "- Por Congregação -"
-          this.showListar = true
-        }else if(response.data.length == 0){
-          this.showListar = false
-          this.toogleAccordion = "filtros"
-          this.alertInfoSistema("AVISO","","Nenhum membro cadastrado Nesta Congregação!!")
-        }else if (response.data.error == true) {
+          this.toogleAccordion = "";
+          this.tituloListar = "- Por Congregação -";
+          this.showListar = true;
+        } else if (response.data.length == 0) {
+          this.showListar = false;
+          this.toogleAccordion = "filtros";
+          this.alertInfoSistema(
+            "AVISO",
+            "",
+            "Nenhum membro cadastrado Nesta Congregação!!"
+          );
+        } else if (response.data.error == true) {
           this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
-          
         }
       } catch (e) {
         this.alertInfoSistema("AVISO", "Error", "" + e);
       }
     },
 
-    async getMembrosCargoCongregacao(){
-      const idCargo = this.selectGnValor.toString()
-      const idCongregacao = this.selectCgrValor.toString()
+    async getMembrosCargoCongregacao() {
+      const idCargo = this.selectGnValor.toString();
+      const idCongregacao = this.selectCgrValor.toString();
       try {
-        const response = await axios.get(`${this.urlServer}/relatorio_membros_congregacao_cargo?idCargo=${idCargo}&idCongregacao=${idCongregacao}`);
-        if(response.data.length > 0){
-          this.listaMembros = response.data
-          this.tituloListar = "Por Cargo e Congregação"
-          this.toogleAccordion = ""
+        const response = await axios.get(
+          `${this.urlServer}/relatorio_membros_congregacao_cargo?idCargo=${idCargo}&idCongregacao=${idCongregacao}`
+        );
+        if (response.data.length > 0) {
+          this.listaMembros = response.data;
+          this.tituloListar = "Por Cargo e Congregação";
+          this.toogleAccordion = "";
           this.showAvisoError = false;
           this.showListar = true;
-        }else if(response.data.length == 0 ){
-          this.toogleAccordion ="filtros";
+        } else if (response.data.length == 0) {
+          this.toogleAccordion = "filtros";
           this.showAvisoError = false;
           this.showListar = false;
-          this.alertInfoSistema("AVISO","","Nenhum Membro Cadastrado com essas Informações!!")
-
-        }else if (response.data.error == true) {
+          this.alertInfoSistema(
+            "AVISO",
+            "",
+            "Nenhum Membro Cadastrado com essas Informações!!"
+          );
+        } else if (response.data.error == true) {
           this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
-          
         }
       } catch (e) {
         this.alertInfoSistema("AVISO", "Error", "" + e);
       }
-    }
-
+    },
   },
 });
 </script>
@@ -660,13 +681,15 @@ h5 {
   color: #ffffff;
 }
 #avisoError {
+  white-space: normal;
   color: #eb445a;
   font-weight: bold;
   font-size: 18px;
 }
 #iconAvisoError {
-  font-size: 20px;
+  font-size: 18px;
   color: #c8e00d;
+  margin-right: 3px;
 }
 .iconBarraQtd {
   margin-left: 10px;

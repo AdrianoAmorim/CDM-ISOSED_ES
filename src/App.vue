@@ -28,6 +28,10 @@ export default defineComponent({
 </script>
 
 <style>
+@font-face {
+  font-family: CrispyFood;
+  src: local(CrispyFood), url(./fonts/CrispyFood.ttf);
+}
 .tagAguardeLoader {
   color: #427aa1;
   margin: 15px;
