@@ -76,7 +76,7 @@
           <ion-accordion
             :toggle-icon="caretDown"
             value="filtros"
-            v-if="opcSelecionada != 'opcAniversariantes'"
+            v-show="opcSelecionada != 'opcAniversariantes'"
           >
             <ion-item slot="header">
               <ion-text color="secondary">
@@ -190,7 +190,7 @@
                   </ion-col>
                   <ion-row class="ion-align-items-center">
                     <ion-col size="12" v-show="showAvisoError">
-                        <ion-icon id="iconAvisoError" :icon="warning" />
+                      <ion-icon id="iconAvisoError" :icon="warning" />
                       <ion-text id="avisoError">{{ textAvisoError }} </ion-text>
                     </ion-col>
                   </ion-row>
@@ -221,6 +221,16 @@
         :listaMembros="listaMembros"
         :tituloListar="tituloListar"
       />
+
+      <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+        <ion-fab-button
+          color="success"
+          @click="downloadPdf()"
+          :disabled="desativarBtnPdf"
+        >
+          <ion-icon :icon="newspaper"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
     </ion-content>
   </ion-page>
 </template>
@@ -228,11 +238,21 @@
 <script>
 import { defineComponent } from "vue";
 import axios from "axios";
+import html2pdf from "html2pdf.js";
+//import {html2canvas} from "html2canvas"
 import RelatorioListarMembros from "@/components/RelatorioListarMembros.vue";
-import { arrowBackCircle, people, caretDown, warning } from "ionicons/icons";
+import {
+  arrowBackCircle,
+  people,
+  caretDown,
+  warning,
+  newspaper,
+} from "ionicons/icons";
 import {
   alertController,
   IonPage,
+  IonFab,
+  IonFabButton,
   IonHeader,
   IonToolbar,
   IonButton,
@@ -258,6 +278,8 @@ export default defineComponent({
     IonPage,
     IonHeader,
     IonToolbar,
+    IonFab,
+    IonFabButton,
     IonButton,
     IonIcon,
     IonContent,
@@ -276,8 +298,9 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer: "http://192.168.18.4:4041",
+      urlServer: "http://192.168.18.103:4041",
       arrowBackCircle,
+      newspaper,
       people,
       caretDown,
       warning,
@@ -314,9 +337,35 @@ export default defineComponent({
         { id: 11, nome: "Novembro" },
         { id: 12, nome: "Dezembro" },
       ],
+      desativarBtnPdf: true,
     };
   },
   methods: {
+    //pega a tabela gerada pelo relatorio de listar, e gera um pdf
+    downloadPdf() {
+      
+      this.desativarBtnPdf = true;
+      var opt = {
+        margin: 10,
+      };
+      html2pdf()
+        .set({ opt,pagebreak: { mode: 'avoid-all' }})
+        .from(document.getElementById("gerarPdf").innerHTML)
+        .save()
+        .then(
+          (sucess) => {
+            console.log("sucesso do save " + sucess);
+
+          },
+          (error) => {
+            this.alertInfoSistema(
+              "AVISO",
+              "",
+              "Erro Ao Salvar o PDF! " + error
+            );
+          }
+        );
+    },
     //CRIA UMA JANELA DE AVISO COM PARAMETROS ...
     async alertInfoSistema(header, subHeader, message) {
       const alert = await alertController.create({
@@ -342,7 +391,8 @@ export default defineComponent({
           this.getQtdMembrosCongregacao();
         } else if (this.filtroSelecionado == "cargo_congregacao") {
           if (this.selectGnValor == "" || this.selectCgrValor == "") {
-            this.textAvisoError = "Selecione Cargo e Congregação para consultar!";
+            this.textAvisoError =
+              "Selecione Cargo e Congregação para consultar!";
             this.showAvisoError = true;
           } else {
             this.getQtdMembrosCongregacaoCargo();
@@ -380,11 +430,15 @@ export default defineComponent({
       this.filtroSelecionado = "";
       this.showResultQtd = false;
       this.showAvisoError = false;
-      this.toogleAccordion = "filtros";
-      console.log(this.toogleAccordion);
-      if (this.opcSelecionada == "opcListar") {
+      if (this.opcSelecionada == "opcAniversariantes") {
+        this.toogleAccordion = "opcao";
+      } else if (this.opcSelecionada == "opcListar") {
         this.ativarSemFiltro = false;
+        this.toogleAccordion = "filtros";
+      } else {
+        this.toogleAccordion = "filtros";
       }
+      console.log(this.toogleAccordion);
     },
 
     /*FAZ O DIRECIONAMENTO DAS ESCOLHAS DO USUARIO ATRAVES dos FILTROS
@@ -574,9 +628,11 @@ export default defineComponent({
         if (response.data.length > 0) {
           this.listaMembros = response.data;
           this.toogleAccordion = "";
-          this.tituloListar = "- Por Cargo -";
+          this.tituloListar = "por Cargo";
           this.showListar = true;
+          this.desativarBtnPdf = false;
         } else if (response.data.length == 0) {
+          this.desativarBtnPdf = true;
           this.showListar = false;
           this.toogleAccordion = "filtros";
           this.alertInfoSistema(
@@ -587,6 +643,7 @@ export default defineComponent({
         } else if (response.data.error == true) {
           this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
           this.resultQtd = 0;
+          this.desativarBtnPdf = true;
         }
       } catch (e) {
         this.alertInfoSistema("AVISO", "Error", "" + e);
@@ -603,10 +660,12 @@ export default defineComponent({
         if (response.data.length > 0) {
           this.listaMembros = response.data;
           this.toogleAccordion = "";
-          this.tituloListar = "- Por Congregação -";
+          this.tituloListar = "por Congregação";
           this.showListar = true;
+          this.desativarBtnPdf = false;
         } else if (response.data.length == 0) {
           this.showListar = false;
+          this.desativarBtnPdf = true;
           this.toogleAccordion = "filtros";
           this.alertInfoSistema(
             "AVISO",
@@ -630,14 +689,17 @@ export default defineComponent({
         );
         if (response.data.length > 0) {
           this.listaMembros = response.data;
-          this.tituloListar = "Por Cargo e Congregação";
+          this.tituloListar = "por Cargo e Congregação";
           this.toogleAccordion = "";
           this.showAvisoError = false;
           this.showListar = true;
+          this.desativarBtnPdf = false;
         } else if (response.data.length == 0) {
           this.toogleAccordion = "filtros";
           this.showAvisoError = false;
           this.showListar = false;
+          
+          this.desativarBtnPdf = true;
           this.alertInfoSistema(
             "AVISO",
             "",
@@ -654,6 +716,35 @@ export default defineComponent({
 });
 </script>
 <style scoped>
+#tabela{
+  display:flex;
+  box-sizing: border-box;
+  justify-content: center;
+  align-items: center;
+}
+h1{
+  text-align:center;
+}
+table{
+  width: 95%;
+  max-width:680px;
+}
+thead{
+  background-color: #979696;
+  color: #fff;
+}
+td{
+  border-bottom:1px solid #3a6b8e;
+}
+th,td{
+  text-align:center;
+  padding:5px;
+}
+
+
+ion-fab-button ion-icon {
+  color: #fff;
+}
 .bgGradiente {
   background: linear-gradient(110deg, #3a6b8e 30%, #3289c7 45%);
 }

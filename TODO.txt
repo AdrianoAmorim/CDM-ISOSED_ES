@@ -1,6 +1,11 @@
 Coisas para fazer:
-ACRESCENTAR UM BOTAO PARA VOLTAR A HOME E CARREGAR A LISTA PRINCIPAL DE Membros
-ADICIONAR A FUNCIONALIDADE DE BAIXAR A FOTO DA PESSOA NA TELA DE VIEW DO MEMBRO 
+5 -Criar sistema de login no Backend
+6 -Criar tela de login
+3 -Diminuir tamanho dos botoes na config ( coloca centralizado)
+4 -na tela de config resolver bug guardando o 1 vlor dos inputs
+2 -Criar o botao e implementar para gerar os Pdfs do Relatorios
+1 -Deixar a Lista de Membros no relatorio com Scroll
+
 
 BUGS
 

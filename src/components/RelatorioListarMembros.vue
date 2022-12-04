@@ -1,61 +1,88 @@
 <template>
-  <ion-list v-show="showList" mode="ios">
-    <ion-list-header >
-      <ion-label>{{tituloListar}}</ion-label>
-    </ion-list-header>
-    <ion-item class="bordaList" v-for="Membro in listaMembros" :key="Membro.id">
-      <ion-label>{{Membro.nome}}</ion-label>
-      <ion-label slot="end" class="textListCgr">{{Membro.congregacao.nome}}</ion-label>
-    </ion-item>
-  </ion-list>
+  <div id="gerarPdf" v-show="showList">
+    <div id="tituloLista">
+      <h3>Listagem {{ tituloListar }}</h3>
+    </div>
+    <div id="boxTabela">
+      <table>
+        <thead class="diminuirFonte">
+          <tr>
+            <th>Nome</th>
+            <th>Cargo</th>
+            <th>Congregação</th>
+            <th>Telefone</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="Membro in listaMembros" :key="Membro.id">
+            <td class="diminuirFonte">{{ Membro.nome }}</td>
+            <td class="diminuirFonte">{{ Membro.cargo.nome }}</td>
+            <td class="diminuirFonte">{{ Membro.congregacao.nome }}</td>
+            <td class="diminuirFonte">{{ Membro.telefone }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </template>
 
 <script>
 import { defineComponent } from "vue";
-import { IonList, IonItem, IonLabel, IonListHeader } from "@ionic/vue";
 export default defineComponent({
   name: "RelatorioListarMembros",
-  components: {
-    IonList,
-    IonListHeader,
-    IonItem,
-    IonLabel,
-  },
+  components: {},
   props: {
     showList: Boolean,
     listaMembros: Array,
-    tituloListar: String
+    tituloListar: String,
   },
 });
 </script>
 
 <style scoped>
-.textListCgr {
-  color: #eb445a;
-}
-.bordaList {
-  --inner-border-width: 0px;
-  --border-width: 0 0 0.5px 0;
-  --border-color: #3289c7;
-}
-ion-item {
-  --inner-padding-end: 5px;
-  --padding-start: 15px;
-}
-ion-list ion-item ion-label {
-  overflow: visible !important;
-  font-weight: bold;
+@media screen and (max-width:768px){
+ .diminuirFonte{
+     font-size: 13px;
+ }
 }
 
-ion-list-header {
-  --background: linear-gradient(110deg, #3a6b8e 30%, #3289c7 45%);
-  --color: #fff;
-  align-items: center;
-  letter-spacing: 1px;
+#tituloLista {
+   background: linear-gradient(110deg, #3a6b8e 30%, #3289c7 45%);
   text-align: center;
-  padding-inline-start: 0;
+  margin-bottom: 5px;
 }
-ion-list-header ion-label {
-  margin: 10px 0 !important;
+#tituloLista h3 {
+  color: #ffffff;
+  letter-spacing: 1px;
+  margin: 0;
+  padding: 10px 0;
+}
+
+#boxTabela {
+  display: flex;
+  box-sizing: border-box;
+  justify-content: center;
+  align-items: center;
+}
+
+table {
+  width: 95%;
+}
+thead {
+  background: #9e9e9e;
+  color: #fff;
+}
+td {
+  border-bottom: 1px solid #96c5e7;
+  font-size: 16px;
+}
+th {
+  font-size: 18px;
+  font-weight: 300;
+}
+th,
+td {
+  text-align: center;
+  padding: 5px;
 }
 </style>
