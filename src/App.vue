@@ -28,9 +28,19 @@ export default defineComponent({
 </script>
 
 <style>
+
 @font-face {
   font-family: CrispyFood;
   src: local(CrispyFood), url(./fonts/CrispyFood.ttf);
+}
+@font-face {
+  font-family: WorkSans;
+  src: local(WorkSans), url(./fonts/WorkSans.ttf);
+}
+ion-content,ion-input{
+  
+  font-family: WorkSans;
+
 }
 .tagAguardeLoader {
   color: #427aa1;

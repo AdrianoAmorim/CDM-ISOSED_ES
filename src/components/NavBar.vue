@@ -32,7 +32,7 @@ export default defineComponent({
 ion-toolbar{
   --background: linear-gradient(90deg, #064789 0%, #276db4 50%, #2174c7 100%) ;
   color: #ffffff;
-  font-family:CrispyFood;
+  font-family:CrispyFood !important;
 }
 ion-thumbnail {
   --size: 50px;
