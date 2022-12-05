@@ -38,9 +38,7 @@ export default defineComponent({
   src: local(WorkSans), url(./fonts/WorkSans.ttf);
 }
 ion-content,ion-input{
-  
   font-family: WorkSans;
-
 }
 .tagAguardeLoader {
   color: #427aa1;
