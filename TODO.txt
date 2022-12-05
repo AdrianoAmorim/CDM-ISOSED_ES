@@ -1,7 +1,7 @@
 Coisas para fazer:
 5 -Criar sistema de login no Backend
 6 -Criar tela de login
-3 -Diminuir tamanho dos botoes na config ( coloca centralizado)
+3 -Diminuir tamanho dos botoes na config ( coloca centralizado) - OK
 4 -na tela de config resolver bug guardando o 1 vlor dos inputs
 2 -Criar o botao e implementar para gerar os Pdfs do Relatorios  - OK
 1 -Deixar a Lista de Membros no relatorio com Scroll
