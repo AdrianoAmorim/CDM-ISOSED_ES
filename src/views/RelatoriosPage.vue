@@ -776,21 +776,22 @@ export default defineComponent({
 <style scoped>
 /*ESTILO DO SELECT DO MES DO ANIVERSARIO */
 #slcMesAniversariante {
-  background: #3a6b8e;
+   background: linear-gradient(110deg, #3a6b8e 30%, #3289c7 45%);
+  opacity: 0.8;
   text-align: center;
   border-radius: 20px;
   --padding-start: 0px;
 }
 #slcMesAniversariante::part(placeholder) {
-  color: #d3d3d3;
+  color: #fcf8f8;
   opacity: 1;
   font-size: 18px;
   font-weight: 700;
 }
 #slcMesAniversariante::part(text) {
-  color: #d3d3d3;
+  color: #fcf8f8;
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 700;
 }
 #slcMesAniversariante::part(icon) {
   display: none;

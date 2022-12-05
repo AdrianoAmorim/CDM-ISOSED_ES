@@ -22,13 +22,13 @@
     <ion-content>
       <ion-grid>
         <ion-row class="ion-justify-content-center">
-          <ion-col class="ion-align-items-center" size="12">
+          <ion-col class="ion-align-items-center" size="12" size-md="5" size-lg="5">
             <ion-button color="secondary" expand="block" size="large" @click="this.$router.push('/infoConfiguracoes/congregacoes')">
               <ion-icon slot="start" :icon="business" />
               Congregações
             </ion-button>
           </ion-col>
-          <ion-col class="ion-align-items-center" size="12">
+          <ion-col class="ion-align-items-center" size="12" size-md="5" size-lg="5">
             <ion-button color="secondary" expand="block" size="large" @click="this.$router.push('/infoConfiguracoes/cargos')">
               <ion-icon slot="start" :icon="ribbon" />
               Cargos
@@ -73,7 +73,7 @@ export default defineComponent({
   data() {
     return {
       //urlServer: "https://isosed-server.herokuapp.com",
-     urlServer: "http://192.168.18.4:4041",
+     urlServer: "http://192.168.18.103:4041",
       arrowBackCircle,
       create,
       business,
