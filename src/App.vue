@@ -71,6 +71,13 @@ ion-modal.modalView::part(content){
   font-size: 16px !important; 
 }
 /* ESTILIZANDO ALERTS DE AVISOS DE INFORMAÇÃO E SUCESSOS*/
+.alertSelects .alert-title{
+  text-align:  center;
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: 1px;
+  color: #474747;
+}
  .alert-info .alert-wrapper{
   border-radius: 18px;
 }

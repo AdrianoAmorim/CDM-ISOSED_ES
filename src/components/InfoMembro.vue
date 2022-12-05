@@ -97,7 +97,7 @@
                 </ion-col>
                 <ion-col size="12">
                   <ion-item mode="md">
-                    <ion-label position="stacked">Congregação: </ion-label>
+                    <ion-label position="stacked">CONGREGAÇÃO</ion-label>
                     <ion-select color="secondary"
                       placeholder="CARREGANDO..." v-if="!congregacoesLs">
                     </ion-select>
@@ -109,6 +109,7 @@
                       placeholder="Congregação"
                       cancel-text="CANCELAR"
                       ok-text="OK"
+                      :interface-options="optSlcAlert"
                     >
                       <ion-select-option
                         v-for="Congregacao in congregacoesLs"
@@ -146,7 +147,7 @@
 
             <ion-col size="6">
               <ion-item mode="md">
-                <ion-label position="stacked">Cargo: </ion-label>
+                <ion-label position="stacked">CARGO</ion-label>
                 <ion-select color="secondary"
                       placeholder="CARREGANDO..." v-if="!cargosLs">
                 </ion-select>
@@ -158,6 +159,7 @@
                   placeholder="Cargo"
                   cancel-text="CANCELAR"
                   ok-text="OK"
+                  :interface-options="optSlcAlert"
                 >
                   <ion-select-option
                     v-for="Cargo in cargosLs"
@@ -406,6 +408,9 @@ export default defineComponent({
       desativarBtnDelete: true,
       desativarBtnSalvar: true,
       loader: true,
+      optSlcAlert:{
+        cssClass:"alertSelects"
+      },
       msgSistema: null,
       statusInfoSistema: false,
       membro: {

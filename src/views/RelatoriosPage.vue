@@ -157,6 +157,7 @@
                         placeholder="Selecione"
                         cancel-text="CANCELAR"
                         ok-text="OK"
+                        :interface-options="optSlcAlert"
                       >
                         <ion-select-option
                           v-for="Item in listaGenerica"
@@ -178,6 +179,7 @@
                         placeholder="Selecione"
                         cancel-text="CANCELAR"
                         ok-text="OK"
+                        :interface-options="optSlcAlert"
                       >
                         <ion-select-option
                           v-for="Item in listaCongregacoes"
@@ -225,6 +227,9 @@
               placeholder="ESCOLHA O MÊS"
               id="slcMesAniversariante"
               v-model="slcMesValor"
+              cancel-text="CANCELAR"
+              ok-text="OK"
+              :interface-options="optSlcMes" 
               @ionChange="direcionarRequisicoes()"
             >
               <ion-select-option
@@ -362,6 +367,13 @@ export default defineComponent({
       desativarBtnPdf: true,
       showSlcMesAniversariantes: false,
       slcMesValor: null,
+      optSlcMes:{
+        header: "Mês",
+        cssClass:"alertSelects"
+      },
+      optSlcAlert:{
+        cssClass:"alertSelects"
+      }
     };
   },
   methods: {
@@ -753,18 +765,17 @@ export default defineComponent({
             this.toogleAccordion = "";
             this.showListar = true;
             this.desativarBtnPdf = false;
-          }else if(response.data.length == 0){
-          this.showListar = false;
-          this.desativarBtnPdf = true;
-          this.alertInfoSistema(
-            "AVISO",
-            "",
-            "Nenhum Membro Faz Aniversário neste mês!!"
-          );
-
-          }else if (response.data.error == true) {
-          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
-        }
+          } else if (response.data.length == 0) {
+            this.showListar = false;
+            this.desativarBtnPdf = true;
+            this.alertInfoSistema(
+              "AVISO",
+              "",
+              "Nenhum Membro Faz Aniversário neste mês!!"
+            );
+          } else if (response.data.error == true) {
+            this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+          }
         } catch (e) {
           console.log(e);
         }
@@ -776,7 +787,7 @@ export default defineComponent({
 <style scoped>
 /*ESTILO DO SELECT DO MES DO ANIVERSARIO */
 #slcMesAniversariante {
-   background: linear-gradient(110deg, #3a6b8e 30%, #3289c7 45%);
+  background: linear-gradient(110deg, #3a6b8e 30%, #3289c7 45%);
   opacity: 0.8;
   text-align: center;
   border-radius: 20px;
