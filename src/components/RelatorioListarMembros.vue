@@ -40,22 +40,23 @@ export default defineComponent({
 </script>
 
 <style scoped>
-@media screen and (max-width:768px){
- .diminuirFonte{
-     font-size: 13px;
- }
+@media screen and (max-width: 768px) {
+  .diminuirFonte {
+    font-size: 13px;
+  }
 }
 
 #tituloLista {
-   background: linear-gradient(110deg, #3a6b8e 30%, #3289c7 45%);
+  background: linear-gradient(110deg, #3a6b8e 30%, #3289c7 45%);
   text-align: center;
   margin-bottom: 5px;
+  opacity:0.8;
 }
 #tituloLista h3 {
   color: #ffffff;
   letter-spacing: 1px;
   margin: 0;
-  padding: 10px 0;
+  padding: 6px 0;
 }
 
 #boxTabela {
@@ -66,11 +67,12 @@ export default defineComponent({
 }
 
 table {
-  width: 95%;
+  width: 100%;
 }
 thead {
-  background: #9e9e9e;
+  background: #5d93b9;
   color: #fff;
+  opacity:0.8;
 }
 td {
   border-bottom: 1px solid #96c5e7;
@@ -83,6 +85,6 @@ th {
 th,
 td {
   text-align: center;
-  padding: 5px;
+  padding: 5px 2px;
 }
 </style>

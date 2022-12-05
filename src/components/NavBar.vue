@@ -46,5 +46,6 @@ ion-title {
   font-size: 28px;
   letter-spacing:2px;
   font-weight: 400;
+  margin-top:5px;
 }
 </style>

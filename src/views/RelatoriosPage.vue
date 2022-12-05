@@ -215,6 +215,28 @@
             <ion-text id="textResultQtd">{{ resultQtd }}</ion-text>
           </ion-col>
         </ion-row>
+
+        <ion-row
+          class="ion-justify-content-center"
+          v-show="showSlcMesAniversariantes"
+        >
+          <ion-col size="11" size-md="8" size-lg="5">
+            <ion-select
+              placeholder="ESCOLHA O MÊS"
+              id="slcMesAniversariante"
+              v-model="slcMesValor"
+              @ionChange="direcionarRequisicoes()"
+            >
+              <ion-select-option
+                v-for="Mes in listaMes"
+                :key="Mes.id"
+                :value="Mes.id"
+              >
+                {{ Mes.nome }}</ion-select-option
+              >
+            </ion-select>
+          </ion-col>
+        </ion-row>
       </ion-grid>
       <RelatorioListarMembros
         :showList="showListar"
@@ -338,24 +360,24 @@ export default defineComponent({
         { id: 12, nome: "Dezembro" },
       ],
       desativarBtnPdf: true,
+      showSlcMesAniversariantes: false,
+      slcMesValor: null,
     };
   },
   methods: {
     //pega a tabela gerada pelo relatorio de listar, e gera um pdf
     downloadPdf() {
-      
       this.desativarBtnPdf = true;
       var opt = {
         margin: 10,
       };
       html2pdf()
-        .set({ opt,pagebreak: { mode: 'avoid-all' }})
+        .set({ opt, pagebreak: { mode: "avoid-all" } })
         .from(document.getElementById("gerarPdf").innerHTML)
         .save()
         .then(
           (sucess) => {
             console.log("sucesso do save " + sucess);
-
           },
           (error) => {
             this.alertInfoSistema(
@@ -382,6 +404,9 @@ export default defineComponent({
       console.log("dentro do direcionar requisicao");
       if (this.filtroSelecionado == "semFiltro") {
         this.getQtdMembros();
+      } else if (this.opcSelecionada == "opcAniversariantes") {
+        this.getAniversariantes();
+        console.log("dentro da opc aniversariante");
       } else if (this.selectGnValor == "" && this.selectCgrValor == "") {
         void 0;
       } else if (this.opcSelecionada == "opcQuantidade") {
@@ -412,8 +437,6 @@ export default defineComponent({
             this.getMembrosCargoCongregacao();
           }
         }
-      } else if (this.opcSelecionada == "opcAniversariantes") {
-        console.log("dentro do aniversariante");
       }
     },
 
@@ -430,15 +453,19 @@ export default defineComponent({
       this.filtroSelecionado = "";
       this.showResultQtd = false;
       this.showAvisoError = false;
+      this.showListar = false;
+      this.desativarBtnPdf = true;
+      this.showSlcMesAniversariantes = false;
+      this.slcMesValor = null;
       if (this.opcSelecionada == "opcAniversariantes") {
         this.toogleAccordion = "opcao";
+        this.showSlcMesAniversariantes = true;
       } else if (this.opcSelecionada == "opcListar") {
         this.ativarSemFiltro = false;
         this.toogleAccordion = "filtros";
       } else {
         this.toogleAccordion = "filtros";
       }
-      console.log(this.toogleAccordion);
     },
 
     /*FAZ O DIRECIONAMENTO DAS ESCOLHAS DO USUARIO ATRAVES dos FILTROS
@@ -698,7 +725,7 @@ export default defineComponent({
           this.toogleAccordion = "filtros";
           this.showAvisoError = false;
           this.showListar = false;
-          
+
           this.desativarBtnPdf = true;
           this.alertInfoSistema(
             "AVISO",
@@ -712,41 +739,130 @@ export default defineComponent({
         this.alertInfoSistema("AVISO", "Error", "" + e);
       }
     },
+    async getAniversariantes() {
+      if (this.slcMesValor == null) {
+        void 0;
+      } else {
+        try {
+          const response = await axios.get(
+            `${this.urlServer}/aniversariantes?mes=${this.slcMesValor}`
+          );
+          if (response.data.length > 0) {
+            this.listaMembros = response.data;
+            this.tituloListar = "Aniversariantes";
+            this.toogleAccordion = "";
+            this.showListar = true;
+            this.desativarBtnPdf = false;
+          }else if(response.data.length == 0){
+          this.showListar = false;
+          this.desativarBtnPdf = true;
+          this.alertInfoSistema(
+            "AVISO",
+            "",
+            "Nenhum Membro Faz Aniversário neste mês!!"
+          );
+
+          }else if (response.data.error == true) {
+          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+        }
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    },
   },
 });
 </script>
 <style scoped>
-#tabela{
-  display:flex;
+/*ESTILO DO SELECT DO MES DO ANIVERSARIO */
+#slcMesAniversariante {
+  background: #3a6b8e;
+  text-align: center;
+  border-radius: 20px;
+  --padding-start: 0px;
+}
+#slcMesAniversariante::part(placeholder) {
+  color: #d3d3d3;
+  opacity: 1;
+  font-size: 18px;
+  font-weight: 700;
+}
+#slcMesAniversariante::part(text) {
+  color: #d3d3d3;
+  font-size: 18px;
+  font-weight: 600;
+}
+#slcMesAniversariante::part(icon) {
+  display: none;
+}
+
+/*ESTILO DA TABELA DA LISTA DE MEMBROS  */
+#tabela {
+  display: flex;
   box-sizing: border-box;
   justify-content: center;
   align-items: center;
 }
-h1{
-  text-align:center;
+h1 {
+  text-align: center;
 }
-table{
+table {
   width: 95%;
-  max-width:680px;
+  max-width: 680px;
 }
-thead{
+thead {
   background-color: #979696;
   color: #fff;
 }
-td{
-  border-bottom:1px solid #3a6b8e;
+td {
+  border-bottom: 1px solid #3a6b8e;
 }
-th,td{
-  text-align:center;
-  padding:5px;
+th,
+td {
+  text-align: center;
+  padding: 5px;
 }
-
-
+/*--------------------------------------------------------- */
+/*ESTILO DA BARRA DE RESULTADO DA QTD DE MEMBROS */
+.barraResultQtd {
+  margin-top: 10px;
+  border-radius: 10px;
+}
+#textResultQtd {
+  margin-right: 10px;
+  font-size: 44px;
+  font-weight: bold;
+  color: #ffffff;
+}
+.iconBarraQtd {
+  margin-left: 10px;
+  font-size: 38px;
+  color: #dde4ff;
+}
+/* ----------------------------------------------- */
+/*ESTILO DO AVISO PARA LEMBRAR DE SELECIONAR OS 2 VALORES NO FILTRO */
+#avisoError {
+  white-space: normal;
+  color: #eb445a;
+  font-weight: bold;
+  font-size: 18px;
+}
+#iconAvisoError {
+  font-size: 18px;
+  color: #c8e00d;
+  margin-right: 3px;
+}
+/*----------------------------------------------------- */
+ion-radio {
+  margin-left: 1px;
+  margin-right: 3px;
+}
 ion-fab-button ion-icon {
   color: #fff;
 }
 .bgGradiente {
   background: linear-gradient(110deg, #3a6b8e 30%, #3289c7 45%);
+  opacity: 0.8;
 }
 .lblOpcoes {
   font-size: 17px;
@@ -759,36 +875,5 @@ h5 {
   overflow: visible;
   font-weight: bold;
   font-size: 17px;
-}
-
-.barraResultQtd {
-  margin-top: 10px;
-  border-radius: 10px;
-}
-#textResultQtd {
-  margin-right: 10px;
-  font-size: 44px;
-  font-weight: bold;
-  color: #ffffff;
-}
-#avisoError {
-  white-space: normal;
-  color: #eb445a;
-  font-weight: bold;
-  font-size: 18px;
-}
-#iconAvisoError {
-  font-size: 18px;
-  color: #c8e00d;
-  margin-right: 3px;
-}
-.iconBarraQtd {
-  margin-left: 10px;
-  font-size: 38px;
-  color: #dde4ff;
-}
-ion-radio {
-  margin-left: 1px;
-  margin-right: 3px;
 }
 </style>
