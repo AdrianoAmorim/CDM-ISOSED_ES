@@ -10,7 +10,7 @@
             <th>Nome</th>
             <th>Cargo</th>
             <th>Congregação</th>
-            <th>Telefone</th>
+            <th>{{tituloListar == "Aniversariantes" ? "Dt Nasc." : "Telefone"}}</th>
           </tr>
         </thead>
         <tbody>
@@ -18,7 +18,7 @@
             <td class="diminuirFonte">{{ Membro.nome }}</td>
             <td class="diminuirFonte">{{ Membro.cargo.nome }}</td>
             <td class="diminuirFonte">{{ Membro.congregacao.nome }}</td>
-            <td class="diminuirFonte">{{ Membro.telefone }}</td>
+            <td class="diminuirFonte">{{ tituloListar == "Aniversariantes" ? formatarData(Membro.dtNascimento) : Membro.telefone }}</td>
           </tr>
         </tbody>
       </table>
@@ -28,6 +28,7 @@
 
 <script>
 import { defineComponent } from "vue";
+import moment from "moment";
 export default defineComponent({
   name: "RelatorioListarMembros",
   components: {},
@@ -36,13 +37,18 @@ export default defineComponent({
     listaMembros: Array,
     tituloListar: String,
   },
+  methods:{
+    formatarData(data){
+     return moment(data).format("DD/MM/YYYY")
+    }
+  }
 });
 </script>
 
 <style scoped>
 @media screen and (max-width: 768px) {
   .diminuirFonte {
-    font-size: 13px;
+    font-size: 12px;
   }
 }
 
@@ -67,7 +73,7 @@ export default defineComponent({
 }
 
 table {
-  width: 100%;
+  width: 99%;
 }
 thead {
   background: #5d93b9;

@@ -224,6 +224,7 @@
         >
           <ion-col size="11" size-md="8" size-lg="5">
             <ion-select
+            mode="md"
               placeholder="ESCOLHA O MÊS"
               id="slcMesAniversariante"
               v-model="slcMesValor"
@@ -243,11 +244,17 @@
           </ion-col>
         </ion-row>
       </ion-grid>
+      <div v-if="!loader">
       <RelatorioListarMembros
         :showList="showListar"
         :listaMembros="listaMembros"
         :tituloListar="tituloListar"
       />
+      </div>
+      <div v-else>
+        <ion-progress-bar type="indeterminate"> </ion-progress-bar>
+        <h3 class="tagAguardeLoader">Gerando PDF...</h3>
+      </div>
 
       <ion-fab slot="fixed" vertical="bottom" horizontal="end">
         <ion-fab-button
@@ -266,7 +273,6 @@
 import { defineComponent } from "vue";
 import axios from "axios";
 import html2pdf from "html2pdf.js";
-//import {html2canvas} from "html2canvas"
 import RelatorioListarMembros from "@/components/RelatorioListarMembros.vue";
 import {
   arrowBackCircle,
@@ -279,6 +285,7 @@ import {
   alertController,
   IonPage,
   IonFab,
+  IonProgressBar,
   IonFabButton,
   IonHeader,
   IonToolbar,
@@ -308,6 +315,7 @@ export default defineComponent({
     IonFab,
     IonFabButton,
     IonButton,
+    IonProgressBar,
     IonIcon,
     IonContent,
     IonGrid,
@@ -325,7 +333,7 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer: "http://192.168.18.103:4041",
+      urlServer: "http://192.168.18.4:4041",
       arrowBackCircle,
       newspaper,
       people,
@@ -349,6 +357,7 @@ export default defineComponent({
       textAvisoError: null,
       showAvisoError: false,
       showListar: false,
+      loader:false,
       tituloListar: "-",
       listaMes: [
         { id: 1, nome: "Janeiro" },
@@ -379,6 +388,7 @@ export default defineComponent({
   methods: {
     //pega a tabela gerada pelo relatorio de listar, e gera um pdf
     downloadPdf() {
+      this.loader = true;
       this.desativarBtnPdf = true;
       var opt = {
         margin: 10,
@@ -388,8 +398,9 @@ export default defineComponent({
         .from(document.getElementById("gerarPdf").innerHTML)
         .save()
         .then(
-          (sucess) => {
-            console.log("sucesso do save " + sucess);
+          () => {
+           this.alertInfoSistema("AVISO","","PDF Criado Com Sucesso!");
+           this.loader = false;
           },
           (error) => {
             this.alertInfoSistema(
@@ -806,33 +817,6 @@ export default defineComponent({
 }
 #slcMesAniversariante::part(icon) {
   display: none;
-}
-
-/*ESTILO DA TABELA DA LISTA DE MEMBROS  */
-#tabela {
-  display: flex;
-  box-sizing: border-box;
-  justify-content: center;
-  align-items: center;
-}
-h1 {
-  text-align: center;
-}
-table {
-  width: 95%;
-  max-width: 680px;
-}
-thead {
-  background-color: #979696;
-  color: #fff;
-}
-td {
-  border-bottom: 1px solid #3a6b8e;
-}
-th,
-td {
-  text-align: center;
-  padding: 5px;
 }
 /*--------------------------------------------------------- */
 /*ESTILO DA BARRA DE RESULTADO DA QTD DE MEMBROS */

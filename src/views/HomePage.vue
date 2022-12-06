@@ -10,7 +10,7 @@ a barra de Ferramentas e a lista de TODOS OS membros cadastrados -->
               <ion-row class="ion-justify-content-center">
                 <ion-searchbar
                   @ionChange="buscarMembros(resultBusca)"
-                  :debounce="1000"
+                  :debounce="500"
                   animated="true"
                   color="light"
                   show-cancel-button="never"
@@ -193,7 +193,7 @@ export default defineComponent({
   data() {
     return {
       //urlServer: "http://177.71.138.179:4041",
-      urlServer: "http://192.168.18.103:4041",
+      urlServer: "http://192.168.18.4:4041",
       ativarBtnBuscar: true,
       loader: true,
       searchCircle,

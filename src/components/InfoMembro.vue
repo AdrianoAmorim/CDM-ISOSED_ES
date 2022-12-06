@@ -86,7 +86,7 @@
               <ion-row class="ion-justify-content-start">
                 <ion-col size="12">
                   <ion-item mode="md">
-                    <ion-label position="floating">Nome: </ion-label>
+                    <ion-label position="floating">NOME </ion-label>
                     <ion-input
                       style="font-weight: bold"
                       v-model="membro.nome"
@@ -128,7 +128,7 @@
           <ion-row class="ion-justify-content-start">
             <ion-col size="6">
               <ion-item mode="md">
-                <ion-label position="floating">Telefone: </ion-label>
+                <ion-label position="floating">TELEFONE</ion-label>
                 <ion-input
                   @ionChange="validarCampos()"
                   color="secondary"
@@ -177,7 +177,7 @@
       <ion-row>
         <ion-col size="8">
           <ion-item mode="md">
-            <ion-label position="floating">Endereço: </ion-label>
+            <ion-label position="floating">ENDEREÇO </ion-label>
             <ion-input
               @ionChange="validarCampos()"
               v-model="membro.endereco"
@@ -187,7 +187,7 @@
         </ion-col>
         <ion-col size="4">
           <ion-item mode="md">
-            <ion-label position="floating">Nº: </ion-label>
+            <ion-label position="floating">Nº </ion-label>
             <ion-input
               @ionChange="validarCampos()"
               v-model="membro.numero"
@@ -202,7 +202,7 @@
       <ion-row>
         <ion-col size="6">
           <ion-item mode="md">
-            <ion-label position="floating">Bairro: </ion-label>
+            <ion-label position="floating">BAIRRO </ion-label>
             <ion-input
               @ionChange="validarCampos()"
               v-model="membro.bairro"
@@ -212,7 +212,7 @@
         </ion-col>
         <ion-col size="6">
           <ion-item mode="md">
-            <ion-label position="floating">Cidade: </ion-label>
+            <ion-label position="floating">CIDADE </ion-label>
             <ion-input
               @ionChange="validarCampos()"
               v-model="membro.cidade"
@@ -225,7 +225,7 @@
       <ion-row>
         <ion-col>
           <ion-item mode="md">
-            <ion-label position="floating">Pai: </ion-label>
+            <ion-label position="floating">PAI </ion-label>
             <ion-input
               @ionChange="validarCampos()"
               v-model="membro.pai"
@@ -239,7 +239,7 @@
       <ion-row>
         <ion-col>
           <ion-item mode="md">
-            <ion-label position="floating">Mãe: </ion-label>
+            <ion-label position="floating">MÃE </ion-label>
             <ion-input
               v-model="membro.mae"
               color="secondary"
@@ -253,7 +253,7 @@
         <ion-col size="6">
           <ion-item mode="md">
             <ion-label style="overflow: visible" position="stacked"
-              >Data de Nascimento:
+              >DT NASCIMENTO
             </ion-label>
             <ion-input
               @ionChange="validarCampos()"
@@ -265,7 +265,7 @@
         </ion-col>
         <ion-col size="6">
           <ion-item mode="md">
-            <ion-label position="stacked">Data de Batismo: </ion-label>
+            <ion-label position="stacked">DT BATISMO </ion-label>
             <ion-input
               @ionChange="validarCampos()"
               v-model="membro.dtBatismo"
@@ -288,7 +288,7 @@
                 <ion-label
                   style="margin-right: 3px"
                   class="ion-align-self-center"
-                  >Est. Civil:</ion-label
+                  >EST. CIVIL</ion-label
                 >
 
                 <ion-item class="diferencaRadioBtn" lines="none">
@@ -403,7 +403,7 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer: "http://192.168.18.103:4041",
+      urlServer: "http://192.168.18.4:4041",
       desativarBtnVoltar: true,
       desativarBtnDelete: true,
       desativarBtnSalvar: true,
@@ -533,8 +533,6 @@ export default defineComponent({
       if (
         (this.membro.nome == null) |
         (this.membro.nome == "") |
-        //(this.membro.telefone == null) |
-        //(this.membro.telefone == "") |
         (this.membro.dtBatismo == null) |
         (this.membro.dtBatismo == "") |
         (this.membro.dtNascimento == null) |
@@ -747,26 +745,23 @@ export default defineComponent({
 </script>
 
 <style scoped>
-#tagAguardeLoader {
-  color: #427aa1;
-  margin: 15px;
-}
 
 .iconDownload {
   font-size: 20px;
   object-fit: fill;
 }
 
-
-ion-label {
+ion-item ion-label {
   overflow: visible;
   font-weight: bold;
+  font-size: 14px !important;
 }
 ion-radio {
   margin-left: 2px;
   margin-right: 1px;
 }
 
+/*ESTILO MSG DE SUCESSO DO CADASTRO E ATUALIZACAO DO MEMBRO */
 .infoSistema {
   opacity: 0.8;
   border-radius: 15px;

@@ -28,7 +28,7 @@ export default defineComponent({
 </script>
 
 <style>
-
+/*IMPORTANDO AS FONTES DO APP */
 @font-face {
   font-family: CrispyFood;
   src: local(CrispyFood), url(./fonts/CrispyFood.ttf);
@@ -37,13 +37,13 @@ export default defineComponent({
   font-family: WorkSans;
   src: local(WorkSans), url(./fonts/WorkSans.ttf);
 }
+/*----------------------------------------- */
+/*SETANDO A FONTE NO APP */
 ion-content,ion-input{
   font-family: WorkSans;
 }
-.tagAguardeLoader {
-  color: #427aa1;
-  margin: 15px;
-}
+/*--------------------------------- */
+/*ESTILOS DAS TELAS DE MODAIS DO APP */
 ion-modal.modalView::part(content){
  --height: 80%;
     position: absolute; 
@@ -70,7 +70,7 @@ ion-modal.modalView::part(content){
   font-weight: bold;
 }
 .modalView #lblTel{
-  font-size: 16px !important;
+  font-size: 14px !important;
   font-weight: bold;
 }
 .modalView #lblCargo{
@@ -78,7 +78,8 @@ ion-modal.modalView::part(content){
   color: #eb445a;
   font-size: 16px !important; 
 }
-/* ESTILIZANDO ALERTS DE AVISOS DE INFORMAÇÃO E SUCESSOS*/
+/*---------------------------------------------- */
+/* ESTILO ALERTS DE AVISOS DE INFORMAÇÃO E SUCESSOS*/
 .alertSelects .alert-title{
   text-align:  center;
   font-weight: 600;
@@ -105,7 +106,7 @@ ion-modal.modalView::part(content){
      font-size: 18px;
      font-weight: bold;
   }
-/* ESTILIZANDO ALERTS DE AVISOS DE ERROS E CUIDADOS */
+/* ESTILO ALERTS DE AVISOS DE CUIDADOS */
 .alert-delete .alert-wrapper{
   border-radius: 18px;
 }
@@ -132,6 +133,12 @@ ion-modal.modalView::part(content){
 }
 /*FIM DAS ESTILIZACOES DE ALERTS DO SISTEMA */
 /*------------------------------------ */
+/*ESTILOS GERAIS */
+.tagAguardeLoader {
+  color: #427aa1;
+  margin: 15px;
+}
+
 .avatarFoto {
   border: 2px solid #427aa1;
   width: 80px;
