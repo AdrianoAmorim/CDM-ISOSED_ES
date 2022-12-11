@@ -447,6 +447,7 @@ export default defineComponent({
   },
   methods: {
     downloadFoto(url, fileName) {
+      
       const downloadLink = document.createElement("a");
       downloadLink.href = url;
       downloadLink.download = `${fileName}`;
@@ -585,6 +586,9 @@ export default defineComponent({
     },
 
     async setMembro(membro) {
+      if(membro.numero == "e" | membro.numero=="E"){
+        membro.numero = 0;
+      }
       const validar = this.validarCampos();
       if (validar) {
         membro.telefone = this.retirarMascara(membro.telefone);

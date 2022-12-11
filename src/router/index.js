@@ -5,8 +5,14 @@ import EditMembro from '../views/EditMembro.vue'
 import ConfigPage from '../views/ConfigPage.vue'
 import RelatoriosPage from '../views/RelatoriosPage.vue'
 import InfoConfiguracoes from '../views/InfoConfiguracoes.vue'
+import viewLogin from '../views/viewLogin.vue'
 const routes = [
 
+   {
+    path: '/login',
+    name: 'login',
+    component: viewLogin
+  },
   {
     path: '/',
     name: 'Home',

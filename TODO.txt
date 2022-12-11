@@ -1,6 +1,6 @@
 Coisas para fazer:
 5 -Criar sistema de login no Backend
-6 -Criar tela de login
+6 -Criar tela de login - Ok
 3 -Diminuir tamanho dos botoes na config ( coloca centralizado) - OK
 4 -na tela de config resolver bug guardando o 1 vlor dos inputs
 2 -Criar o botao e implementar para gerar os Pdfs do Relatorios  - OK
@@ -9,4 +9,4 @@ Coisas para fazer:
 
 BUGS
 
-* AS VEZES O BOTAO DE BAIXAR A FOTO NAO BAIXA...
+* AS VEZES O BOTAO DE BAIXAR A FOTO NAO BAIXA...(tag a com atributo download naocompativel em celular)

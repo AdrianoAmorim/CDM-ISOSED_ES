@@ -24,6 +24,12 @@ export default defineComponent({
     IonHeader,
     IonContent,
   },
+  data(){
+    return{
+
+    }
+  },
+
 });
 </script>
 
@@ -31,11 +37,11 @@ export default defineComponent({
 /*IMPORTANDO AS FONTES DO APP */
 @font-face {
   font-family: CrispyFood;
-  src: local(CrispyFood), url(./fonts/CrispyFood.ttf);
+  src: local(CrispyFood), url(../public/fonts/CrispyFood.ttf);
 }
 @font-face {
   font-family: WorkSans;
-  src: local(WorkSans), url(./fonts/WorkSans.ttf);
+  src: local(WorkSans), url(../public/fonts/WorkSans.ttf);
 }
 /*----------------------------------------- */
 /*SETANDO A FONTE NO APP */
