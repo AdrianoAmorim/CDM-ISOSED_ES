@@ -43,16 +43,21 @@ export default defineComponent({
     async getMembro(idMembro) {
       this.getCargos();
       this.getCongregacoes();
+      const auth = sessionStorage.getItem("token")
       try{
-        const response = await axios.get(`${this.urlServer}/membro/${idMembro}` );
+        const response = await axios.get(`${this.urlServer}/membro/${idMembro}`,{
+               headers: {
+            Authorization: `token ${auth}`,
+          },
+        } );
         if(response.data.id >0){
         this.membro = response.data;
         }else if(response.data.id == 0){
            this.alertInfoSistema("AVISO",'',"Não Conseguimos Encontrar o Membro Selecionado para Editar!! ");
          
         }else if(response.data.error ==true){
-          this.alertInfoSistema("ERROR",'',"Houve Um Erro: " + response.data.msg);
           this.alertInfoSistema("ERROR",'',"Houve Um erro Ao Buscar o Membro selecionado para Edição!!  " + response.data.msg);
+           this.$router.push("/login");
         }
 
       }
@@ -61,14 +66,20 @@ export default defineComponent({
       }
     },
      async getCongregacoes() {
+      const auth = sessionStorage.getItem("token")
         try{
-          const response = await axios.get(`${this.urlServer}/congregacoes`);
+          const response = await axios.get(`${this.urlServer}/congregacoes`,{
+                 headers: {
+            Authorization: `token ${auth}`,
+          },
+          });
             if(response.data.length > 0){
               this.congregacoes = response.data;
             }else if(response.data.length == 0){
              this.alertInfoSistema("AVISO",'',"Nenhuma Congregação Cadastrada!")
             }else if(response.data.error == true){
               this.alertInfoSistema("ERROR",'',"Error Interno no Servidor: "+ response.data.msg)
+               this.$router.push("/login");
             }
             }
           catch(e){
@@ -76,14 +87,20 @@ export default defineComponent({
           }
     },
     async getCargos() {
+      const auth = sessionStorage.getItem("token")
         try{
-          const response = await axios.get(`${this.urlServer}/cargos`);
+          const response = await axios.get(`${this.urlServer}/cargos`,{
+                 headers: {
+            Authorization: `token ${auth}`,
+          },
+          });
             if(response.data.length > 0){
               this.cargos = response.data;
             }else if(response.data.length == 0){
               this.alertInfoSistema("AVISO",'',"Nenhum Cargo Cadastrado!")
             }else if(response.data.error == true){
               this.alertInfoSistema("ERROR",'',"Error Interno no Servidor: "+ response.data.msg)
+               this.$router.push("/login");
             }
             }
           catch(e){

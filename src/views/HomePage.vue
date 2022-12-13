@@ -25,41 +25,39 @@ a barra de Ferramentas e a lista de TODOS OS membros cadastrados -->
           <ion-row>
             <ion-col class="ion-align-items-center" size="12">
               <ion-row class="ion-justify-content-between">
+                <ion-button
+                  fill="clear"
+                  color="success"
+                  size="small"
+                  router-direction="forward"
+                  @click="this.$router.replace('/cadastrar')"
+                  ><ion-icon
+                    slot="icon-only"
+                    class="iconToolbar"
+                    :icon="personAdd"
+                /></ion-button>
 
-              <ion-button
-                fill="clear"
-                color="success"
-                size="small"
-                router-direction="forward"
-                @click="this.$router.replace('/cadastrar')"
-                ><ion-icon
-                  slot="icon-only"
-                  class="iconToolbar"
-                  :icon="personAdd"
-              /></ion-button>
+                <ion-button
+                  fill="clear"
+                  color="secondary"
+                  size="small"
+                  @click="this.$router.replace('/relatorios')"
+                  ><ion-icon
+                    slot="icon-only"
+                    class="iconToolbar"
+                    :icon="newspaper"
+                /></ion-button>
 
-                 <ion-button
-                fill="clear"
-                color="secondary"
-                size="small"
-                @click="this.$router.replace('/relatorios')"
-                ><ion-icon
-                  slot="icon-only"
-                  class="iconToolbar"
-                  :icon="newspaper"
-              /></ion-button>
-
-                 <ion-button
-                fill="clear"
-                color="secondary"
-                size="small"
-                @click="this.$router.replace('/configuracoes')"
-                ><ion-icon
-                  slot="icon-only"
-                  class="iconToolbar"
-                  :icon="settings"
-              /></ion-button>
-
+                <ion-button
+                  fill="clear"
+                  color="secondary"
+                  size="small"
+                  @click="this.$router.replace('/configuracoes')"
+                  ><ion-icon
+                    slot="icon-only"
+                    class="iconToolbar"
+                    :icon="settings"
+                /></ion-button>
               </ion-row>
             </ion-col>
           </ion-row>
@@ -81,7 +79,10 @@ a barra de Ferramentas e a lista de TODOS OS membros cadastrados -->
                   <ion-item>
                     <ion-col size="9">
                       <ion-row
-                        class="ion-justify-content-between ion-align-items-center ">
+                        class="
+                          ion-justify-content-between ion-align-items-center
+                        "
+                      >
                         <ion-col size="4">
                           <ion-avatar @click="openModal(Membro.id)">
                             <ion-img
@@ -104,7 +105,7 @@ a barra de Ferramentas e a lista de TODOS OS membros cadastrados -->
                             {{ Membro.nome }}
                           </ion-label>
                           <ion-label color="danger"
-                            ><b>{{Membro.cargo.nome}}</b></ion-label
+                            ><b>{{ Membro.cargo.nome }}</b></ion-label
                           >
                         </ion-col>
                       </ion-row>
@@ -148,7 +149,14 @@ import { defineComponent } from "vue";
 import moment from "moment";
 import ModalViewMembro from "@/components/ModalViewMembro.vue";
 import axios from "axios";
-import { searchCircle, personAdd, create,settings,newspaper,home} from "ionicons/icons";
+import {
+  searchCircle,
+  personAdd,
+  create,
+  settings,
+  newspaper,
+  home,
+} from "ionicons/icons";
 import {
   IonImg,
   alertController,
@@ -209,12 +217,12 @@ export default defineComponent({
   },
   methods: {
     //ADICIONA A MASCARA DO TELEFONE PARA O MODALVIEWMEMBRO
-      maskTel(telefone){
-      var maskTel1 = "("+telefone;
-      var tel = null
-      tel= maskTel1.substring(0,3) +") " + maskTel1.substring(3);
-      tel = tel.substring(0,10) + "-" + tel.substring(10);
-      return tel
+    maskTel(telefone) {
+      var maskTel1 = "(" + telefone;
+      var tel = null;
+      tel = maskTel1.substring(0, 3) + ") " + maskTel1.substring(3);
+      tel = tel.substring(0, 10) + "-" + tel.substring(10);
+      return tel;
     },
     //ABRIR O MODAL.. PARA EXIBIR OS DADOS DO MEMBRO SELECIONADO
     async openModal(id) {
@@ -228,7 +236,7 @@ export default defineComponent({
         var dtBatismo = moment(returnMembro.dtBatismo).format("DD/MM/YYYY");
         returnMembro.dtNascimento = dtNascimento;
         returnMembro.dtBatismo = dtBatismo;
-        returnMembro.telefone = maskTel
+        returnMembro.telefone = maskTel;
 
         const modal = await modalController.create({
           component: ModalViewMembro,
@@ -269,7 +277,8 @@ export default defineComponent({
     //BUSCAR O MEMBRO SELECIONADO PRA EXIBIR AS INFORMAÇÕES NO MODAL
     async getMembroSelecionado(id) {
       try {
-        const response = await axios.get(`${this.urlServer}/membro/${id}`);
+        const response = await axios.get(`${this.urlServer}/membro/${id}`
+       );
         return response.data;
       } catch (e) {
         alert(
@@ -280,16 +289,24 @@ export default defineComponent({
     },
     //BUSCA TODOS OS MEMBROS CADASTRADO, CASO NÃO HOUVER NENHUM REDIRECIONA PARA O CADASTRO
     async getMembros() {
+      //pegando o token do session storage
+      const auth = sessionStorage.getItem("token");
       try {
-        const response = await axios.get(`${this.urlServer}/membros`);
+        const response = await axios.get(`${this.urlServer}/membros`, {
+          headers: {
+            Authorization: `token ${auth}`,
+          },
+        });
+        console.log(response)
         if (response.data.length > 0) {
-          this.listaMembros = response.data;
-        } else if (response.data.length == 0) {
-          alert("Nenhum Membro Cadastrado!! Favor Cadastrar um novo Membro!");
-          this.$router.replace("/cadastrar");
-        } else if (response.data.error == true) {
-          alert("Error no Servidor: " + response.data.msg);
-        }
+            this.listaMembros = response.data;
+          } else if (response.data.length == 0) {
+            alert("Nenhum Membro Cadastrado!! Favor Cadastrar um novo Membro!");
+            this.$router.replace("/cadastrar");
+          } else if (response.data.error == true) {
+            alert("Error no Servidor: " + response.data.msg);
+          this.$router.push("/login");
+          }
       } catch (e) {
         alert("Erro ao Listar Todos os Membros: " + e.message);
         this.getMembros();
@@ -344,7 +361,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
 .iconButtonEdit {
   font-size: 36px;
   object-fit: fill;
