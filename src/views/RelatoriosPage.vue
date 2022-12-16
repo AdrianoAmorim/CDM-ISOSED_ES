@@ -224,13 +224,13 @@
         >
           <ion-col size="11" size-md="8" size-lg="5">
             <ion-select
-            mode="md"
+              mode="md"
               placeholder="ESCOLHA O MÊS"
               id="slcMesAniversariante"
               v-model="slcMesValor"
               cancel-text="CANCELAR"
               ok-text="OK"
-              :interface-options="optSlcMes" 
+              :interface-options="optSlcMes"
               @ionChange="direcionarRequisicoes()"
             >
               <ion-select-option
@@ -245,11 +245,11 @@
         </ion-row>
       </ion-grid>
       <div v-if="!loader">
-      <RelatorioListarMembros
-        :showList="showListar"
-        :listaMembros="listaMembros"
-        :tituloListar="tituloListar"
-      />
+        <RelatorioListarMembros
+          :showList="showListar"
+          :listaMembros="listaMembros"
+          :tituloListar="tituloListar"
+        />
       </div>
       <div v-else>
         <ion-progress-bar type="indeterminate"> </ion-progress-bar>
@@ -357,7 +357,7 @@ export default defineComponent({
       textAvisoError: null,
       showAvisoError: false,
       showListar: false,
-      loader:false,
+      loader: false,
       tituloListar: "-",
       listaMes: [
         { id: 1, nome: "Janeiro" },
@@ -376,13 +376,13 @@ export default defineComponent({
       desativarBtnPdf: true,
       showSlcMesAniversariantes: false,
       slcMesValor: null,
-      optSlcMes:{
+      optSlcMes: {
         header: "Mês",
-        cssClass:"alertSelects"
+        cssClass: "alertSelects",
       },
-      optSlcAlert:{
-        cssClass:"alertSelects"
-      }
+      optSlcAlert: {
+        cssClass: "alertSelects",
+      },
     };
   },
   methods: {
@@ -399,8 +399,8 @@ export default defineComponent({
         .save()
         .then(
           () => {
-           this.alertInfoSistema("AVISO","","PDF Criado Com Sucesso!");
-           this.loader = false;
+            this.alertInfoSistema("AVISO", "", "PDF Criado Com Sucesso!");
+            this.loader = false;
           },
           (error) => {
             this.alertInfoSistema(
@@ -424,12 +424,10 @@ export default defineComponent({
     },
     //FAZ O DIRECIONAMENTO DAS REQUIZICOES AO SERVIDOR, DE ACORDO COM AS OPCOES E FILTROS SELECIONADOS
     direcionarRequisicoes() {
-      console.log("dentro do direcionar requisicao");
       if (this.filtroSelecionado == "semFiltro") {
         this.getQtdMembros();
       } else if (this.opcSelecionada == "opcAniversariantes") {
         this.getAniversariantes();
-        console.log("dentro da opc aniversariante");
       } else if (this.selectGnValor == "" && this.selectCgrValor == "") {
         void 0;
       } else if (this.opcSelecionada == "opcQuantidade") {
@@ -525,8 +523,13 @@ export default defineComponent({
       this.selectCgrValor = "";
       this.ativarSelectGn = false;
       this.ativarSelectCgr = false;
+      const auth = sessionStorage.getItem("token");
       try {
-        const response = await axios.get(`${this.urlServer}/cargos`);
+        const response = await axios.get(`${this.urlServer}/cargos`, {
+          headers: {
+            Authorization: `token ${auth}`,
+          },
+        });
         if (response.data.length > 0) {
           this.listaGenerica = response.data;
           this.lblSelectGenerico = "CARGOS";
@@ -534,10 +537,10 @@ export default defineComponent({
         } else if (response.data.length == 0) {
           this.alertInfoSistema("AVISO", "", "Nenhum cargo Cadastrado!");
         } else if (response.data.error == true) {
-          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+          this.alertInfoSistema("AVISO", "", response.data.msg);
         }
       } catch (e) {
-        this.alertInfoSistema("AVISO", "Error", "" + e.message);
+        this.alertInfoSistema("AVISO", "", e.message);
       }
     },
 
@@ -548,8 +551,13 @@ export default defineComponent({
       this.selectCgrValor = "";
       this.ativarSelectGn = false;
       this.ativarSelectCgr = false;
+      const auth = sessionStorage.getItem("token");
       try {
-        const response = await axios.get(`${this.urlServer}/congregacoes`);
+        const response = await axios.get(`${this.urlServer}/congregacoes`, {
+          headers: {
+            Authorization: `token ${auth}`,
+          },
+        });
         if (response.data.length > 0) {
           if (this.filtroSelecionado == "cargo_congregacao") {
             this.listaCongregacoes = response.data;
@@ -562,17 +570,23 @@ export default defineComponent({
         } else if (response.data.length == 0) {
           this.alertInfoSistema("AVISO", "", "Nenhuma Congregação Cadastrado!");
         } else if (response.data.error == true) {
-          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+          this.alertInfoSistema("AVISO", "", response.data.msg);
         }
       } catch (e) {
-        this.alertInfoSistema("AVISO", "Error", "" + e.message);
+        this.alertInfoSistema("AVISO", "", e.message);
       }
     },
 
     async getQtdMembros() {
+      const auth = sessionStorage.getItem("token");
       try {
         const response = await axios.get(
-          `${this.urlServer}/relatorio_qtdMembros`
+          `${this.urlServer}/relatorio_qtdMembros`,
+          {
+            headers: {
+              Authorization: `token ${auth}`,
+            },
+          }
         );
         if (response.data._all > 0) {
           this.resultQtd = response.data._all;
@@ -582,18 +596,24 @@ export default defineComponent({
           this.showResultQtd = false;
           this.alertInfoSistema("AVISO", "", "Nenhum Membro Cadastrado!");
         } else if (response.data.error == true) {
-          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+          this.alertInfoSistema("AVISO", "", response.data.msg);
           this.resultQtd = 0;
         }
       } catch (e) {
-        this.alertInfoSistema("AVISO", "Error", "" + e);
+        this.alertInfoSistema("AVISO","", e.message);
       }
     },
     async getQtdMembrosCargo() {
       var idCargo = this.selectGnValor.toString();
+      const auth = sessionStorage.getItem("token");
       try {
         const response = await axios.get(
-          `${this.urlServer}/relatorio_qtdMembros_cargo?id=${idCargo}`
+          `${this.urlServer}/relatorio_qtdMembros_cargo?id=${idCargo}`,
+          {
+            headers: {
+              Authorization: `token ${auth}`,
+            },
+          }
         );
 
         if (response.data._all > 0) {
@@ -608,7 +628,7 @@ export default defineComponent({
             "Nenhum Membro com Este Cargo Cadastrado!"
           );
         } else if (response.data.error == true) {
-          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+          this.alertInfoSistema("AVISO", "", response.data.msg);
           this.resultQtd = 0;
         }
       } catch (e) {
@@ -617,9 +637,15 @@ export default defineComponent({
     },
     async getQtdMembrosCongregacao() {
       var idCongregacao = this.selectGnValor.toString();
+      const auth = sessionStorage.getItem("token");
       try {
         const response = await axios.get(
-          `${this.urlServer}/relatorio_qtdMembros_congregacao?id=${idCongregacao}`
+          `${this.urlServer}/relatorio_qtdMembros_congregacao?id=${idCongregacao}`,
+          {
+            headers: {
+              Authorization: `token ${auth}`,
+            },
+          }
         );
 
         if (response.data._all > 0) {
@@ -634,20 +660,26 @@ export default defineComponent({
             "Nenhum Membro com Esta Congregação Cadastrada!"
           );
         } else if (response.data.error == true) {
-          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+          this.alertInfoSistema("AVISO","", response.data.msg);
           this.resultQtd = 0;
         }
       } catch (e) {
-        this.alertInfoSistema("AVISO", "Error", "" + e);
+        this.alertInfoSistema("AVISO","",e.message);
       }
     },
     async getQtdMembrosCongregacaoCargo() {
       var idCargo = this.selectGnValor.toString();
       var idCongregacao = this.selectCgrValor.toString();
+      const auth = sessionStorage.getItem("token");
 
       try {
         const response = await axios.get(
-          `${this.urlServer}/relatorio_qtdMembros_cargo_congregacao?idCargo=${idCargo}&idCongregacao=${idCongregacao}`
+          `${this.urlServer}/relatorio_qtdMembros_cargo_congregacao?idCargo=${idCargo}&idCongregacao=${idCongregacao}`,
+          {
+            headers: {
+              Authorization: `token ${auth}`,
+            },
+          }
         );
 
         if (response.data._all > 0) {
@@ -660,19 +692,25 @@ export default defineComponent({
           this.showResultQtd = false;
           this.alertInfoSistema("AVISO", "", "Nenhum Membro Cadastrada!");
         } else if (response.data.error == true) {
-          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+          this.alertInfoSistema("AVISO", "", response.data.msg);
           this.resultQtd = 0;
         }
       } catch (e) {
-        this.alertInfoSistema("AVISO", "Error", "" + e);
+        this.alertInfoSistema("AVISO","", + e.message);
       }
     },
 
     async getMembrosCargo() {
       const idCargo = this.selectGnValor.toString();
+      const auth = sessionStorage.getItem("token");
       try {
         const response = await axios.get(
-          `${this.urlServer}/relatorio_membros_cargo?idCargo=${idCargo}`
+          `${this.urlServer}/relatorio_membros_cargo?idCargo=${idCargo}`,
+          {
+            headers: {
+              Authorization: `token ${auth}`,
+            },
+          }
         );
 
         if (response.data.length > 0) {
@@ -691,20 +729,26 @@ export default defineComponent({
             "Nenhum membro cadastrado com este cargo!!"
           );
         } else if (response.data.error == true) {
-          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+          this.alertInfoSistema("AVISO", "", response.data.msg);
           this.resultQtd = 0;
           this.desativarBtnPdf = true;
         }
       } catch (e) {
-        this.alertInfoSistema("AVISO", "Error", "" + e);
+        this.alertInfoSistema("AVISO","",e.message);
       }
     },
 
     async getMembrosCongregacao() {
       const idCongregacao = this.selectGnValor.toString();
+      const auth = sessionStorage.getItem("token");
       try {
         const response = await axios.get(
-          `${this.urlServer}/relatorio_membros_congregacao?idCongregacao=${idCongregacao}`
+          `${this.urlServer}/relatorio_membros_congregacao?idCongregacao=${idCongregacao}`,
+          {
+            headers: {
+              Authorization: `token ${auth}`,
+            },
+          }
         );
 
         if (response.data.length > 0) {
@@ -723,19 +767,25 @@ export default defineComponent({
             "Nenhum membro cadastrado Nesta Congregação!!"
           );
         } else if (response.data.error == true) {
-          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+          this.alertInfoSistema("AVISO", "", response.data.msg);
         }
       } catch (e) {
-        this.alertInfoSistema("AVISO", "Error", "" + e);
+        this.alertInfoSistema("AVISO", "", e.message);
       }
     },
 
     async getMembrosCargoCongregacao() {
       const idCargo = this.selectGnValor.toString();
       const idCongregacao = this.selectCgrValor.toString();
+      const auth = sessionStorage.getItem("token");
       try {
         const response = await axios.get(
-          `${this.urlServer}/relatorio_membros_congregacao_cargo?idCargo=${idCargo}&idCongregacao=${idCongregacao}`
+          `${this.urlServer}/relatorio_membros_congregacao_cargo?idCargo=${idCargo}&idCongregacao=${idCongregacao}`,
+          {
+            headers: {
+              Authorization: `token ${auth}`,
+            },
+          }
         );
         if (response.data.length > 0) {
           this.listaMembros = response.data;
@@ -756,19 +806,25 @@ export default defineComponent({
             "Nenhum Membro Cadastrado com essas Informações!!"
           );
         } else if (response.data.error == true) {
-          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+          this.alertInfoSistema("AVISO", "", response.data.msg);
         }
       } catch (e) {
-        this.alertInfoSistema("AVISO", "Error", "" + e);
+        this.alertInfoSistema("AVISO","", e.message);
       }
     },
     async getAniversariantes() {
+      const auth = sessionStorage.getItem("token");
       if (this.slcMesValor == null) {
         void 0;
       } else {
         try {
           const response = await axios.get(
-            `${this.urlServer}/aniversariantes?mes=${this.slcMesValor}`
+            `${this.urlServer}/aniversariantes?mes=${this.slcMesValor}`,
+            {
+              headers: {
+                Authorization: `token ${auth}`,
+              },
+            }
           );
           if (response.data.length > 0) {
             this.listaMembros = response.data;
@@ -785,10 +841,10 @@ export default defineComponent({
               "Nenhum Membro Faz Aniversário neste mês!!"
             );
           } else if (response.data.error == true) {
-            this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+            this.alertInfoSistema("AVISO", "",response.data.msg);
           }
         } catch (e) {
-          console.log(e);
+           this.alertInfoSistema("ERROR", "",e.message);
         }
       }
     },

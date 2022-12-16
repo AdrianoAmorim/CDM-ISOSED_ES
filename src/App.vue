@@ -98,6 +98,7 @@ ion-modal.modalView::part(content){
 }
 .alert-info .alert-title {
   color: #ffffff;
+  text-align: center ;
 }
 .alert-info .alert-head {
   background: #21c05e;
@@ -105,6 +106,7 @@ ion-modal.modalView::part(content){
 .alert-info .alert-message{
   padding-top: 20px !important; 
   font-size: 18px;
+  text-align: center ;
   color: black;
 }
   .alert-info .alert-button-group span{
@@ -118,6 +120,7 @@ ion-modal.modalView::part(content){
 }
 .alert-delete .alert-title {
   color: #ffffff;
+  text-align: center ;
 }
 .alert-delete .alert-head {
   background: #cf3c4f;
@@ -125,6 +128,7 @@ ion-modal.modalView::part(content){
 .alert-delete .alert-message{
   padding-top: 20px !important; 
   font-size: 18px;
+  text-align: center;
   color: black;
 }
 .alert-delete .btn-delete {
@@ -143,6 +147,16 @@ ion-modal.modalView::part(content){
 .tagAguardeLoader {
   color: #427aa1;
   margin: 15px;
+}
+.loaderTelaLogin{
+  --background: #a2c6eb;
+  --spinner-color: #fff;
+  --backdrop-opacity: 0.6;
+  color: #130f49;
+  font-size: 16px;
+}
+.loaderTelaLogin div{
+  border-radius: 15px !important;
 }
 
 .avatarFoto {

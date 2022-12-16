@@ -1,7 +1,9 @@
 <template>
   <ion-header mode="ios">
     <ion-toolbar mode="ios">
-      <ion-label class="tituloPagina" v-if="page == 'cadastro'">Cadastrar</ion-label>
+      <ion-label class="tituloPagina" v-if="page == 'cadastro'"
+        >Cadastrar</ion-label
+      >
       <ion-label class="tituloPagina" v-else>Editar</ion-label>
       <ion-button
         v-if="page == 'editar'"
@@ -98,8 +100,11 @@
                 <ion-col size="12">
                   <ion-item mode="md">
                     <ion-label position="stacked">CONGREGAÇÃO</ion-label>
-                    <ion-select color="secondary"
-                      placeholder="CARREGANDO..." v-if="!congregacoesLs">
+                    <ion-select
+                      color="secondary"
+                      placeholder="CARREGANDO..."
+                      v-if="!congregacoesLs"
+                    >
                     </ion-select>
                     <ion-select
                       v-else
@@ -148,8 +153,11 @@
             <ion-col size="6">
               <ion-item mode="md">
                 <ion-label position="stacked">CARGO</ion-label>
-                <ion-select color="secondary"
-                      placeholder="CARREGANDO..." v-if="!cargosLs">
+                <ion-select
+                  color="secondary"
+                  placeholder="CARREGANDO..."
+                  v-if="!cargosLs"
+                >
                 </ion-select>
                 <ion-select
                   v-else
@@ -408,8 +416,8 @@ export default defineComponent({
       desativarBtnDelete: true,
       desativarBtnSalvar: true,
       loader: true,
-      optSlcAlert:{
-        cssClass:"alertSelects"
+      optSlcAlert: {
+        cssClass: "alertSelects",
       },
       msgSistema: null,
       statusInfoSistema: false,
@@ -447,7 +455,6 @@ export default defineComponent({
   },
   methods: {
     downloadFoto(url, fileName) {
-      
       const downloadLink = document.createElement("a");
       downloadLink.href = url;
       downloadLink.download = `${fileName}`;
@@ -581,12 +588,11 @@ export default defineComponent({
       this.membro.bairro = membroEdit.logradouro.bairro;
       this.membro.cidade = membroEdit.logradouro.cidade;
       this.membro.numero = membroEdit.logradouro.numero;
-
-
     },
 
     async setMembro(membro) {
       const validar = this.validarCampos();
+      const auth = sessionStorage.getItem("token");
       if (validar) {
         membro.telefone = this.retirarMascara(membro.telefone);
         membro.telefone = membro.telefone ?? "";
@@ -597,7 +603,12 @@ export default defineComponent({
         try {
           const response = await axios.post(
             `${this.urlServer}/cadastrar`,
-            membro
+            membro,
+            {
+              headers: {
+                Authorization: `token ${auth}`,
+              },
+            }
           );
           if (response.data.id > 0) {
             this.limparCampos();
@@ -636,6 +647,7 @@ export default defineComponent({
 
     async updateMembro(membro) {
       const validar = this.validarCampos();
+      const auth = sessionStorage.getItem("token");
       if (validar) {
         membro.telefone = this.retirarMascara(membro.telefone);
         membro.telefone = membro.telefone ?? "";
@@ -646,7 +658,12 @@ export default defineComponent({
         try {
           const response = await axios.put(
             `${this.urlServer}/atualizar`,
-            membro
+            membro,
+            {
+              headers: {
+                Authorization: `token ${auth}`,
+              },
+            }
           );
           if (response.data.id > 0) {
             this.limparCampos();
@@ -688,6 +705,7 @@ export default defineComponent({
       this.desativarBtnDelete = true;
       this.desativarBtnVoltar = true;
       this.loader = true;
+      const auth = sessionStorage.getItem("token");
       const ids = {
         id_membro: id_membro,
         id_logradouro: id_logradouro,
@@ -695,6 +713,9 @@ export default defineComponent({
       try {
         const response = await axios.delete(`${this.urlServer}/deletar`, {
           data: ids,
+          headers: {
+            Authorization: `token ${auth}`,
+          },
         });
         if (response.data.id > 0) {
           this.limparCampos();
@@ -705,7 +726,7 @@ export default defineComponent({
             this.$router.replace("/");
           }, 3000);
         } else if (response.data.error == true) {
-          this.alertInfoSistem(
+          this.alertInfoSistema(
             "ERROR",
             "",
             "ERRO INTERNO NO SERVIDOR! " + response.data.msg
@@ -746,7 +767,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
 .iconDownload {
   font-size: 20px;
   object-fit: fill;

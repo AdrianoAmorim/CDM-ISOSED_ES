@@ -46,11 +46,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-@media screen and (max-width: 768px) {
-  .diminuirFonte {
-    font-size: 12px;
-  }
-}
 
 #tituloLista {
   background: linear-gradient(110deg, #3a6b8e 30%, #3289c7 45%);
@@ -92,5 +87,10 @@ th,
 td {
   text-align: center;
   padding: 5px 2px;
+}
+@media screen and (max-width: 768px) {
+  .diminuirFonte {
+    font-size: 12px;
+  }
 }
 </style>

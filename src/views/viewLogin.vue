@@ -58,6 +58,8 @@ import axios from "axios";
 import { logIn, person, key, logoLinkedin } from "ionicons/icons";
 import {
   IonPage,
+  alertController,
+  loadingController,
   IonImg,
   IonText,
   IonIcon,
@@ -93,13 +95,35 @@ export default defineComponent({
     };
   },
   methods: {
-    async redirecionarUsuario(token){
-      sessionStorage.setItem("token",token);
+    async redirecionarUsuario(token,loader) {
+      sessionStorage.setItem("token", token);
+      loader.dismiss();
       this.$router.push("/");
+    },
 
+    async loadRedirecionamento(){
+      const loader = await loadingController.create({
+        message:"Aguarde",
+        spinner: 'bubbles',
+        cssClass: 'loaderTelaLogin'
+      })
+      loader.present()
+      return loader
+    },
+
+     async alertInfoSistema(header, subHeader, message) {
+      const alert = await alertController.create({
+        cssClass: "alert-info",
+        header: header,
+        subHeader: subHeader,
+        message: message,
+        buttons: ["OK"],
+      });
+      await alert.present();
     },
 
     async efetuarLogin() {
+      const loader =  await this.loadRedirecionamento();
       const user = {
         nome: this.nome,
         password: this.password,
@@ -108,16 +132,17 @@ export default defineComponent({
         const response = await axios.post(`${this.urlServer}/login`, user);
         //
         if (response.data.aviso) {
-          alert(response.data.msg);
+          loader.dismiss();
+          this.alertInfoSistema("AVISO","",response.data.msg);
+        } else if (response.data.error) {
+          loader.dismiss();
+         this.alertInfoSistema("ERROR","",response.data.msg);
         } else {
-          if (response.data.error) {
-            alert(response.data.msg);
-          } else {
-           this.redirecionarUsuario(response.data.token)
-          }
+          this.redirecionarUsuario(response.data.token,loader);
         }
       } catch (e) {
-        console.log(e.message)
+        console.log(e.message);
+        this.alertInfoSistema("ERROR","Erro na requisição do login",e.message);
       }
     },
   },

@@ -2,8 +2,10 @@
   <ion-page>
     <ion-header mode="ios">
       <ion-toolbar mode="ios">
-        <ion-label class="tituloPagina" v-if="nomePg == 'congregacoes'">Congregações</ion-label>
-      <ion-label class="tituloPagina" v-else>Cargos</ion-label>
+        <ion-label class="tituloPagina" v-if="nomePg == 'congregacoes'"
+          >Congregações</ion-label
+        >
+        <ion-label class="tituloPagina" v-else>Cargos</ion-label>
         <ion-button
           fill="clear"
           router-direction="back"
@@ -173,7 +175,6 @@ export default defineComponent({
   },
   data() {
     return {
-      //urlServer: "http://54.207.193.202:4041",
       urlServer: "http://192.168.18.4:4041",
       arrowBackCircle,
       addCircle,
@@ -220,8 +221,7 @@ export default defineComponent({
           this.cadItemCargo(nomeItem);
         }
       } else {
-        
-          this.alertInfoSistema("AVISO","","CAMPO VAZIO, FAVOR PREENCHER!!")
+        this.alertInfoSistema("AVISO", "", "CAMPO VAZIO, FAVOR PREENCHER!!");
       }
     },
     direcionarPgAtualizar(Obj) {
@@ -242,12 +242,21 @@ export default defineComponent({
     //FAZ UMA BUSCA NO ITEM(CARGO OU CONGREGACAO)
     async buscarItem(resultBusca) {
       this.loader = true;
+      const auth = sessionStorage.getItem("token");
       try {
         if (this.nomePg == "congregacoes") {
           const response = await axios.get(
-            `${this.urlServer}/buscarCongregacoes?nome=${resultBusca}`
+            `${this.urlServer}/buscarCongregacoes?nome=${resultBusca}`,
+            {
+              headers: {
+                Authorization: `token ${auth}`,
+              },
+            }
           );
-          if (response.data.length > 0) {
+          if (response.data.error) {
+            this.alertInfoSistema("ERROR", "", response.data.msg);
+            this.$router.push("/login");
+          } else if (response.data.length > 0) {
             this.listaItens = response.data;
             this.loader = false;
           } else {
@@ -257,9 +266,17 @@ export default defineComponent({
           }
         } else {
           const response = await axios.get(
-            `${this.urlServer}/buscarCargos?nome=${resultBusca}`
+            `${this.urlServer}/buscarCargos?nome=${resultBusca}`,
+            {
+              headers: {
+                Authorization: `token ${auth}`,
+              },
+            }
           );
-          if (response.data.length > 0) {
+          if (response.data.error) {
+            this.alertInfoSistema("ERROR", "", response.data.msg);
+            this.$router.push("/login");
+          } else if (response.data.length > 0) {
             this.listaItens = response.data;
             this.loader = false;
           } else {
@@ -269,15 +286,23 @@ export default defineComponent({
           }
         }
       } catch (e) {
-        this.alertInfoSistema("AVISO", "Error", "Houve um Erro: " + e.message);
+        this.alertInfoSistema("AVISO", "", "Houve um Erro: " + e.message);
       }
     },
 
     //FAZ UMA BUSCA DE TODAS AS CONGREGACOES OU CARGO CADASTRADO
     async getCongregacoes() {
       this.loader = true;
+      const auth = sessionStorage.getItem("token");
       try {
-        const response = await axios.get(`${this.urlServer}/configCongregacoes`);
+        const response = await axios.get(
+          `${this.urlServer}/configCongregacoes`,
+          {
+            headers: {
+              Authorization: `token ${auth}`,
+            },
+          }
+        );
         if (response.data.length > 0) {
           this.listaItens = response.data;
           this.loader = false;
@@ -290,9 +315,10 @@ export default defineComponent({
         } else if (response.data.error == true) {
           this.alertInfoSistema(
             "AVISO",
-            "Error",
+            "",
             "Error: " + response.data.msg
           );
+          this.$router.push("/login");
         }
       } catch (e) {
         this.alertInfoSistema("AVISO", "Error", "" + e.message);
@@ -300,8 +326,13 @@ export default defineComponent({
     },
     async getCargos() {
       this.loader = true;
+      const auth = sessionStorage.getItem("token");
       try {
-        const response = await axios.get(`${this.urlServer}/configCargos`);
+        const response = await axios.get(`${this.urlServer}/configCargos`, {
+          headers: {
+            Authorization: `token ${auth}`,
+          },
+        });
         if (response.data.length > 0) {
           this.listaItens = response.data;
           this.loader = false;
@@ -309,6 +340,7 @@ export default defineComponent({
           this.alertInfoSistema("AVISO", "", "Nenhum cargo Cadastrado!");
         } else if (response.data.error == true) {
           this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+          this.$router.push("/login");
         }
       } catch (e) {
         this.alertInfoSistema("AVISO", "Error", "" + e.message);
@@ -317,6 +349,7 @@ export default defineComponent({
 
     //ATUALIZA O NOME DO CARGO OU CONGREGACAO
     async atualizarCargo(obj) {
+      const auth = sessionStorage.getItem("token");
       if (obj.nome == "") {
         this.alertInfoSistema("AVISO", "", "Favor Preencher o Campo!!");
       } else {
@@ -324,41 +357,58 @@ export default defineComponent({
         try {
           const response = await axios.put(
             `${this.urlServer}/atualizarCargo`,
-            obj
+            obj,
+            {
+              headers: {
+                Authorization: `token ${auth}`,
+              },
+            }
           );
-          if (response.data.id > 0) {
+          if (response.data.error) {
+            this.alertInfoSistema("ERROR", "", response.data.msg);
+            this.$router.push("/login");
+          } else if (response.data.id > 0) {
             this.getCargos();
           } else {
-            this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+            this.alertInfoSistema("AVISO", "", "" + response.data.msg);
             this.getCargos();
+            this.loader = false;
+          }
+        } catch (e) {
+          this.alertInfoSistema("AVISO", "", "" + e.message);
+        }
+      }
+    },
+    async atualizarCongregacao(obj) {
+      const auth = sessionStorage.getItem("token");
+      if (obj.nome == "") {
+        this.alertInfoSistema("AVISO", "", "Favor Preencher o Campo!!");
+      } else {
+        this.loader = true;
+        try {
+          const response = await axios.put(
+            `${this.urlServer}/atualizarCongregacao`,
+            obj,
+            {
+              headers: {
+                Authorization: `token ${auth}`,
+              },
+            }
+          );
+          if (response.data.error) {
+            this.alertInfoSistema("ERROR", "", response.data.msg);
+            this.$router.push("/login");
+          } else if (response.data.id > 0) {
+            this.getCongregacoes();
+            this.loader = false;
+          } else {
+            this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+            this.getCongregacoes();
             this.loader = false;
           }
         } catch (e) {
           this.alertInfoSistema("AVISO", "Error", "" + e);
         }
-      }
-    },
-    async atualizarCongregacao(obj) {
-       if (obj.nome == "") {
-        this.alertInfoSistema("AVISO", "", "Favor Preencher o Campo!!");
-      } else {
-      this.loader = true;
-      try {
-        const response = await axios.put(
-          `${this.urlServer}/atualizarCongregacao`,
-          obj
-        );
-        if (response.data.id > 0) {
-          this.getCongregacoes();
-          this.loader = false;
-        } else {
-          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
-          this.getCongregacoes();
-          this.loader = false;
-        }
-      } catch (e) {
-        this.alertInfoSistema("AVISO", "Error", "" + e);
-      }
       }
     },
 
@@ -368,20 +418,30 @@ export default defineComponent({
         id_cargo: id_cargo,
       };
       this.loader = true;
+      const auth = sessionStorage.getItem("token");
       try {
-        const response = await axios.delete(`${this.urlServer}/deletarCargo`, {
-          data: id,
-        });
-        if (response.data.id > 0) {
+        const response = await axios.delete(
+          `${this.urlServer}/deletarCargo`,
+          {
+            data: id,
+             headers: {
+              Authorization: `token ${auth}`,
+            },
+          }
+        );
+        if (response.data.error) {
+          this.alertInfoSistema("AVISO", "", response.data.msg);
+          this.$router.push("/login");
+        } else if (response.data.id > 0) {
           this.getCargos();
           this.loader = false;
         } else {
-          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+          this.alertInfoSistema("AVISO", "", "" + response.data.msg);
           this.getCargos();
           this.loader = false;
         }
       } catch (e) {
-        this.alertInfoSistema("AVISO", "Error", "" + e.message);
+        this.alertInfoSistema("AVISO", "", "" + e.message);
         console.log(e);
         this.getCargos();
         this.loader = false;
@@ -392,23 +452,31 @@ export default defineComponent({
         id_congregacao: id_congregacao,
       };
       this.loader = true;
+      const auth = sessionStorage.getItem("token");
       try {
         const response = await axios.delete(
           `${this.urlServer}/deletarCongregacao`,
           {
             data: id,
-          }
+              headers: {
+              Authorization: `token ${auth}`,
+            },
+          },
+          
         );
-        if (response.data.id > 0) {
+        if (response.data.error) {
+          this.alertInfoSistema("AVISO", "", response.data.msg);
+          this.$router.push("/login");
+        } else if (response.data.id > 0) {
           this.getCongregacoes();
           this.loader = false;
         } else {
-          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+          this.alertInfoSistema("AVISO", "", "" + response.data.msg);
           this.getCongregacoes();
           this.loader = false;
         }
       } catch (e) {
-        this.alertInfoSistema("AVISO", "Error", "" + e.message);
+        this.alertInfoSistema("AVISO", "", "" + e.message);
         this.getCongregacoes();
         this.loader = false;
       }
@@ -416,17 +484,26 @@ export default defineComponent({
 
     //CADASTRA UM CARGO OU CONGREGACAO NOVA
     async cadItemCongregacao(nomeItem) {
+      const auth = sessionStorage.getItem("token");
       try {
         const response = await axios.post(
           `${this.urlServer}/cadCongregacao`,
-          nomeItem
+          nomeItem,
+          {
+            headers: {
+              Authorization: `token ${auth}`,
+            },
+          }
         );
-        if (response.data.id > 0) {
-          this.alertInfoSistema("AVISO","","CONGREGAÇÃO CADASTRADA !");
+          if (response.data.error) {
+          this.alertInfoSistema("AVISO", "", response.data.msg);
+          this.$router.push("/login");
+        }else if (response.data.id > 0) {
+          this.alertInfoSistema("AVISO", "", "CONGREGAÇÃO CADASTRADA !");
           nomeItem.nome = "";
           this.getCongregacoes();
         } else {
-          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+          this.alertInfoSistema("AVISO", "", "" + response.data.msg);
         }
       } catch (e) {
         this.alertInfoSistema("AVISO", "Error", "" + e.message);
@@ -434,18 +511,23 @@ export default defineComponent({
     },
     async cadItemCargo(nomeItem) {
       this.loader = true;
+      const auth = sessionStorage.getItem("token");
       try {
         const response = await axios.post(
           `${this.urlServer}/cadCargo`,
-          nomeItem
+          nomeItem,
+          {
+            headers: {
+              Authorization: `token ${auth}`,
+            },
+          }
         );
-        if (response.data.id > 0) {
+          if (response.data.error) {
+          this.alertInfoSistema("AVISO", "", response.data.msg);
+          this.$router.push("/login");
+        }else if (response.data.id > 0) {
           nomeItem.nome = "";
-          this.alertInfoSistema("AVISO","","CARGO CADASTRADO !")
-          this.getCargos();
-          this.loader = false;
-        } else {
-          this.alertInfoSistema("AVISO", "Error", "" + response.data.msg);
+          this.alertInfoSistema("AVISO", "", "CARGO CADASTRADO !");
           this.getCargos();
           this.loader = false;
         }

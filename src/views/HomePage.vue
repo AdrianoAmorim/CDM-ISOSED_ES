@@ -200,7 +200,7 @@ export default defineComponent({
   },
   data() {
     return {
-      //urlServer: "http://177.71.138.179:4041",
+   
       urlServer: "http://192.168.18.4:4041",
       ativarBtnBuscar: true,
       loader: true,
@@ -276,13 +276,17 @@ export default defineComponent({
     },
     //BUSCAR O MEMBRO SELECIONADO PRA EXIBIR AS INFORMAÇÕES NO MODAL
     async getMembroSelecionado(id) {
+      const auth = sessionStorage.getItem("token");
       try {
-        const response = await axios.get(`${this.urlServer}/membro/${id}`
-       );
+        const response = await axios.get(`${this.urlServer}/membro/${id}`,{
+            headers: {
+            Authorization: `token ${auth}`,
+          },
+        });
         return response.data;
       } catch (e) {
-        alert(
-          "Houve Um erro Ao Buscar o Membro selecionado para Edição!! " +
+        this.alertInfoSistema(
+          "Houve Um erro Ao Buscar o Membro selecionado para Edição!! " ,"",
             e.message
         );
       }
@@ -297,47 +301,48 @@ export default defineComponent({
             Authorization: `token ${auth}`,
           },
         });
-        console.log(response)
         if (response.data.length > 0) {
             this.listaMembros = response.data;
           } else if (response.data.length == 0) {
-            alert("Nenhum Membro Cadastrado!! Favor Cadastrar um novo Membro!");
+            this.alertInfoSistema("AVISO","","Nenhum Membro Cadastrado!! Favor Cadastrar um novo Membro!");
             this.$router.replace("/cadastrar");
           } else if (response.data.error == true) {
-            alert("Error no Servidor: " + response.data.msg);
+            this.alertInfoSistema("ERROR","",response.data.msg);
           this.$router.push("/login");
           }
       } catch (e) {
-        alert("Erro ao Listar Todos os Membros: " + e.message);
-        this.getMembros();
+        this.alertInfoSistema("ERROR","","Erro ao Listar Todos os Membros: " + e.message);
       }
     },
     /*EFETUA UMA BUSCA AO MEMBRO DIGITADO NO CAMPO DE BUSCA, CASO NAO ACHE RECARREGA A LISTA COM TODOS
     MEMBROS*/
     async buscarMembros(resultBusca) {
       this.loader = true;
+      const auth = sessionStorage.getItem("token")
       try {
         const response = await axios.get(
-          `${this.urlServer}/buscar?nome=${resultBusca}`
-        );
+          `${this.urlServer}/buscar?nome=${resultBusca}`,{
+              headers: {
+            Authorization: `token ${auth}`,
+          },
+          });
 
         if (response.data.length > 0) {
           this.loader = false;
-          //this.resultBusca = "";
           this.listaMembros = response.data;
         } else if (response.data.length == 0) {
-          this.alertInfoSistema("AVISO!!", "", "Membro não Encontrado!!");
+          this.alertInfoSistema("AVISO", "", "Membro não Encontrado!!");
           this.getMembros();
         } else if (response.data.error == true) {
           this.alertInfoSistema(
             "ERROR!!",
-            "Error no Servidor: ",
+            "",
             response.data.msg
           );
           this.getMembros();
         }
       } catch (e) {
-        alert("Erro Ao Buscar o Membro - " + e.message);
+        this.alertInfoSistema("ERROR","","Erro Ao Buscar o Membro - " + e.message);
         this.getMembros();
       }
     },

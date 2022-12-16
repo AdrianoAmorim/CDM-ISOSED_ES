@@ -44,7 +44,6 @@ export default defineComponent({
             Authorization: `token ${auth}`,
           },
           });
-          console.log(response)
             if(response.data.length > 0){
               this.congregacoes = response.data;
             }else if(response.data.length == 0){
