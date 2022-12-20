@@ -333,7 +333,7 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer: "http://192.168.18.4:4041",
+      urlServer: "http://127.0.0.1:4041",
       arrowBackCircle,
       newspaper,
       people,

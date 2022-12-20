@@ -85,7 +85,7 @@ export default defineComponent({
   },
   data() {
     return {
-      urlServer: "http://192.168.18.4:4041",
+      urlServer: "https://isosedes.loca.lt",
       logIn,
       person,
       key,

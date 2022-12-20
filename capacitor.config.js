@@ -3,7 +3,7 @@
 const config = {
   appId: 'io.ionic.starter',
   appName: 'cadastro-membro',
-  webDir: 'dist',
+  webDir: 'public',
   bundledWebRuntime: false
 };
 
